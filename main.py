@@ -1,21 +1,27 @@
 import pygame
-from DTO.player import Player  # Import lớp Player từ tệp player.py
+from classes.player import Player  # Import lớp Player từ tệp player.py
+from values.color import *
+from values.screen import *
 
 pygame.init()
-
-SCREEN_WIDTH = 1200
-SCREEN_HEIGHT = 600
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption('Demo')
 
-player1 = Player(300, 350, (255, 0, 0))
-player2 = Player(800, 350, (80, 110, 199))
+player1 = Player(300, 350, RED)
+player2 = Player(800, 350, BLUE)
 
 run = True
 clock = pygame.time.Clock()
 while run:
-	screen.fill((0, 0, 0))
+	
+	screen.fill(WHITE)
+	line_spacing = 50  # Khoảng cách giữa các đường line
+	for y in range(0, SCREEN_HEIGHT, line_spacing):
+		pygame.draw.line(screen, BLACK, (0, y), (SCREEN_WIDTH, y))
+	line_spacing_vertical = 50
+	for x in range(0, SCREEN_WIDTH, line_spacing_vertical):
+	    pygame.draw.line(screen, BLACK, (x, 0), (x, SCREEN_HEIGHT))
 	
 	for player in [player1, player2]:
 		player.draw(screen)
