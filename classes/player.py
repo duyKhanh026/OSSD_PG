@@ -50,7 +50,7 @@ class Player:
 			py.draw.rect(surface, (0, 255, 0), (self.rect.x - self.SQUARE_SIZE_X, self.rect.y - 20, int(self.SQUARE_SIZE_X * (self.health / self.max_health)), 10))
 		
 	def action(self, key):
-		if key[self.punch_key]:
+		if key[self.punch_key] :
 			self.punched = True
 		else:
 			self.punched = False
