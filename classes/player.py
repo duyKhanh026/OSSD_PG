@@ -8,45 +8,51 @@ class Player:
 		self.color = color
 		self.move_left_key = move_left_key
 		self.move_right_key = move_right_key
-		self.side = side
+		self.side = side  # Dùng để phân biệt phía của player
 		self.speed = 4
 
-		# use for jump event
+		# Use for jump event
 		self.jump_key = jump_key
-		self.on_ground = True;
+		self.on_ground = False
 		self.square_y_speed = 0
 		self.GRAVITY = 0.5
 		self.JUMP_POWER = -15
 
-		#use for punch
+		# Use for punch
 		self.punch_key = punch_key
 		self.punched = False
-	
+
+		# Health bar
+		self.max_health = 100
+		self.health = self.max_health
+
 	def move(self, dx, dy):
 		self.rect.move_ip(dx, dy)
-	
+
 	def draw(self, surface):
 		if self.side == 'R':
 			py.draw.rect(surface, self.color, self.rect)
-		else :
+		else:
 			py.draw.rect(surface, self.color, py.Rect(self.rect.x - self.SQUARE_SIZE_X, self.rect.y, self.SQUARE_SIZE_X, self.SQUARE_SIZE_Y))
 
-		py.draw.line(surface, (26,243,0), (self.rect.x, 0), (self.rect.x,600))
-		py.draw.line(surface, (26,243,0), (0, self.rect.y), (1200,self.rect.y))
+		py.draw.line(surface, (26, 243, 0), (self.rect.x, 0), (self.rect.x, 600))
+		py.draw.line(surface, (26, 243, 0), (0, self.rect.y), (1200, self.rect.y))
 		font = py.font.SysFont(None, 16)
-		text = font.render(' (' + str(self.rect.x) + ',' + str(self.rect.y) + ')', True, (0,0,0))
-		surface.blit(text, ( self.rect.x, 10))
+		text = font.render(' (' + str(self.rect.x) + ',' + str(self.rect.y) + ')', True, (0, 0, 0))
+		surface.blit(text, (self.rect.x, 10))
 
-		if self.punched and self.side == 'L':
-			py.draw.rect(surface, (4,166,0), py.Rect(self.rect.x, self.rect.y, 100, 50))
-		elif self.punched:
-			py.draw.rect(surface, (4,166,0), py.Rect(self.rect.x - self.SQUARE_SIZE_X, self.rect.y, 100, 50))
-
-
-	def punch(self, key):
+		# Draw health bar
+		if self.side == 'R':
+			py.draw.rect(surface, (255, 0, 0), (self.rect.x, self.rect.y - 20, self.SQUARE_SIZE_X, 10))
+			py.draw.rect(surface, (0, 255, 0), (self.rect.x, self.rect.y - 20, int(self.SQUARE_SIZE_X * (self.health / self.max_health)), 10))
+		else :
+			py.draw.rect(surface, (255, 0, 0), (self.rect.x - self.SQUARE_SIZE_X, self.rect.y - 20, self.SQUARE_SIZE_X, 10))
+			py.draw.rect(surface, (0, 255, 0), (self.rect.x - self.SQUARE_SIZE_X, self.rect.y - 20, int(self.SQUARE_SIZE_X * (self.health / self.max_health)), 10))
+		
+	def action(self, key):
 		if key[self.punch_key]:
 			self.punched = True
-		else :
+		else:
 			self.punched = False
 
 	def move_logic(self, key):
@@ -61,10 +67,10 @@ class Player:
 		# Áp dụng trọng lực
 		self.square_y_speed += self.GRAVITY
 		self.rect.y += self.square_y_speed
-		
+
 		# Kiểm tra va chạm với mặt đất
-		if self.rect.y>= 600 - self.SQUARE_SIZE_Y:
-			self.rect.y= 600 - self.SQUARE_SIZE_Y
+		if self.rect.y >= 600 - self.SQUARE_SIZE_Y:
+			self.rect.y = 600 - self.SQUARE_SIZE_Y
 			self.square_y_speed = 0
 			self.on_ground = True
 
@@ -74,8 +80,13 @@ class Player:
 				self.rect.x = 0
 			elif self.rect.x > 1200 - self.SQUARE_SIZE_X:
 				self.rect.x = 1200 - self.SQUARE_SIZE_X
-		else :
+		else:
 			if self.rect.x < self.SQUARE_SIZE_X:
 				self.rect.x = self.SQUARE_SIZE_X
-			elif self.rect.x > 1200 :
+			elif self.rect.x > 1200:
 				self.rect.x = 1200
+
+
+
+
+
