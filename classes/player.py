@@ -1,7 +1,7 @@
 import pygame as py
 
 class Player:
-	def __init__(self, x, y, color, move_left_key, move_right_key, jump_key, punch_key, side):
+	def __init__(self, x, y, color, move_left_key, move_right_key, jump_key, atk_key, def_key,side):
 		self.SQUARE_SIZE_X = 100
 		self.SQUARE_SIZE_Y = 150
 		self.rect = py.Rect(x, y, self.SQUARE_SIZE_X, self.SQUARE_SIZE_Y)
@@ -18,9 +18,14 @@ class Player:
 		self.GRAVITY = 0.5
 		self.JUMP_POWER = -15
 
-		# Use for punch
-		self.punch_key = punch_key
-		self.punched = False
+		self.state = 'NO'
+
+		# Use for Attack
+		self.atk_key = atk_key
+		self.atked = False
+
+		# Use for Defense
+		self.def_key = def_key
 
 		# Health bar
 		self.max_health = 100
@@ -49,13 +54,27 @@ class Player:
 			py.draw.rect(surface, (255, 0, 0), (self.rect.x - self.SQUARE_SIZE_X, self.rect.y - 20, self.SQUARE_SIZE_X, 10))
 			py.draw.rect(surface, (0, 255, 0), (self.rect.x - self.SQUARE_SIZE_X, self.rect.y - 20, int(self.SQUARE_SIZE_X * (self.health / self.max_health)), 10))
 		
+		# Draw text about the current state 
+		font = py.font.SysFont(None, 46)
+		text = font.render(' ' + self.state, True, (0, 0, 0))
+		surface.blit(text, (self.rect.x if self.side == 'R' else self.rect.x - self.SQUARE_SIZE_X, self.rect.y + self.SQUARE_SIZE_Y // 2))
+
 	def action(self, key):
-		if key[self.punch_key] :
-			self.punched = True
-		else:
-			self.punched = False
+		if not self.atked and not self.state == 'STUN':
+			if key[self.atk_key]:
+				self.atked = True
+				self.state = 'ATK'
+			elif key[self.def_key]:
+				self.state = 'DEF'
+				self.defed = True
+			else:
+				self.state = 'NO'
+		elif not self.state == 'STUN':
+			self.state = 'NO'
 
 	def move_logic(self, key):
+		if self.state == 'DEF':
+			return
 		if key[self.move_left_key]:
 			self.move(-self.speed, 0)
 		elif key[self.move_right_key]:
@@ -85,8 +104,3 @@ class Player:
 				self.rect.x = self.SQUARE_SIZE_X
 			elif self.rect.x > 1200:
 				self.rect.x = 1200
-
-
-
-
-
