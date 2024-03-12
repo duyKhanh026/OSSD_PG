@@ -1,5 +1,6 @@
 import socket
 import pygame
+import random
 
 HEADER = 64
 PORT = 5050
@@ -44,7 +45,7 @@ def main():
 	clock = pygame.time.Clock()
 
 	# Starting position of the square
-	x, y = 250, 250
+	x, y = random.randint(10, 300), random.randint(10, 300)
 	speed = 5
 
 	running = True
