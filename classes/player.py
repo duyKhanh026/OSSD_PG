@@ -10,6 +10,8 @@ class Player:
 		self.move_right_key = move_right_key
 		self.side = side  # Dùng để phân biệt phía của player
 		self.speed = 4
+		self.Max_jump = 2
+		self.jump_count = 0
 
 		# Use for jump event
 		self.jump_key = jump_key
@@ -30,6 +32,9 @@ class Player:
 		# Health bar
 		self.max_health = 100
 		self.health = self.max_health
+
+		self.velocity_x = 0
+		self.pushed = False
 
 	def move(self, dx, dy):
 		self.rect.move_ip(dx, dy)
@@ -104,3 +109,26 @@ class Player:
 				self.rect.x = self.SQUARE_SIZE_X
 			elif self.rect.x > 1200:
 				self.rect.x = 1200
+
+		if self.state == 'STUN' and not self.pushed:
+			self.pushed = True
+			self.velocity_x = 10
+
+		if self.side == 'R':
+			self.rect.x += self.velocity_x
+		else :
+			self.rect.x -= self.velocity_x
+		# Áp dụng ma sát
+		if self.velocity_x > 0:
+			self.velocity_x -= 0.1  # Giảm tốc độ dương
+		elif self.velocity_x < 0:
+			self.velocity_x += 0.1  # Giảm tốc độ âm
+		if abs(self.velocity_x) < 0.1:
+			self.velocity_x = 0  # Đảm bảo tốc độ không trở thành số âm nhỏ
+			self.pushed = False
+		
+		# Kiểm tra không cho khối vuông đi ra ngoài màn hình bên trái
+		if self.rect.left < 0:
+			self.rect.left = 0
+			self.velocity_x = 0  # Đặt tốc độ thành 0 nếu chạm cạnh bên trái của màn hình
+			self.pushed = False
