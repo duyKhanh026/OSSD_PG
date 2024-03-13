@@ -86,7 +86,7 @@ while run:
 		stunned_ready_p1 = True
 		player1.state = 'NO'
 	else:
-		draw_stunned_ready(screen, (10, 50))
+		draw_stunned_ready(screen, (10, 50)) 
 
 	if stunned_cooldown_p2 > 0:
 		draw_stunned_cooldown(screen, stunned_cooldown_p2, (SCREEN_WIDTH - 110, 50))
