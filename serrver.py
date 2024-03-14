@@ -1,5 +1,6 @@
 import socket
 import threading
+from classes.player import Player
 
 HEADER = 64
 PORT = 5050
@@ -17,15 +18,15 @@ class StringList:
 		self.coordinates = []
 
 
-	def add_string(self, s, strs):
+	def add_string(self, s, pler):
 		if s not in self.strings:
 			self.strings.append(s)
-			self.coordinates.append(strs)
-			print(f"String '{s}' with coordinates {strs}")
+			self.coordinates.append(pler)
+			print(f"String '{s}' with coordinates {pler}")
 		else:
 			index = self.strings.index(s)
-			self.coordinates[index] = strs
-			print(f"String '{s}' coordinates updated to {strs}.")
+			self.coordinates[index] = pler
+			print(f"String '{s}' coordinates updated to {pler}.")
 
 	def contains_string(self, s):
 		return s in self.strings

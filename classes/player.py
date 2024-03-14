@@ -1,7 +1,7 @@
 import pygame as py
 
 class Player:
-	def __init__(self, x, y, color, move_left_key, move_right_key, jump_key, atk_key, def_key,side):
+	def __init__(self, x, y, color, move_left_key, move_right_key, jump_key, atk_key, def_key, kick_key,side):
 		self.SQUARE_SIZE_X = 100
 		self.SQUARE_SIZE_Y = 150
 		self.rect = py.Rect(x, y, self.SQUARE_SIZE_X, self.SQUARE_SIZE_Y)
@@ -28,6 +28,10 @@ class Player:
 
 		# Use for Defense
 		self.def_key = def_key
+
+		# Use for Kick
+		self.kic_key = kick_key
+		self.kicked = False
 
 		# Health bar
 		self.max_health = 100
@@ -67,19 +71,21 @@ class Player:
 	def action(self, key):
 		if self.move_left_key == None:
 			return 
-		if not self.atked and not self.state == 'STUN':
+		if not self.atked and not self.kicked and not self.state == 'STUN':
 			if key[self.atk_key]:
 				self.atked = True
 				self.state = 'ATK'
 			elif key[self.def_key]:
 				self.state = 'DEF'
-				self.defed = True
+			elif key[self.kic_key]:
+				self.state = 'KIC'
+				self.kicked = True
 			else:
 				self.state = 'NO'
 		elif not self.state == 'STUN':
 			self.state = 'NO'
 
-	def move_logic(self, key, pl2):
+	def move_logic(self, key):
 		# Áp dụng trọng lực
 		self.square_y_speed += self.GRAVITY
 		self.rect.y += self.square_y_speed
@@ -102,7 +108,7 @@ class Player:
 			elif self.rect.x > 1200:
 				self.rect.x = 1200
 
-		if self.state == 'STUN' and not self.pushed:
+		if self.state == 'PUS' and not self.pushed:
 			self.pushed = True
 			self.velocity_x = 10
 
@@ -112,10 +118,10 @@ class Player:
 			self.rect.x -= self.velocity_x
 		# Áp dụng ma sát
 		if self.velocity_x > 0:
-			self.velocity_x -= 0.1  # Giảm tốc độ dương
+			self.velocity_x -= 0.2  # Giảm tốc độ dương
 		elif self.velocity_x < 0:
-			self.velocity_x += 0.1  # Giảm tốc độ âm
-		if abs(self.velocity_x) < 0.1:
+			self.velocity_x += 0.2  # Giảm tốc độ âm
+		if abs(self.velocity_x) < 0.2:
 			self.velocity_x = 0  # Đảm bảo tốc độ không trở thành số âm nhỏ
 			self.pushed = False
 		
@@ -137,11 +143,57 @@ class Player:
 			self.square_y_speed = self.JUMP_POWER
 			self.on_ground = False
 
-		if self.rect.y >= pl2.rect.y - pl2.SQUARE_SIZE_Y and self.rect.y <= pl2.rect.y:
-			if self.rect.x > pl2.rect.x and self.rect.x <= pl2.rect.x + pl2.SQUARE_SIZE_X:
-				self.move(-self.speed, 0)
-			elif self.rect.x < pl2.rect.x + pl2.SQUARE_SIZE_X * 2 and self.rect.x > pl2.rect.x + pl2.SQUARE_SIZE_X:
-				self.move(self.speed, 0)
+
+		# if self.side == 'L' and self.rect.y >= pl2.rect.y - pl2.SQUARE_SIZE_Y and self.rect.y <= pl2.rect.y:
+		# 	if self.rect.x > pl2.rect.x and self.rect.x <= pl2.rect.x + pl2.SQUARE_SIZE_X:
+		# 		self.move(-self.speed, 0)
+		# 	elif self.rect.x < pl2.rect.x + pl2.SQUARE_SIZE_X * 2 and self.rect.x > pl2.rect.x + pl2.SQUARE_SIZE_X:
+		# 		self.move(self.speed, 0)
 
 
-		
+	def __str__(self):
+		# Tạo một chuỗi đại diện cho đối tượng Player
+		player_info = [
+			str(self.speed),
+			str(self.Max_jump),
+			str(self.jump_count),
+			str(self.on_ground),
+			str(self.square_y_speed),
+			str(self.GRAVITY),
+			str(self.JUMP_POWER),
+			self.state,
+			str(self.atked),
+			str(self.kicked),
+			str(self.max_health),
+			str(self.health),
+			str(self.velocity_x),
+			str(self.pushed),
+			str(self.rect.x),
+			str(self.rect.y)
+		]
+		return ",".join(player_info)
+
+	def from_string(self, player_str):
+		# Tách chuỗi để lấy các giá trị
+		values = player_str.split(",")
+		# Gán các giá trị cho các thuộc tính của đối tượng Player
+		self.speed = int(values[0])
+		self.Max_jump = int(values[1])
+		self.jump_count = int(values[2])
+		self.on_ground = values[3].lower() == 'true'
+		self.square_y_speed = float(values[4])
+		self.GRAVITY = float(values[5])
+		self.JUMP_POWER = float(values[6])
+		self.state = values[7]
+		self.atked = values[8].lower() == 'true'
+		self.kicked = values[9].lower() == 'true'
+		self.max_health = int(values[10])
+		self.health = int(values[11])
+		self.velocity_x = float(values[12])
+		self.pushed = values[13].lower() == 'true'
+		self.rect.x = float(values[14])
+		self.rect.y = float(values[15])
+		self.rect.x = 1200 - self.rect.x
+
+
+
