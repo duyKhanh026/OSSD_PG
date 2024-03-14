@@ -37,14 +37,6 @@ class StringList:
 				if string != s:
 					return self.coordinates[i]
 			return "String not found"
-	def remove_string(self, s):
-		if s in self.strings:
-			index = self.strings.index(s)
-			del self.strings[index]
-			del self.coordinates[index]
-			print(f"String '{s}' and its coordinates removed from the list.")
-		else:
-			print(f"String '{s}' not found in the list.")
 
 
 my_string_list = StringList()
@@ -60,7 +52,6 @@ def handle_client(conn, addr):
 			msg_length = int(msg_length)
 			msg = conn.recv(msg_length).decode(FORMAT)
 			if msg == DISCONNECT_MESSAGE:
-				my_string_list.remove_string(str(get_portt(addr)))
 				connected = False
 
 			print(f"[{addr}] {msg}")

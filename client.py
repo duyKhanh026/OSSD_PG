@@ -36,19 +36,18 @@ while run:
 	for x in range(0, SCREEN_WIDTH, line_spacing_vertical):
 		py.draw.line(screen, BLACK, (x, 0), (x, SCREEN_HEIGHT))
 
-	for player in [player1, player2]:
-		player.move_logic(py.key.get_pressed())
-		player.action(py.key.get_pressed())
-		player.draw(screen)
-		draw_atk_effect(screen, player)
+	player.move_logic(py.key.get_pressed())
+	player.action(py.key.get_pressed())
+	player.draw(screen)
+	draw_atk_effect(screen, player)
 
-		if player.atked:
-			if player == player1 and attack_ready_p1:
-				attack_cooldown_p1 = ATTACK_COOLDOWN
-				attack_ready_p1 = False
-			elif player == player2 and attack_ready_p2:
-				attack_cooldown_p2 = ATTACK_COOLDOWN
-				attack_ready_p2 = False
+	if player.atked:
+		if player == player1 and attack_ready_p1:
+			attack_cooldown_p1 = ATTACK_COOLDOWN
+			attack_ready_p1 = False
+		elif player == player2 and attack_ready_p2:
+			attack_cooldown_p2 = ATTACK_COOLDOWN
+			attack_ready_p2 = False
 
 
 	if attack_cooldown_p1 > 0:
