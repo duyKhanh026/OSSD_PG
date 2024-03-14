@@ -54,6 +54,17 @@ while run:
 				attack_ready_p2 = False
 
 
+	if player1.side == 'L' and player1.rect.x - player1.SQUARE_SIZE_X > player2.rect.x:
+		player1.side = 'R'
+		player1.rect.x -= player1.SQUARE_SIZE_X
+		player2.side = 'L'
+		player2.rect.x += player2.SQUARE_SIZE_X
+	elif player1.side == 'R' and player2.rect.x - player2.SQUARE_SIZE_X > player1.rect.x:
+		player1.side = 'L'
+		player1.rect.x += player1.SQUARE_SIZE_X
+		player2.side = 'R'
+		player2.rect.x -= player2.SQUARE_SIZE_X
+
 	if attack_cooldown_p1 > 0:
 		draw_attack_cooldown(screen, attack_cooldown_p1, (10, 30))
 		attack_cooldown_p1 -= clock.get_time()

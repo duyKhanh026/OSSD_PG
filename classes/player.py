@@ -169,7 +169,8 @@ class Player:
 			str(self.velocity_x),
 			str(self.pushed),
 			str(self.rect.x),
-			str(self.rect.y)
+			str(self.rect.y),
+			str(self.side)
 		]
 		return ",".join(player_info)
 
@@ -193,7 +194,5 @@ class Player:
 		self.pushed = values[13].lower() == 'true'
 		self.rect.x = float(values[14])
 		self.rect.y = float(values[15])
-		self.rect.x = 1200 - self.rect.x
-
-
-
+		self.side = 'L' if values[16] == 'R' else 'R' # đảo lại phía cho p2
+		self.rect.x = 1200 - self.rect.x # đổi vị trí của từ p1 sang p2

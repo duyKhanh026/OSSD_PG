@@ -57,9 +57,7 @@ def send(msg):
 	global player2
 	if not remesage == 'NOPLAY':
 		player2.from_string(remesage)
-		if player2.state == 'KIC':
-			print("is kickking")
-		# print(remesage)
+		print(remesage)
 
 attack_cooldown_p1 = 0 
 attack_ready_p1 = True
@@ -103,6 +101,12 @@ while run:
 				attack_cooldown_p2 = ATTACK_COOLDOWN
 				attack_ready_p2 = False
 
+	if player1.side == 'L' and player1.rect.x - player1.SQUARE_SIZE_X > player2.rect.x:
+		player1.side = 'R'
+		player1.rect.x -= player1.SQUARE_SIZE_X
+	elif player1.side == 'R' and player2.rect.x - player2.SQUARE_SIZE_X > player1.rect.x:
+		player1.side = 'L'
+		player1.rect.x += player1.SQUARE_SIZE_X
 
 	if attack_cooldown_p1 > 0:
 		draw_attack_cooldown(screen, attack_cooldown_p1, (10, 30))
