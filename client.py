@@ -80,7 +80,7 @@ while run:
 	for x in range(0, SCREEN_WIDTH, line_spacing_vertical):
 		py.draw.line(screen, BLACK, (x, 0), (x, SCREEN_HEIGHT))
 
-	player1.move_logic(py.key.get_pressed())
+	player1.move_logic(py.key.get_pressed(), player2)
 	player1.action(py.key.get_pressed())
 	player1.draw(screen)
 	draw_atk_effect(screen, player1)
@@ -91,6 +91,7 @@ while run:
 			attack_ready_p1 = False
 
 	player2.draw(screen)
+	draw_atk_effect(screen, player2)
 
 
 	if attack_cooldown_p1 > 0:

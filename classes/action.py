@@ -12,7 +12,7 @@ def handle_attack(attacker, victim):
 		victim.health -= DAMAGE
 
 def draw_atk_effect(screen, player):
-	if player.atked:
+	if player.state == 'ATK':
 		if player.side == 'L':
 			py.draw.rect(screen, (255, 150, 0), py.Rect(player.rect.x, player.rect.y, player.SQUARE_SIZE_X, player.SQUARE_SIZE_Y))
 		else:

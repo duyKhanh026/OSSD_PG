@@ -79,7 +79,7 @@ class Player:
 		elif not self.state == 'STUN':
 			self.state = 'NO'
 
-	def move_logic(self, key):
+	def move_logic(self, key, pl2):
 		# Áp dụng trọng lực
 		self.square_y_speed += self.GRAVITY
 		self.rect.y += self.square_y_speed
@@ -123,7 +123,7 @@ class Player:
 		if self.rect.left < 0:
 			self.rect.left = 0
 			self.velocity_x = 0  # Đặt tốc độ thành 0 nếu chạm cạnh bên trái của màn hình
-			self.pushed = False
+			self.pushed = False 
 
 		if self.move_left_key == None:
 			return 
@@ -136,5 +136,12 @@ class Player:
 		if key[self.jump_key] and self.on_ground:
 			self.square_y_speed = self.JUMP_POWER
 			self.on_ground = False
+
+		if self.rect.y >= pl2.rect.y - pl2.SQUARE_SIZE_Y and self.rect.y <= pl2.rect.y:
+			if self.rect.x > pl2.rect.x and self.rect.x <= pl2.rect.x + pl2.SQUARE_SIZE_X:
+				self.move(-self.speed, 0)
+			elif self.rect.x < pl2.rect.x + pl2.SQUARE_SIZE_X * 2 and self.rect.x > pl2.rect.x + pl2.SQUARE_SIZE_X:
+				self.move(self.speed, 0)
+
 
 		

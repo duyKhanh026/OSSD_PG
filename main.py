@@ -36,7 +36,7 @@ while run:
 		py.draw.line(screen, BLACK, (x, 0), (x, SCREEN_HEIGHT))
 
 	for player in [player1, player2]:
-		player.move_logic(py.key.get_pressed())
+		player.move_logic(py.key.get_pressed(), player2 if player == player1 else player1)
 		player.action(py.key.get_pressed())
 		player.draw(screen)
 		draw_atk_effect(screen, player)
