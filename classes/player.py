@@ -65,6 +65,8 @@ class Player:
 		surface.blit(text, (self.rect.x if self.side == 'R' else self.rect.x - self.SQUARE_SIZE_X, self.rect.y + self.SQUARE_SIZE_Y // 2))
 
 	def action(self, key):
+		if self.move_left_key == None:
+			return 
 		if not self.atked and not self.state == 'STUN':
 			if key[self.atk_key]:
 				self.atked = True
@@ -78,16 +80,6 @@ class Player:
 			self.state = 'NO'
 
 	def move_logic(self, key):
-		if self.state == 'DEF':
-			return
-		if key[self.move_left_key]:
-			self.move(-self.speed, 0)
-		elif key[self.move_right_key]:
-			self.move(self.speed, 0)
-		if key[self.jump_key] and self.on_ground:
-			self.square_y_speed = self.JUMP_POWER
-			self.on_ground = False
-
 		# Áp dụng trọng lực
 		self.square_y_speed += self.GRAVITY
 		self.rect.y += self.square_y_speed
@@ -132,3 +124,17 @@ class Player:
 			self.rect.left = 0
 			self.velocity_x = 0  # Đặt tốc độ thành 0 nếu chạm cạnh bên trái của màn hình
 			self.pushed = False
+
+		if self.move_left_key == None:
+			return 
+		if self.state == 'DEF':
+			return
+		if key[self.move_left_key]:
+			self.move(-self.speed, 0)
+		elif key[self.move_right_key]:
+			self.move(self.speed, 0)
+		if key[self.jump_key] and self.on_ground:
+			self.square_y_speed = self.JUMP_POWER
+			self.on_ground = False
+
+		

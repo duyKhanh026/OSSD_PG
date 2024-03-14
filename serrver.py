@@ -16,15 +16,16 @@ class StringList:
 		self.strings = []
 		self.coordinates = []
 
-	def add_string(self, s, x=None, y=None):
+
+	def add_string(self, s, strs):
 		if s not in self.strings:
 			self.strings.append(s)
-			self.coordinates.append((x, y))
-			print(f"String '{s}' with coordinates ({x}, {y}) added to the list.")
+			self.coordinates.append(strs)
+			print(f"String '{s}' with coordinates {strs}")
 		else:
 			index = self.strings.index(s)
-			self.coordinates[index] = (x, y)
-			print(f"String '{s}' coordinates updated to ({x}, {y}).")
+			self.coordinates[index] = strs
+			print(f"String '{s}' coordinates updated to {strs}.")
 
 	def contains_string(self, s):
 		return s in self.strings
@@ -37,6 +38,14 @@ class StringList:
 				if string != s:
 					return self.coordinates[i]
 			return "String not found"
+	def remove_string(self, s):
+		if s in self.strings:
+			index = self.strings.index(s)
+			del self.strings[index]
+			del self.coordinates[index]
+			print(f"String '{s}' and its coordinates removed from the list.")
+		else:
+			print(f"String '{s}' not found in the list.")
 
 
 my_string_list = StringList()
@@ -52,12 +61,13 @@ def handle_client(conn, addr):
 			msg_length = int(msg_length)
 			msg = conn.recv(msg_length).decode(FORMAT)
 			if msg == DISCONNECT_MESSAGE:
+				my_string_list.remove_string(str(get_portt(addr)))
 				connected = False
 
 			print(f"[{addr}] {msg}")
 			senback = "NOPLAY"
 			if connected:
-				my_string_list.add_string(str(get_portt(addr)), convert_to_coordinate(msg))
+				my_string_list.add_string(str(get_portt(addr)), msg)
 				senback = my_string_list.get_coordinate(str(get_portt(addr)))
 			conn.send(str(senback).encode(FORMAT))
 
@@ -65,11 +75,6 @@ def handle_client(conn, addr):
 
 def get_portt(adr):
 	return adr[1]
-def convert_to_coordinate(string):
-	x_str, y_str = string.split(',')
-	x = int(x_str)
-	y = int(y_str)
-	return x, y
 
 def start():
 	server.listen()
