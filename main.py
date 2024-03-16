@@ -52,7 +52,7 @@ while run:
 		# Xử lý khi player1 hoặc player2 tung đòn đá để đẩy
 		for player in [player1, player2]:
 			if player.state == 'KIC' and (player2.state if player == player1 else player1.state) != 'ATK':
-				if player.kicAcount > 30:
+				if player.kicAcount > 30 and (player2.state if player == player1 else player1.state) != 'PUS':
 					handle_attack(player1 if player == player1 else player2, player2 if player == player1 else player1)
 					if player == player1: 
 						player2.state = 'PUS' 
@@ -69,15 +69,15 @@ while run:
 					else:
 					    player1.push_ready_p1 = False
 
-		if player1.state == 'ATK' and player2.state != 'ATK':
-			if player1.atkAcount > 30:
+		if player1.state == 'ATK' and player2.state != 'DEF':
+			if player1.atkAcount > 30 and player2.state != 'STUN':
 				handle_attack(player1, player2)
 				player2.state = 'STUN'
 				player2.stunned_cooldown_p1 = STUNNED_COOLDOWN
 				player2.stunned_ready_p1 = False
 
-		if player2.state == 'ATK' and player1.state != 'ATK':
-			if player2.atkAcount > 30:
+		if player2.state == 'ATK' and player1.state != 'DEF':
+			if player2.atkAcount > 30 and player1.state != 'STUN':
 				handle_attack(player2, player1)
 				player1.state = 'STUN'  
 				player1.stunned_cooldown_p1 = STUNNED_COOLDOWN

@@ -105,10 +105,10 @@ class Player:
 		self.rect.move_ip(dx, dy)
 
 	def draw(self, surface):
-		if self.side == 'R':
-			py.draw.rect(surface, self.color, self.rect)
-		else:
-			py.draw.rect(surface, self.color, py.Rect(self.rect.x - self.SQUARE_SIZE_X, self.rect.y, self.SQUARE_SIZE_X, self.SQUARE_SIZE_Y))
+		# if self.side == 'R':
+		# 	py.draw.rect(surface, self.color, self.rect)
+		# else:
+		# 	py.draw.rect(surface, self.color, py.Rect(self.rect.x - self.SQUARE_SIZE_X, self.rect.y, self.SQUARE_SIZE_X, self.SQUARE_SIZE_Y))
 
 
 		self.redrawGameWindow(surface)
@@ -128,9 +128,9 @@ class Player:
 			py.draw.rect(surface, (0, 255, 0), (self.rect.x - self.SQUARE_SIZE_X, self.rect.y - 20, int(self.SQUARE_SIZE_X * (self.health / self.max_health)), 10))
 		
 		# Draw text about the current state 
-		font = py.font.SysFont(None, 46)
-		text = font.render(' ' + self.state, True, (255, 255,255))
-		surface.blit(text, (self.rect.x if self.side == 'R' else self.rect.x - self.SQUARE_SIZE_X, self.rect.y + self.SQUARE_SIZE_Y // 2))
+		# font = py.font.SysFont(None, 46)
+		# text = font.render(' ' + self.state, True, (255, 255,255))
+		# surface.blit(text, (self.rect.x if self.side == 'R' else self.rect.x - self.SQUARE_SIZE_X, self.rect.y + self.SQUARE_SIZE_Y // 2))
 
 	def action(self, key):
 		if self.move_left_key == None:
