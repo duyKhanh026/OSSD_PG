@@ -1,6 +1,7 @@
 import pygame as py
 from classes.player import Player
 from classes.action import *
+from classes.spSkill import *
 from values.color import *
 from values.screen import *
 
@@ -11,6 +12,11 @@ py.display.set_caption('Demo')
 
 player1 = Player(300, 150, RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, 'L',)
 player2 = Player(900, 150, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_KP1, py.K_KP2, py.K_KP3, 'R')
+
+
+spkill = SPskill1()
+skill1 = False
+
 
 run = True
 clock = py.time.Clock()
@@ -23,6 +29,12 @@ while run:
 	line_spacing_vertical = 50
 	for x in range(0, SCREEN_WIDTH, line_spacing_vertical):
 		py.draw.line(screen, BLACK, (x, 0), (x, SCREEN_HEIGHT))
+
+	if spkill.skill_use(screen, player1.rect.x, skill1): skill1 = False
+
+	
+	if py.key.get_pressed()[py.K_e]:
+		skill1 = True
 
 	for player in [player1, player2]:
 		# draw_atk_effect(screen, player)
