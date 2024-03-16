@@ -2,6 +2,31 @@ import pygame as py
 
 class Player:
 	def __init__(self, x, y, color, move_left_key, move_right_key, jump_key, atk_key, def_key, kick_key,side):
+		self.walkRight = [py.image.load('assets/stickman_blade_runningR1.png'),
+					 py.image.load('assets/stickman_blade_runningR2.png'),
+					 py.image.load('assets/stickman_blade_runningR3.png'),
+					 py.image.load('assets/stickman_blade_runningR4.png'),
+					 py.image.load('assets/stickman_blade_runningR5.png')]
+		self.slashA = [py.image.load('assets/stickman_blade_slash1.png'),
+					 py.image.load('assets/stickman_blade_slash2.png'),
+					 py.image.load('assets/stickman_blade_slash3.png'),
+					 py.image.load('assets/stickman_blade_slash4.png'),
+					 py.image.load('assets/stickman_blade_slash5.png'),
+					 py.image.load('assets/stickman_blade_slash5.png'),
+					 py.image.load('assets/stickman_blade_slash5.png')]
+		self.kickA = [py.image.load('assets/stickman_blade_kick1.png'),
+					 py.image.load('assets/stickman_blade_kick2.png'),
+					 py.image.load('assets/stickman_blade_kick3.png'),
+					 py.image.load('assets/stickman_blade_kick4.png'),
+					 py.image.load('assets/stickman_blade_kick5.png'),
+					 py.image.load('assets/stickman_blade_kick6.png'),
+					 py.image.load('assets/stickman_blade_kick7.png')]
+		self.charIdle = py.image.load('assets/stickman_blade_idle.png')
+		self.defenseA = py.image.load('assets/stickman_blade_defense.png')
+		self.walkCount = 0
+		self.right = True if side == 'L' else False
+		self.left = True if side == 'R' else False
+
 		self.SQUARE_SIZE_X = 100
 		self.SQUARE_SIZE_Y = 150
 		self.rect = py.Rect(x, y, self.SQUARE_SIZE_X, self.SQUARE_SIZE_Y)
@@ -24,14 +49,24 @@ class Player:
 
 		# Use for Attack
 		self.atk_key = atk_key
-		self.atked = False
+		self.attack_cooldown_p1 = 0 
+		self.attack_ready_p1 = True
+		self.atkAcount = 0 #for animation
+
+		# Use for being attacked
+		self.stunned_cooldown_p1 = 0
+		self.stunned_ready_p1 = True
+
+		# Use for being kicked
+		self.push_cooldown_p1 = 0
+		self.push_ready_p1 = True
 
 		# Use for Defense
 		self.def_key = def_key
 
 		# Use for Kick
 		self.kic_key = kick_key
-		self.kicked = False
+		self.kicAcount = 0 #for animation
 
 		# Health bar
 		self.max_health = 100
@@ -40,14 +75,43 @@ class Player:
 		self.velocity_x = 0
 		self.pushed = False
 
+
+	def redrawGameWindow(self, surface):
+		if self.walkCount + 1 >= 30:
+			self.walkCount = 0
+		if self.atkAcount + 1 >= 42:
+			self.atkAcount = 0
+		if self.kicAcount + 1 >= 42:
+			self.kicAcount = 0
+			
+		if self.state == 'ATK':
+			surface.blit(self.slashA[self.atkAcount//6] if self.side == 'L' else py.transform.flip(self.slashA[self.atkAcount//6], True, False), (self.rect.x - self.SQUARE_SIZE_X * (2 if self.side == 'L' else 1), self.rect.y))
+			self.atkAcount += 1
+		elif self.state == 'KIC':
+			surface.blit(self.kickA[self.kicAcount//6] if self.side == 'L' else py.transform.flip(self.kickA[self.kicAcount//6], True, False), (self.rect.x - self.SQUARE_SIZE_X * (2 if self.side == 'L' else 1), self.rect.y))
+			self.kicAcount += 1
+		elif self.right:
+			surface.blit(self.walkRight[self.walkCount//6], (self.rect.x - self.SQUARE_SIZE_X * (2 if self.side == 'L' else 1), self.rect.y))
+			self.walkCount += 1
+		elif self.left:
+			surface.blit(py.transform.flip(self.walkRight[self.walkCount//6], True, False), (self.rect.x - self.SQUARE_SIZE_X * (2 if self.side == 'L' else 1), self.rect.y))
+			self.walkCount += 1
+		elif self.state == 'DEF':
+			surface.blit(self.defenseA if self.side == 'L' else py.transform.flip(self.defenseA, True, False), (self.rect.x - self.SQUARE_SIZE_X * (2 if self.side == 'L' else 1), self.rect.y))
+		else :
+			surface.blit(self.charIdle if self.side == 'L' else py.transform.flip(self.charIdle, True, False), (self.rect.x - self.SQUARE_SIZE_X * (2 if self.side == 'L' else 1), self.rect.y))
+
 	def move(self, dx, dy):
 		self.rect.move_ip(dx, dy)
 
 	def draw(self, surface):
-		if self.side == 'R':
-			py.draw.rect(surface, self.color, self.rect)
-		else:
-			py.draw.rect(surface, self.color, py.Rect(self.rect.x - self.SQUARE_SIZE_X, self.rect.y, self.SQUARE_SIZE_X, self.SQUARE_SIZE_Y))
+		# if self.side == 'R':
+		# 	py.draw.rect(surface, self.color, self.rect)
+		# else:
+		# 	py.draw.rect(surface, self.color, py.Rect(self.rect.x - self.SQUARE_SIZE_X, self.rect.y, self.SQUARE_SIZE_X, self.SQUARE_SIZE_Y))
+
+
+		self.redrawGameWindow(surface)
 
 		py.draw.line(surface, (26, 243, 0), (self.rect.x, 0), (self.rect.x, 600))
 		py.draw.line(surface, (26, 243, 0), (0, self.rect.y), (1200, self.rect.y))
@@ -64,26 +128,24 @@ class Player:
 			py.draw.rect(surface, (0, 255, 0), (self.rect.x - self.SQUARE_SIZE_X, self.rect.y - 20, int(self.SQUARE_SIZE_X * (self.health / self.max_health)), 10))
 		
 		# Draw text about the current state 
-		font = py.font.SysFont(None, 46)
-		text = font.render(' ' + self.state, True, (0, 0, 0))
-		surface.blit(text, (self.rect.x if self.side == 'R' else self.rect.x - self.SQUARE_SIZE_X, self.rect.y + self.SQUARE_SIZE_Y // 2))
+		# font = py.font.SysFont(None, 46)
+		# text = font.render(' ' + self.state, True, (255, 255,255))
+		# surface.blit(text, (self.rect.x if self.side == 'R' else self.rect.x - self.SQUARE_SIZE_X, self.rect.y + self.SQUARE_SIZE_Y // 2))
 
 	def action(self, key):
 		if self.move_left_key == None:
 			return 
-		if not self.atked and not self.kicked and not self.state == 'STUN':
+		if self.state != 'ATK' and self.state != 'KIC' and self.state != 'STUN':
 			if key[self.atk_key]:
-				self.atked = True
+				self.atkAcount = 0
 				self.state = 'ATK'
 			elif key[self.def_key]:
 				self.state = 'DEF'
 			elif key[self.kic_key]:
+				self.kicAcount = 0
 				self.state = 'KIC'
-				self.kicked = True
 			else:
 				self.state = 'NO'
-		elif not self.state == 'STUN':
-			self.state = 'NO'
 
 	def move_logic(self, key):
 		# Áp dụng trọng lực
@@ -136,12 +198,20 @@ class Player:
 		if self.state == 'DEF':
 			return
 		if key[self.move_left_key]:
+			self.right = False
+			self.left = True
 			self.move(-self.speed, 0)
 		elif key[self.move_right_key]:
+			self.right = True
+			self.left = False
 			self.move(self.speed, 0)
+		else:
+			self.right = False
+			self.left = False
 		if key[self.jump_key] and self.on_ground:
 			self.square_y_speed = self.JUMP_POWER
 			self.on_ground = False
+
 
 
 		# if self.side == 'L' and self.rect.y >= pl2.rect.y - pl2.SQUARE_SIZE_Y and self.rect.y <= pl2.rect.y:
@@ -162,8 +232,6 @@ class Player:
 			str(self.GRAVITY),
 			str(self.JUMP_POWER),
 			self.state,
-			str(self.atked),
-			str(self.kicked),
 			str(self.max_health),
 			str(self.health),
 			str(self.velocity_x),
@@ -186,13 +254,11 @@ class Player:
 		self.GRAVITY = float(values[5])
 		self.JUMP_POWER = float(values[6])
 		self.state = values[7]
-		self.atked = values[8].lower() == 'true'
-		self.kicked = values[9].lower() == 'true'
-		self.max_health = int(values[10])
-		self.health = int(values[11])
-		self.velocity_x = float(values[12])
-		self.pushed = values[13].lower() == 'true'
-		self.rect.x = float(values[14])
-		self.rect.y = float(values[15])
-		self.side = 'L' if values[16] == 'R' else 'R' # đảo lại phía cho p2
+		self.max_health = int(values[8])
+		self.health = int(values[9])
+		self.velocity_x = float(values[10])
+		self.pushed = values[11].lower() == 'true'
+		self.rect.x = float(values[12])
+		self.rect.y = float(values[13])
+		self.side = 'L' if values[14] == 'R' else 'R' # đảo lại phía cho p2
 		self.rect.x = 1200 - self.rect.x # đổi vị trí của từ p1 sang p2

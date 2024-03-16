@@ -196,7 +196,7 @@ while run:
 			run = False
 
 	py.display.update()
-	clock.tick(60)
+	clock.tick(120)
 	send(str(player1))
 	# vong += 1
 
