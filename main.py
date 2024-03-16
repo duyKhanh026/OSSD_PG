@@ -21,14 +21,14 @@ skill1 = False
 run = True
 clock = py.time.Clock()
 while run:
-	screen.fill(WHITE)
+	screen.fill(BLACK)
 
 	line_spacing = 50  # Khoảng cách giữa các đường line
 	for y in range(0, SCREEN_HEIGHT, line_spacing):
-		py.draw.line(screen, BLACK, (0, y), (SCREEN_WIDTH, y))
+		py.draw.line(screen, WHITE, (0, y), (SCREEN_WIDTH, y))
 	line_spacing_vertical = 50
 	for x in range(0, SCREEN_WIDTH, line_spacing_vertical):
-		py.draw.line(screen, BLACK, (x, 0), (x, SCREEN_HEIGHT))
+		py.draw.line(screen, WHITE, (x, 0), (x, SCREEN_HEIGHT))
 
 	if spkill.skill_use(screen, player1.rect.x, skill1): skill1 = False
 

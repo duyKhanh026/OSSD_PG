@@ -2,27 +2,27 @@ import pygame as py
 
 class Player:
 	def __init__(self, x, y, color, move_left_key, move_right_key, jump_key, atk_key, def_key, kick_key,side):
-		self.walkRight = [py.image.load('assets/stickman_blade_runningR1.png'),
-					 py.image.load('assets/stickman_blade_runningR2.png'),
-					 py.image.load('assets/stickman_blade_runningR3.png'),
-					 py.image.load('assets/stickman_blade_runningR4.png'),
-					 py.image.load('assets/stickman_blade_runningR5.png')]
-		self.slashA = [py.image.load('assets/stickman_blade_slash1.png'),
-					 py.image.load('assets/stickman_blade_slash2.png'),
-					 py.image.load('assets/stickman_blade_slash3.png'),
-					 py.image.load('assets/stickman_blade_slash4.png'),
-					 py.image.load('assets/stickman_blade_slash5.png'),
-					 py.image.load('assets/stickman_blade_slash5.png'),
-					 py.image.load('assets/stickman_blade_slash5.png')]
-		self.kickA = [py.image.load('assets/stickman_blade_kick1.png'),
-					 py.image.load('assets/stickman_blade_kick2.png'),
-					 py.image.load('assets/stickman_blade_kick3.png'),
-					 py.image.load('assets/stickman_blade_kick4.png'),
-					 py.image.load('assets/stickman_blade_kick5.png'),
-					 py.image.load('assets/stickman_blade_kick6.png'),
-					 py.image.load('assets/stickman_blade_kick7.png')]
-		self.charIdle = py.image.load('assets/stickman_blade_idle.png')
-		self.defenseA = py.image.load('assets/stickman_blade_defense.png')
+		self.walkRight = [py.image.load('assets/blue/stickman_blade_running1.png'),
+					 py.image.load('assets/blue/stickman_blade_running2.png'),
+					 py.image.load('assets/blue/stickman_blade_running3.png'),
+					 py.image.load('assets/blue/stickman_blade_running4.png'),
+					 py.image.load('assets/blue/stickman_blade_running5.png')]
+		self.slashA = [py.image.load('assets/blue/stickman_blade_slash1.png'),
+					 py.image.load('assets/blue/stickman_blade_slash2.png'),
+					 py.image.load('assets/blue/stickman_blade_slash3.png'),
+					 py.image.load('assets/blue/stickman_blade_slash4.png'),
+					 py.image.load('assets/blue/stickman_blade_slash5.png'),
+					 py.image.load('assets/blue/stickman_blade_slash5.png'),
+					 py.image.load('assets/blue/stickman_blade_slash5.png')]
+		self.kickA = [py.image.load('assets/blue/stickman_blade_kick1.png'),
+					 py.image.load('assets/blue/stickman_blade_kick2.png'),
+					 py.image.load('assets/blue/stickman_blade_kick3.png'),
+					 py.image.load('assets/blue/stickman_blade_kick4.png'),
+					 py.image.load('assets/blue/stickman_blade_kick5.png'),
+					 py.image.load('assets/blue/stickman_blade_kick6.png'),
+					 py.image.load('assets/blue/stickman_blade_kick7.png')]
+		self.charIdle = py.image.load('assets/blue/stickman_blade_idle.png')
+		self.defenseA = py.image.load('assets/blue/stickman_blade_defense.png')
 		self.walkCount = 0
 		self.right = True if side == 'L' else False
 		self.left = True if side == 'R' else False
@@ -128,9 +128,9 @@ class Player:
 			py.draw.rect(surface, (0, 255, 0), (self.rect.x - self.SQUARE_SIZE_X, self.rect.y - 20, int(self.SQUARE_SIZE_X * (self.health / self.max_health)), 10))
 		
 		# Draw text about the current state 
-		font = py.font.SysFont(None, 46)
-		text = font.render(' ' + self.state, True, (255, 255,255))
-		surface.blit(text, (self.rect.x if self.side == 'R' else self.rect.x - self.SQUARE_SIZE_X, self.rect.y + self.SQUARE_SIZE_Y // 2))
+		# font = py.font.SysFont(None, 46)
+		# text = font.render(' ' + self.state, True, (255, 255,255))
+		# surface.blit(text, (self.rect.x if self.side == 'R' else self.rect.x - self.SQUARE_SIZE_X, self.rect.y + self.SQUARE_SIZE_Y // 2))
 
 	def action(self, key):
 		if self.move_left_key == None:
@@ -200,10 +200,16 @@ class Player:
 			return
 		if key[self.move_left_key]:
 			self.right = False
+			if self.side == 'L':
+				self.rect.x -= self.SQUARE_SIZE_X
+			self.side = 'R'
 			self.left = True
 			self.move(-self.speed, 0)
 		elif key[self.move_right_key]:
 			self.right = True
+			if self.side == 'R':
+				self.rect.x += self.SQUARE_SIZE_X
+			self.side = 'L'
 			self.left = False
 			self.move(self.speed, 0)
 		else:

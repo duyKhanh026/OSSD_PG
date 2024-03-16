@@ -4,6 +4,7 @@ ATTACK_COOLDOWN = 500  # Thời gian hồi của đòn đánh (milliseconds)
 STUNNED_COOLDOWN = 450 
 PUSH_COOLDOWN = 450 
 DAMAGE = 10
+TEXT_COLOR = (255, 255, 255)
 
 def check_collision(p1, p2):
 	return p1.rect.colliderect(p2.rect)
@@ -21,32 +22,32 @@ def draw_atk_effect(screen, player):
 
 def draw_attack_cooldown(screen, time_remaining, toado):
 	font = py.font.SysFont(None, 24)
-	text = font.render(f'Attack: {time_remaining / 1000:.1f} s', True, (0, 0, 0))
+	text = font.render(f'Attack: {time_remaining / 1000:.1f} s', True, TEXT_COLOR)
 	screen.blit(text, toado)
 
 def draw_attack_ready(screen, toado):
 	font = py.font.SysFont(None, 24)
-	text = font.render('Attack: Ready', True, (0, 0, 0))
+	text = font.render('Attack: Ready', True, TEXT_COLOR)
 	screen.blit(text, toado)
 
 def draw_stunned_cooldown(screen, time_remaining, toado):
 	font = py.font.SysFont(None, 24)
-	text = font.render(f'Stunned: {time_remaining / 1000:.1f} s', True, (0, 0, 0))
+	text = font.render(f'Stunned: {time_remaining / 1000:.1f} s', True, TEXT_COLOR)
 	screen.blit(text, toado)
 
 def draw_stunned_ready(screen, toado):
 	font = py.font.SysFont(None, 24)
-	text = font.render('Stunned: No', True, (0, 0, 0))
+	text = font.render('Stunned: No', True, TEXT_COLOR)
 	screen.blit(text, toado)
 
 
 def draw_push_cooldown(screen, time_remaining, toado):
 	font = py.font.SysFont(None, 24)
-	text = font.render(f'Pushed: {time_remaining / 1000:.1f} s', True, (0, 0, 0))
+	text = font.render(f'Pushed: {time_remaining / 1000:.1f} s', True, TEXT_COLOR)
 	screen.blit(text, toado)
 
 def draw_push_ready(screen, toado):
 	font = py.font.SysFont(None, 24)
-	text = font.render('Pushed: No', True, (0, 0, 0))
+	text = font.render('Pushed: No', True, TEXT_COLOR)
 	screen.blit(text, toado)
 
