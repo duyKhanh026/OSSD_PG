@@ -79,9 +79,9 @@ class Player:
 	def redrawGameWindow(self, surface):
 		if self.walkCount + 1 >= 30:
 			self.walkCount = 0
-		if self.atkAcount + 1 >= 42:
+		if self.atkAcount + 1 >= 42 or self.state != 'ATK':
 			self.atkAcount = 0
-		if self.kicAcount + 1 >= 42:
+		if self.kicAcount + 1 >= 42 or self.state != 'KIC':
 			self.kicAcount = 0
 			
 		if self.state == 'ATK':
@@ -128,9 +128,9 @@ class Player:
 			py.draw.rect(surface, (0, 255, 0), (self.rect.x - self.SQUARE_SIZE_X, self.rect.y - 20, int(self.SQUARE_SIZE_X * (self.health / self.max_health)), 10))
 		
 		# Draw text about the current state 
-		# font = py.font.SysFont(None, 46)
-		# text = font.render(' ' + self.state, True, (255, 255,255))
-		# surface.blit(text, (self.rect.x if self.side == 'R' else self.rect.x - self.SQUARE_SIZE_X, self.rect.y + self.SQUARE_SIZE_Y // 2))
+		font = py.font.SysFont(None, 46)
+		text = font.render(' ' + self.state, True, (255, 255,255))
+		surface.blit(text, (self.rect.x if self.side == 'R' else self.rect.x - self.SQUARE_SIZE_X, self.rect.y + self.SQUARE_SIZE_Y // 2))
 
 	def action(self, key):
 		if self.move_left_key == None:
@@ -148,6 +148,7 @@ class Player:
 				self.state = 'NO'
 
 	def move_logic(self, key):
+
 		# Áp dụng trọng lực
 		self.square_y_speed += self.GRAVITY
 		self.rect.y += self.square_y_speed
