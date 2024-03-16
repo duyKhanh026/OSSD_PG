@@ -73,15 +73,15 @@ while run:
 			if player1.atkAcount > 30:
 				handle_attack(player1, player2)
 				player2.state = 'STUN'
-				stunned_cooldown_p2 = STUNNED_COOLDOWN
-				stunned_ready_p2 = False
+				player2.stunned_cooldown_p1 = STUNNED_COOLDOWN
+				player2.stunned_ready_p1 = False
 
 		if player2.state == 'ATK' and player1.state != 'ATK':
 			if player2.atkAcount > 30:
 				handle_attack(player2, player1)
 				player1.state = 'STUN'  
-				stunned_cooldown_p1 = STUNNED_COOLDOWN
-				stunned_ready_p1 = False
+				player1.stunned_cooldown_p1 = STUNNED_COOLDOWN
+				player1.stunned_ready_p1 = False
 				
 
 	# Tính thời gian hồi lại khi bị đánh
@@ -113,6 +113,6 @@ while run:
 	py.display.update()
 	clock.tick(60)
 
-	print(str(player1) + f' {player1.attack_cooldown_p1}')
+	print(str(player1) + f' {player2.stunned_cooldown_p1} {player2.stunned_ready_p1}')
 
 py.quit()
