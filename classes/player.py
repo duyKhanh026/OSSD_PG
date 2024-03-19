@@ -1,7 +1,7 @@
 import pygame as py
 
 class Player:
-	def __init__(self, x, y, color, move_left_key, move_right_key, jump_key, atk_key, def_key, kick_key,side):
+	def __init__(self, x, y, color, move_left_key, move_right_key, jump_key, atk_key, def_key, kick_key, sp1_key,side):
 		self.walkRight = [py.image.load('assets/blue/stickman_blade_running1.png'),
 					 py.image.load('assets/blue/stickman_blade_running2.png'),
 					 py.image.load('assets/blue/stickman_blade_running3.png'),
@@ -23,7 +23,29 @@ class Player:
 					 py.image.load('assets/blue/stickman_blade_kick7.png')]
 		self.charIdle = py.image.load('assets/blue/stickman_blade_idle.png')
 		self.defenseA = py.image.load('assets/blue/stickman_blade_defense.png')
+		self.sp1 = [py.image.load('assets/blue/stickman_blade_sp1.png'),
+					py.image.load('assets/blue/stickman_blade_sp2.png'),
+					py.image.load('assets/blue/stickman_blade_sp3.png'),
+					py.image.load('assets/blue/stickman_blade_sp4.png'),
+					py.image.load('assets/blue/stickman_blade_sp5.png'),
+					py.image.load('assets/blue/stickman_blade_sp6.png'),
+					py.image.load('assets/blue/stickman_blade_sp7.png'),
+					py.image.load('assets/blue/stickman_blade_sp8.png'),
+					py.image.load('assets/blue/stickman_blade_sp9.png'),
+					py.image.load('assets/blue/stickman_blade_sp10.png'),
+					py.image.load('assets/blue/stickman_blade_sp11.png'),
+					py.image.load('assets/blue/stickman_blade_sp12.png'),
+					py.image.load('assets/blue/stickman_blade_sp13.png'),
+					py.image.load('assets/blue/stickman_blade_sp14.png'),
+					py.image.load('assets/blue/stickman_blade_sp15.png'),
+					py.image.load('assets/blue/stickman_blade_sp16.png'),
+					py.image.load('assets/blue/stickman_blade_sp17.png'),
+					py.image.load('assets/blue/stickman_blade_sp18.png'),
+					py.image.load('assets/blue/stickman_blade_sp19.png')]
 		self.walkCount = 0
+		self.skill1 = False
+		self.sp1count = 0
+		self.sp1_key = sp1_key
 		self.right = True if side == 'L' else False
 		self.left = True if side == 'R' else False
 
@@ -83,8 +105,15 @@ class Player:
 			self.atkAcount = 0
 		if self.kicAcount + 1 >= 42 or self.state != 'KIC':
 			self.kicAcount = 0
+		if self.sp1count >= 113:
+			self.skill1 = True
+			self.sp1count = 113
 			
-		if self.state == 'ATK':
+		if self.state == 'SP1':
+			surface.blit(self.sp1[self.sp1count//6] if self.side == 'L' else py.transform.flip(self.sp1[self.sp1count//6], True, False), (self.rect.x - self.SQUARE_SIZE_X * (2 if self.side == 'L' else 1), self.rect.y - 100))
+			if self.sp1count < 113:
+				self.sp1count += 1
+		elif self.state == 'ATK':
 			surface.blit(self.slashA[self.atkAcount//6] if self.side == 'L' else py.transform.flip(self.slashA[self.atkAcount//6], True, False), (self.rect.x - self.SQUARE_SIZE_X * (2 if self.side == 'L' else 1), self.rect.y))
 			self.atkAcount += 1
 		elif self.state == 'KIC':
@@ -135,7 +164,11 @@ class Player:
 	def action(self, key):
 		if self.move_left_key == None:
 			return 
-		if self.state != 'ATK' and self.state != 'KIC' and self.state != 'STUN':
+
+		if key[self.sp1_key]:
+			self.state = 'SP1'
+			self.sp1count = 0
+		elif self.state != 'ATK' and self.state != 'KIC' and self.state != 'STUN' and self.state != 'SP1':
 			if key[self.atk_key]:
 				self.atkAcount = 0
 				self.state = 'ATK'
@@ -196,7 +229,7 @@ class Player:
 
 		if self.move_left_key == None:
 			return 
-		if self.state == 'DEF':
+		if self.state == 'DEF' or self.state == 'SP1' or self.state == 'STUN':
 			return
 		if key[self.move_left_key]:
 			self.right = False
