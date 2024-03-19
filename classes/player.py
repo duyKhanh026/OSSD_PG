@@ -2,46 +2,27 @@ import pygame as py
 
 class Player:
 	def __init__(self, x, y, color, move_left_key, move_right_key, jump_key, atk_key, def_key, kick_key, sp1_key,side):
-		self.walkRight = [py.image.load('assets/blue/stickman_blade_running1.png'),
-					 py.image.load('assets/blue/stickman_blade_running2.png'),
-					 py.image.load('assets/blue/stickman_blade_running3.png'),
-					 py.image.load('assets/blue/stickman_blade_running4.png'),
-					 py.image.load('assets/blue/stickman_blade_running5.png')]
-		self.slashA = [py.image.load('assets/blue/stickman_blade_slash1.png'),
-					 py.image.load('assets/blue/stickman_blade_slash2.png'),
-					 py.image.load('assets/blue/stickman_blade_slash3.png'),
-					 py.image.load('assets/blue/stickman_blade_slash4.png'),
-					 py.image.load('assets/blue/stickman_blade_slash5.png'),
-					 py.image.load('assets/blue/stickman_blade_slash5.png'),
-					 py.image.load('assets/blue/stickman_blade_slash5.png')]
-		self.kickA = [py.image.load('assets/blue/stickman_blade_kick1.png'),
-					 py.image.load('assets/blue/stickman_blade_kick2.png'),
-					 py.image.load('assets/blue/stickman_blade_kick3.png'),
-					 py.image.load('assets/blue/stickman_blade_kick4.png'),
-					 py.image.load('assets/blue/stickman_blade_kick5.png'),
-					 py.image.load('assets/blue/stickman_blade_kick6.png'),
-					 py.image.load('assets/blue/stickman_blade_kick7.png')]
+		self.walkRight = []
+		for i in range(1, 6):
+			img = py.image.load(f'assets/blue/stickman_blade_running{i}.png')
+			self.walkRight.append(img)
+		self.slashA = []
+		for i in range(1, 8):
+			img = py.image.load(f'assets/blue/stickman_blade_slash{i if i < 6 else 5}.png')
+			self.slashA.append(img)
+
+		self.kickA = []
+		for i in range(1, 8):
+			img = py.image.load(f'assets/blue/stickman_blade_kick{i}.png')
+			self.kickA.append(img)
+
 		self.charIdle = py.image.load('assets/blue/stickman_blade_idle.png')
 		self.defenseA = py.image.load('assets/blue/stickman_blade_defense.png')
-		self.sp1 = [py.image.load('assets/blue/stickman_blade_sp1.png'),
-					py.image.load('assets/blue/stickman_blade_sp2.png'),
-					py.image.load('assets/blue/stickman_blade_sp3.png'),
-					py.image.load('assets/blue/stickman_blade_sp4.png'),
-					py.image.load('assets/blue/stickman_blade_sp5.png'),
-					py.image.load('assets/blue/stickman_blade_sp6.png'),
-					py.image.load('assets/blue/stickman_blade_sp7.png'),
-					py.image.load('assets/blue/stickman_blade_sp8.png'),
-					py.image.load('assets/blue/stickman_blade_sp9.png'),
-					py.image.load('assets/blue/stickman_blade_sp10.png'),
-					py.image.load('assets/blue/stickman_blade_sp11.png'),
-					py.image.load('assets/blue/stickman_blade_sp12.png'),
-					py.image.load('assets/blue/stickman_blade_sp13.png'),
-					py.image.load('assets/blue/stickman_blade_sp14.png'),
-					py.image.load('assets/blue/stickman_blade_sp15.png'),
-					py.image.load('assets/blue/stickman_blade_sp16.png'),
-					py.image.load('assets/blue/stickman_blade_sp17.png'),
-					py.image.load('assets/blue/stickman_blade_sp18.png'),
-					py.image.load('assets/blue/stickman_blade_sp19.png')]
+		self.sp1 = []
+
+		for i in range(1, 20):
+			img = py.image.load(f'assets/blue/stickman_blade_sp{i}.png')
+			self.sp1.append(img)
 		self.walkCount = 0
 		self.skill1 = False
 		self.sp1count = 0
