@@ -10,8 +10,8 @@ py.init()
 screen = py.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 py.display.set_caption('Demo')
 
-player1 = Player(300, 150, RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L',)
-player2 = Player(900, 150, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_KP1, py.K_KP2, py.K_KP3, py.K_KP4,'R')
+player1 = Player( 'blue/stickman_blade',300, 150, RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L',)
+player2 = Player( 'purple/stickman',900, 150, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_KP1, py.K_KP2, py.K_KP3, py.K_KP4,'R')
 
 
 spkillp1 = SPskill1()
@@ -85,14 +85,14 @@ while run:
 					    player1.push_ready_p1 = False
 
 		if player1.state == 'ATK' and player2.state != 'DEF':
-			if player1.atkAcount > 30 and player2.state != 'STUN':
+			if player1.atkAcount == 16 and player2.state != 'STUN':
 				handle_attack(player1, player2)
 				player2.state = 'STUN'
 				player2.stunned_cooldown_p1 = STUNNED_COOLDOWN
 				player2.stunned_ready_p1 = False
 
 		if player2.state == 'ATK' and player1.state != 'DEF':
-			if player2.atkAcount > 30 and player1.state != 'STUN':
+			if player2.atkAcount > 16 and player1.state != 'STUN':
 				handle_attack(player2, player1)
 				player1.state = 'STUN'  
 				player1.stunned_cooldown_p1 = STUNNED_COOLDOWN

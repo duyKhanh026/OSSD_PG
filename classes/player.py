@@ -1,27 +1,31 @@
 import pygame as py
 
 class Player:
-	def __init__(self, x, y, color, move_left_key, move_right_key, jump_key, atk_key, def_key, kick_key, sp1_key,side):
+	def __init__(self, strNam, x, y, color, move_left_key, move_right_key, jump_key, atk_key, def_key, kick_key, sp1_key,side):
 		self.walkRight = []
 		for i in range(1, 6):
-			img = py.image.load(f'assets/blue/stickman_blade_running{i}.png')
+			img = py.image.load(f'assets/{strNam}_running{i}.png')
 			self.walkRight.append(img)
-		self.slashA = []
-		for i in range(1, 8):
-			img = py.image.load(f'assets/blue/stickman_blade_slash{i if i < 6 else 5}.png')
-			self.slashA.append(img)
+		self.slashA1 = []
+		for i in range(1, 5):
+			img = py.image.load(f'assets/{strNam}_slash{i}.png')
+			self.slashA1.append(img)
 
 		self.kickA = []
 		for i in range(1, 8):
-			img = py.image.load(f'assets/blue/stickman_blade_kick{i}.png')
+			img = py.image.load(f'assets/{strNam}_kick{i}.png')
 			self.kickA.append(img)
 
-		self.charIdle = py.image.load('assets/blue/stickman_blade_idle.png')
-		self.defenseA = py.image.load('assets/blue/stickman_blade_defense.png')
+		self.charIdle = []
+		self.idlecount = 0
+		for i in range(1, 6):
+			img = py.image.load(f'assets/{strNam}_idle{i}.png')
+			self.charIdle.append(img)
+		self.defenseA = py.image.load(f'assets/{strNam}_defense.png')
 		self.sp1 = []
 
 		for i in range(1, 20):
-			img = py.image.load(f'assets/blue/stickman_blade_sp{i}.png')
+			img = py.image.load(f'assets/{strNam}_sp{i}.png')
 			self.sp1.append(img)
 		self.walkCount = 0
 		self.skill1 = False
@@ -82,21 +86,24 @@ class Player:
 	def redrawGameWindow(self, surface):
 		if self.walkCount + 1 >= 30:
 			self.walkCount = 0
-		if self.atkAcount + 1 >= 42 or self.state != 'ATK':
-			self.atkAcount = 0
-		if self.kicAcount + 1 >= 42 or self.state != 'KIC':
+		if self.kicAcount + 1 >= 42:
 			self.kicAcount = 0
 		if self.sp1count >= 113:
 			self.skill1 = True
 			self.sp1count = 113
+		if self.idlecount >= 30:
+			self.idlecount = 0
 			
 		if self.state == 'SP1':
 			surface.blit(self.sp1[self.sp1count//6] if self.side == 'L' else py.transform.flip(self.sp1[self.sp1count//6], True, False), (self.rect.x - self.SQUARE_SIZE_X * (2 if self.side == 'L' else 1), self.rect.y - 100))
 			if self.sp1count < 113:
 				self.sp1count += 1
 		elif self.state == 'ATK':
-			surface.blit(self.slashA[self.atkAcount//6] if self.side == 'L' else py.transform.flip(self.slashA[self.atkAcount//6], True, False), (self.rect.x - self.SQUARE_SIZE_X * (2 if self.side == 'L' else 1), self.rect.y))
-			self.atkAcount += 1
+			if self.atkAcount < 23:
+				self.atkAcount += 1
+			elif self.atkAcount > 23:
+				self.atkAcount = 0
+			surface.blit(self.slashA1[self.atkAcount//6] if self.side == 'L' else py.transform.flip(self.slashA1[self.atkAcount//6], True, False), (self.rect.x - self.SQUARE_SIZE_X * (2 if self.side == 'L' else 1), self.rect.y - 100))
 		elif self.state == 'KIC':
 			surface.blit(self.kickA[self.kicAcount//6] if self.side == 'L' else py.transform.flip(self.kickA[self.kicAcount//6], True, False), (self.rect.x - self.SQUARE_SIZE_X * (2 if self.side == 'L' else 1), self.rect.y))
 			self.kicAcount += 1
@@ -109,7 +116,9 @@ class Player:
 		elif self.state == 'DEF':
 			surface.blit(self.defenseA if self.side == 'L' else py.transform.flip(self.defenseA, True, False), (self.rect.x - self.SQUARE_SIZE_X * (2 if self.side == 'L' else 1), self.rect.y))
 		else :
-			surface.blit(self.charIdle if self.side == 'L' else py.transform.flip(self.charIdle, True, False), (self.rect.x - self.SQUARE_SIZE_X * (2 if self.side == 'L' else 1), self.rect.y))
+
+			surface.blit(self.charIdle[self.idlecount//6] if self.side == 'L' else py.transform.flip(self.charIdle[self.idlecount//6], True, False), (self.rect.x - self.SQUARE_SIZE_X * (2 if self.side == 'L' else 1), self.rect.y))
+			self.idlecount += 1
 
 	def move(self, dx, dy):
 		self.rect.move_ip(dx, dy)
