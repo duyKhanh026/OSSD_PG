@@ -30,14 +30,14 @@ while run:
 		py.draw.line(screen, WHITE, (x, 0), (x, SCREEN_HEIGHT))
 
 	player2.get_hit_by_skill = False
-	if spkillp1.skill_use(screen, player1.rect.x, player1.skill1, player2): 
+	if spkillp1.skill_use(screen, player1, player2): 
 		player1.skill1 = False
 		player1.state = 'NO'
 		player1.sp1count = 0
-	if spkillp2.skill_use(screen, player2.rect.x, player2.skill1, player2): 
-		player2.skill1 = False
-		player2.state = 'NO'
-		player2.sp1count = 0
+	# if spkillp2.skill_use(screen, player2, player1): 
+	# 	player2.skill1 = False
+	# 	player2.state = 'NO'
+	# 	player2.sp1count = 0
 	if player2.get_hit_by_skill:
 		player2.JUMP_POWER = -10 - (100-player2.health)/7
 		handle_attack(None, player2)
