@@ -84,11 +84,11 @@ class Player:
 
 
 	def redrawGameWindow(self, surface):
-		if self.walkCount + 1 >= 30:
+		if self.walkCount + 1 >= 30: # 5frame
 			self.walkCount = 0
-		if self.kicAcount + 1 >= 42:
+		if self.kicAcount + 1 >= 42: # 7frame
 			self.kicAcount = 0
-		if self.sp1count >= 113:
+		if self.sp1count + 1 >= 114: # 19 frame
 			self.skill1 = True
 			self.sp1count = 113
 		if self.idlecount >= 30:
@@ -116,7 +116,6 @@ class Player:
 		elif self.state == 'DEF':
 			surface.blit(self.defenseA if self.side == 'L' else py.transform.flip(self.defenseA, True, False), (self.rect.x - self.SQUARE_SIZE_X * (2 if self.side == 'L' else 1), self.rect.y))
 		else :
-
 			surface.blit(self.charIdle[self.idlecount//6] if self.side == 'L' else py.transform.flip(self.charIdle[self.idlecount//6], True, False), (self.rect.x - self.SQUARE_SIZE_X * (2 if self.side == 'L' else 1), self.rect.y))
 			self.idlecount += 1
 
@@ -268,7 +267,14 @@ class Player:
 			str(self.pushed),
 			str(self.rect.x),
 			str(self.rect.y),
-			str(self.side)
+			str(self.side),
+			str(self.walkCount),
+			str(self.kicAcount),
+			str(self.atkAcount),
+			str(self.sp1count),
+			str(self.idlecount),
+			str(self.right),
+			str(self.left)
 		]
 		return ",".join(player_info)
 
@@ -291,4 +297,19 @@ class Player:
 		self.rect.x = float(values[12])
 		self.rect.y = float(values[13])
 		self.side = 'L' if values[14] == 'R' else 'R' # đảo lại phía cho p2
+		self.walkCount = int(values[15])
+		self.kicAcount = int(values[16])
+		self.atkAcount = int(values[17])
+		self.sp1count = int(values[18])
+		self.idlecount = int(values[19])
+		self.right = values[20].lower() == 'true'
+		self.left = values[21].lower() == 'true'
+		if self.right or self.left:
+			if self.right: 
+				self.right = False
+				self.left = True
+			else:
+				self.right = True
+				self.left = False
+
 		self.rect.x = 1200 - self.rect.x # đổi vị trí của từ p1 sang p2
