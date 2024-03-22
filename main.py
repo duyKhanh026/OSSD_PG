@@ -14,7 +14,7 @@ player1 = Player( 'blue/stickman_blade',300, 150, RED, py.K_a, py.K_d, py.K_w, p
 player2 = Player( 'purple/stickman',900, 150, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_KP1, py.K_KP2, py.K_KP3, py.K_KP4,'R')
 
 
-spkillp1 = SPskill1()
+spkillp1 = SPskill1() 
 spkillp2 = SPskill1()
 
 run = True
@@ -29,15 +29,23 @@ while run:
 	for x in range(0, SCREEN_WIDTH, line_spacing_vertical):
 		py.draw.line(screen, WHITE, (x, 0), (x, SCREEN_HEIGHT))
 
-
-	if spkillp1.skill_use(screen, player1.rect.x, player1.skill1): 
+	player2.get_hit_by_skill = False
+	if spkillp1.skill_use(screen, player1.rect.x, player1.skill1, player2): 
 		player1.skill1 = False
 		player1.state = 'NO'
 		player1.sp1count = 0
-	if spkillp2.skill_use(screen, player2.rect.x, player2.skill1): 
+	if spkillp2.skill_use(screen, player2.rect.x, player2.skill1, player2): 
 		player2.skill1 = False
 		player2.state = 'NO'
 		player2.sp1count = 0
+	if player2.get_hit_by_skill:
+		player2.JUMP_POWER = -10 - (100-player2.health)/7
+		handle_attack(None, player2)
+		player2.velocity_x = 10 + (100-player2.health)/7 # đẩy ra 
+		player2.square_y_speed = player2.JUMP_POWER # ép nó nhảy lên
+		player2.on_ground = False # trọng lực
+	else: 
+		player2.JUMP_POWER = -15
 
 	for player in [player1, player2]:
 		# draw_atk_effect(screen, player)
@@ -89,7 +97,14 @@ while run:
 				handle_attack(player1, player2)
 				player2.state = 'STUN'
 				player2.stunned_cooldown_p1 = STUNNED_COOLDOWN
+				player2.JUMP_POWER = -10 - (100-player2.health)/7
 				player2.stunned_ready_p1 = False
+				handle_attack(None, player2)
+				player2.velocity_x = 10 + (100-player2.health)/7 # đẩy ra 
+				player2.square_y_speed = player2.JUMP_POWER # ép nó nhảy lên
+				player2.on_ground = False # trọng lực
+		
+
 
 		if player2.state == 'ATK' and player1.state != 'DEF':
 			if player2.atkAcount > 16 and player1.state != 'STUN':
@@ -107,6 +122,7 @@ while run:
 		elif not player.stunned_ready_p1:
 			player.stunned_ready_p1 = True
 			player.state = 'NO'
+			player.JUMP_POWER = -15
 		else:
 			draw_stunned_ready(screen, (10 if player == player1 else SCREEN_WIDTH - 110, 50)) 
 
@@ -128,6 +144,6 @@ while run:
 	py.display.update()
 	clock.tick(60)
 
-	print(str(player1))
+	# print(str(player1))
 
 py.quit()

@@ -178,7 +178,7 @@ while run:
 	clock.tick(60)
 
 	send(str(player1))
-	print(str(player2))
+	# print(str(player2))
 
 py.quit()
 send(DISCONNECT_MESSAGE)

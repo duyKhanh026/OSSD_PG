@@ -3,6 +3,9 @@ import pygame as py
 class Player:
 	def __init__(self, strNam, x, y, color, move_left_key, move_right_key, jump_key, atk_key, def_key, kick_key, sp1_key,side):
 		self.walkRight = []
+
+
+		self.imgStr = strNam
 		for i in range(1, 6):
 			img = py.image.load(f'assets/{strNam}_running{i}.png')
 			self.walkRight.append(img)
@@ -27,6 +30,7 @@ class Player:
 		for i in range(1, 20):
 			img = py.image.load(f'assets/{strNam}_sp{i}.png')
 			self.sp1.append(img)
+
 		self.walkCount = 0
 		self.skill1 = False
 		self.sp1count = 0
@@ -81,6 +85,8 @@ class Player:
 
 		self.velocity_x = 0
 		self.pushed = False
+
+		self.get_hit_by_skill = False
 
 
 	def redrawGameWindow(self, surface):
@@ -274,7 +280,8 @@ class Player:
 			str(self.sp1count),
 			str(self.idlecount),
 			str(self.right),
-			str(self.left)
+			str(self.left),
+			str(self.imgStr)
 		]
 		return ",".join(player_info)
 
@@ -311,5 +318,24 @@ class Player:
 			else:
 				self.right = True
 				self.left = False
+
+		self.imgStr = values[22]
+
+		# for i in range(1, 6):
+		# 	img = py.image.load(f'assets/{self.imgStr}_running{i}.png')
+		# 	self.walkRight.append(img)
+		# for i in range(1, 5):
+		# 	img = py.image.load(f'assets/{self.imgStr}_slash{i}.png')
+		# 	self.slashA1.append(img)
+		# for i in range(1, 8):
+		# 	img = py.image.load(f'assets/{self.imgStr}_kick{i}.png')
+		# 	self.kickA.append(img)
+		# for i in range(1, 6):
+		# 	img = py.image.load(f'assets/{self.imgStr}_idle{i}.png')
+		# 	self.charIdle.append(img)
+		# self.defenseA = py.image.load(f'assets/{self.imgStr}_defense.png')
+		# for i in range(1, 20):
+		# 	img = py.image.load(f'assets/{self.imgStr}_sp{i}.png')
+		# 	self.sp1.append(img)
 
 		self.rect.x = 1200 - self.rect.x # đổi vị trí của từ p1 sang p2

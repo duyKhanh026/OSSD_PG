@@ -10,7 +10,7 @@ def check_collision(p1, p2):
 	return p1.rect.colliderect(p2.rect)
 
 def handle_attack(attacker, victim):
-	if check_collision(attacker, victim):
+	if attacker == None or check_collision(attacker, victim) :
 		victim.health -= DAMAGE
 
 def draw_atk_effect(screen, player):
