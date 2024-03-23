@@ -2,7 +2,7 @@ import pygame as py
 
 ATTACK_COOLDOWN = 500  # Thời gian hồi của đòn đánh (milliseconds)
 STUNNED_COOLDOWN = 450 
-PUSH_COOLDOWN = 450 
+PUSH_COOLDOWN = 600 
 DAMAGE = 10
 TEXT_COLOR = (255, 255, 255)
 

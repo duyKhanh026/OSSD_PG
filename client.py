@@ -3,202 +3,134 @@ import socket
 import re
 from classes.player import Player
 from classes.action import *
+from classes.spSkill import *
 from values.color import *
 from values.screen import *
 
-HEADER = 64
-PORT = 5050
-FORMAT = 'utf-8'
-DISCONNECT_MESSAGE = "!DISCONNECT"
-SERVER = "192.168.56.1"
-ADDR = (SERVER, PORT)
+class Player_client:
+    def __init__(self, server_ip="192.168.56.1", port=5050):
+        self.SERVER = server_ip
+        self.PORT = port
+        self.FORMAT = 'utf-8'
+        self.HEADER = 64
+        self.DISCONNECT_MESSAGE = "!DISCONNECT"
+        self.ADDR = (self.SERVER, self.PORT)
 
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect(ADDR)
+        self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client.connect(self.ADDR)
 
-py.init()
+        py.init()
 
-screen = py.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-py.display.set_caption('Demo')
+        self.screen = py.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        py.display.set_caption('Demo')
 
-player1 = Player(300, 150, RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, 'L')
-player2 = Player(800, 150, BLUE, None, None, None, None, None, None, 'R')
+        self.player1 = Player(200, 50, 'blue/stickman_blade', 300, 150,  RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L',)
+        self.player2 = Player(200, 70, 'purple/stickman', 1200, -150, BLUE,   None,   None,   None,   None,   None,   None, None, 'R')
+        self.player2.on_ground = True
 
-def parse_input(input_string):
-	# Sử dụng biểu thức chính quy để tách tọa độ và chuỗi
-	match = re.match(r'\((\d+),(\d+)\)\s*(\w+)', input_string)
+    def send(self, msg):
+        message = msg.encode(self.FORMAT)
+        msg_length = len(message)
+        send_length = str(msg_length).encode(self.FORMAT)
+        send_length += b' ' * (self.HEADER - len(send_length))
+        self.client.send(send_length)
+        self.client.send(message)
+        remessage = self.client.recv(2048).decode(self.FORMAT)
+        if not remessage == 'NOPLAY':
+            self.player2.from_string(remessage)
+            print(remessage)
 
-	# Nếu tìm thấy sự phù hợp
-	if match:
-		# Lấy tọa độ x, y và chuỗi
-		x = int(match.group(1))
-		y = int(match.group(2))
-		string = match.group(3)
+    def run(self):
+        run = True
+        clock = py.time.Clock()
 
-		# Trả về kết quả
-		return x, y, string
-	else:
-		return None
+        while run:
+            self.screen.fill(BLACK)
 
+            line_spacing = 50
+            for y in range(0, SCREEN_HEIGHT, line_spacing):
+                py.draw.line(self.screen, WHITE, (0, y), (SCREEN_WIDTH, y))
 
-def flip_coordinates_horizontal(x, y):
-	new_x = SCREEN_WIDTH - x
-	new_y = y
-	return new_x, new_y
+            line_spacing_vertical = 50
+            for x in range(0, SCREEN_WIDTH, line_spacing_vertical):
+                py.draw.line(self.screen, WHITE, (x, 0), (x, SCREEN_HEIGHT))
 
-def send(msg):
-	message = msg.encode(FORMAT)
-	msg_length = len(message)
-	send_length = str(msg_length).encode(FORMAT)
-	send_length += b' ' * (HEADER - len(send_length))
-	client.send(send_length)
-	client.send(message)
-	remesage = client.recv(2048).decode(FORMAT)
-	global player2
-	if not remesage == 'NOPLAY':
-		player2.from_string(remesage)
-		print(remesage)
+            for player in [self.player1, self.player2]:
+                player.move_logic(py.key.get_pressed())
+                player.action(py.key.get_pressed())
+                player.draw(self.screen)
 
-attack_cooldown_p1 = 0 
-attack_ready_p1 = True
-attack_cooldown_p2 = 0
-attack_ready_p2 = True
+                if player.state == 'ATK' or player.state == 'KIC':
+                    if player.attack_cooldown_p1 == 0:
+                        player.attack_cooldown_p1 = ATTACK_COOLDOWN
+                        player.attack_ready_p1 = False
 
-stunned_cooldown_p1 = 0
-stunned_ready_p1 = True
-stunned_cooldown_p2 = 0
-stunned_ready_p2 = True
+            for player in [self.player1, self.player2]:
+                if player.attack_cooldown_p1 > 0:
+                    draw_attack_cooldown(self.screen, player.attack_cooldown_p1, (10 if player == self.player1 else SCREEN_WIDTH - 110, 30))
+                    player.attack_cooldown_p1 -= clock.get_time()
+                elif player.state == 'ATK' or player.state == 'KIC':
+                    player.attack_ready_p1 = True
+                    player.attack_cooldown_p1 = 0
+                    player.state = 'NO'
+                else: 
+                    draw_attack_ready(self.screen, (10 if player == self.player1 else SCREEN_WIDTH - 110, 30))
 
-push_cooldown_p1 = 0
-push_ready_p1 = True
-push_cooldown_p2 = 0
-push_ready_p2 = True
+            if check_collision(self.player1, self.player2):
+                for player in [self.player1, self.player2]:
+                    if player != self.player1 and player.state == 'KIC' and (self.player2.state if player == self.player1 else self.player1.state) != 'ATK':
+                        if player.kicAcount > 30 and (self.player2.state if player == self.player1 else self.player1.state) != 'PUS':
+                            handle_attack(self.player1 if player == self.player1 else self.player2, self.player2 if player == self.player1 else self.player1)
+                            if player == self.player1: 
+                                self.player2.state = 'PUS' 
+                            else: 
+                                self.player1.state = 'PUS'
 
-run = True
-clock = py.time.Clock()
-vong = 0
-while run:
-	screen.fill(WHITE)
+                            if player == self.player1:
+                                self.player2.push_cooldown_p1 = PUSH_COOLDOWN
+                            else:
+                                self.player1.push_cooldown_p1 = PUSH_COOLDOWN
 
-	line_spacing = 50  # Khoảng cách giữa các đường line
-	for y in range(0, SCREEN_HEIGHT, line_spacing):
-		py.draw.line(screen, BLACK, (0, y), (SCREEN_WIDTH, y))
-	line_spacing_vertical = 50
-	for x in range(0, SCREEN_WIDTH, line_spacing_vertical):
-		py.draw.line(screen, BLACK, (x, 0), (x, SCREEN_HEIGHT))
+                            if player == self.player1:
+                                self.player2.push_ready_p1 = False
+                            else:
+                                self.player1.push_ready_p1 = False
 
-	for player in [player1, player2]:
-		player.move_logic(py.key.get_pressed())
-		player.action(py.key.get_pressed())
-		player.draw(screen)
-		draw_atk_effect(screen, player)
+                if self.player2.state == 'ATK' and self.player1.state != 'DEF':
+                    if self.player2.atkAcount > 16 and self.player1.state != 'STUN':
+                        handle_attack(self.player2, self.player1)
+                        self.player1.state = 'STUN'  
+                        self.player1.stunned_cooldown_p1 = STUNNED_COOLDOWN
+                        self.player1.stunned_ready_p1 = False
 
-		if player.atked or player.kicked:
-			if player == player1 and attack_ready_p1:
-				attack_cooldown_p1 = ATTACK_COOLDOWN
-				attack_ready_p1 = False
-			elif player == player2 and attack_ready_p2:
-				attack_cooldown_p2 = ATTACK_COOLDOWN
-				attack_ready_p2 = False
+            for player in [self.player1, self.player2]:
+                if player.stunned_cooldown_p1 > 0:
+                    draw_stunned_cooldown(self.screen, player.stunned_cooldown_p1, (10 if player == self.player1 else SCREEN_WIDTH - 110, 50))
+                    player.stunned_cooldown_p1 -= clock.get_time()
+                elif not player.stunned_ready_p1:
+                    player.stunned_ready_p1 = True
+                    player.state = 'NO'
+                else:
+                    draw_stunned_ready(self.screen, (10 if player == self.player1 else SCREEN_WIDTH - 110, 50)) 
 
-	if player1.side == 'L' and player1.rect.x - player1.SQUARE_SIZE_X > player2.rect.x:
-		player1.side = 'R'
-		player1.rect.x -= player1.SQUARE_SIZE_X
-	elif player1.side == 'R' and player2.rect.x - player2.SQUARE_SIZE_X > player1.rect.x:
-		player1.side = 'L'
-		player1.rect.x += player1.SQUARE_SIZE_X
+            for player in [self.player2, self.player1]:
+                if player.push_cooldown_p1 > 0:
+                    draw_push_cooldown(self.screen, player.push_cooldown_p1, (10 if player == self.player1 else SCREEN_WIDTH - 110, 80))
+                    player.push_cooldown_p1 -= clock.get_time()
+                elif not player.push_ready_p1:
+                    player.push_ready_p1 = True
+                    player.state = 'NO'
+                else:
+                    draw_push_ready(self.screen, (10 if player == self.player1 else SCREEN_WIDTH - 110, 80))
 
-	if attack_cooldown_p1 > 0:
-		draw_attack_cooldown(screen, attack_cooldown_p1, (10, 30))
-		attack_cooldown_p1 -= clock.get_time()
-	else:
-		draw_attack_ready(screen, (10, 30))
-		attack_ready_p1 = True
-		player1.atked = False
-		player1.kicked = False
+            for event in py.event.get():
+                if event.type == py.QUIT:
+                    run = False
 
-	if attack_cooldown_p2 > 0:
-		draw_attack_cooldown(screen, attack_cooldown_p2, (SCREEN_WIDTH - 110, 30))
-		attack_cooldown_p2 -= clock.get_time()
-	else:
-		draw_attack_ready(screen, (SCREEN_WIDTH - 110, 30))
-		attack_ready_p2 = True
-		player2.atked = False
-		player2.kicked = False
+            py.display.update()
+            clock.tick(60)
 
-	if check_collision(player1, player2):
-		# if player1.state == 'KIC' and player2.state != 'ATK':
-		# 	handle_attack(player1, player2)
-		# 	player2.state = 'PUS'
-		# 	push_cooldown_p2 = PUSH_COOLDOWN
-		# 	push_ready_p2 = False	
+            self.send(str(self.player1))
 
-		if player2.state == 'KIC' and player1.state != 'ATK':
-			handle_attack(player2, player1)
-			player1.state = 'PUS'
-			push_cooldown_p1 = PUSH_COOLDOWN
-			push_ready_p1 = False
-		
-		# if player1.state == 'ATK' and not player2.state == 'ATK':
-		# 	if player1.state == 'ATK' and player2.state != 'DEF':
-		# 		handle_attack(player1, player2)
-		# 		player2.state = 'STUN'
-		# 		stunned_cooldown_p2 = STUNNED_COOLDOWN
-		# 		stunned_ready_p2 = False
-
-		if player2.state == 'ATK' and not player1.state == 'ATK':
-			if player2.state == 'ATK' and player1.state != 'DEF':
-				handle_attack(player2, player1)
-				player1.state = 'STUN'  
-				stunned_cooldown_p1 = STUNNED_COOLDOWN
-				stunned_ready_p1 = False
-				
-
-
-	if stunned_cooldown_p1 > 0:
-		draw_stunned_cooldown(screen, stunned_cooldown_p1, (10, 50))
-		stunned_cooldown_p1 -= clock.get_time()
-	elif not stunned_ready_p1:
-		stunned_ready_p1 = True
-		player1.state = 'NO'
-	else:
-		draw_stunned_ready(screen, (10, 50)) 
-
-	if stunned_cooldown_p2 > 0:
-		draw_stunned_cooldown(screen, stunned_cooldown_p2, (SCREEN_WIDTH - 110, 50))
-		stunned_cooldown_p2 -= clock.get_time()
-	elif not stunned_ready_p2:
-		stunned_ready_p2 = True
-		player2.state = 'NO'
-	else:
-		draw_stunned_ready(screen, (SCREEN_WIDTH - 110, 50))
-
-	if push_cooldown_p2 > 0:
-		draw_push_cooldown(screen, push_cooldown_p2, (SCREEN_WIDTH - 110, 80))
-		push_cooldown_p2 -= clock.get_time()
-	elif not push_ready_p2:
-		push_ready_p2 = True
-		player2.state = 'NO'
-	else:
-		draw_push_ready(screen, (SCREEN_WIDTH - 110, 80))
-
-	if push_cooldown_p1 > 0:
-		draw_push_cooldown(screen, push_cooldown_p1, (10, 80))
-		push_cooldown_p1 -= clock.get_time()
-	elif not push_ready_p2:
-		push_ready_p1 = True
-		player1.state = 'NO'
-	else:
-		draw_push_ready(screen, (10, 80))
-
-	for event in py.event.get():
-		if event.type == py.QUIT:
-			run = False
-
-	py.display.update()
-	clock.tick(120)
-	send(str(player1))
-	# vong += 1
-
-py.quit()
-send(DISCONNECT_MESSAGE)
+        py.quit()
+        self.send(self.DISCONNECT_MESSAGE)

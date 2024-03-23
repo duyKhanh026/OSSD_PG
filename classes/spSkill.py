@@ -7,7 +7,7 @@ class SPskill1:
 
 		# Tạo list để lưu trữ các biến hình
 		self.hinh_1_list = []
-		self.lengt = int(1200 / 50)
+		self.lengt = int(600 / 50)
 		self.startX = 0
 
 		# Thêm 10 biến hình 1 vào list
@@ -29,7 +29,7 @@ class SPskill1:
 				x = self.startX + i * 50
 			else: 
 				x = self.startX - i * 50
-			y = 600 - 150
+			y = 800 - 150
 			objA = py.Rect(x, y, 50, 150)
 			surface.blit(self.hinh_1_list[i], (x, y))
 			if (objA.colliderect(player2.rect)):

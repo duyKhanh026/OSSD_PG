@@ -1,0 +1,151 @@
+import pygame as py
+from classes.player import Player
+from classes.action import *
+from classes.spSkill import *
+from values.color import *
+from values.screen import *
+
+class Offline_gameplay:
+	def __init__(self):
+		py.init()
+
+		self.screen = py.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+		py.display.set_caption('Demo')
+
+		self.player1 = Player(200, 50, 'blue/stickman_blade', 300, 150, RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L')
+		self.player2 = Player(200, 80, 'purple/stickman', 1200, 150, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_KP1, py.K_KP2, py.K_KP3, py.K_KP4, 'R')
+
+		self.spkillp1 = SPskill1() 
+		self.spkillp2 = SPskill1()
+
+		self.running = True
+		self.clock = py.time.Clock()
+
+	# thực hiện xác nhận player thực hiện đánh thường hoặc đá
+	def attack_confirmation(self, player, x, y):
+		if player.attack_cooldown_p1 > 0:
+			draw_attack_cooldown(self.screen, player.attack_cooldown_p1, (x, y))
+			player.attack_cooldown_p1 -= self.clock.get_time()
+		elif player.state == 'ATK' or player.state == 'KIC':
+			player.attack_ready_p1 = True
+			player.attack_cooldown_p1 = 0
+			player.state = 'NO'
+		else: 
+			draw_attack_ready(self.screen, (x, y))
+
+	# xác nhận player bị choáng
+	def stunning_confirmation(self, player, x, y):
+		if player.stunned_cooldown_p1 > 0:
+			draw_stunned_cooldown(self.screen, player.stunned_cooldown_p1, (x, y))
+			player.stunned_cooldown_p1 -= self.clock.get_time()
+		elif not player.stunned_ready_p1:
+			player.stunned_ready_p1 = True
+			player.state = 'NO'
+			player.JUMP_POWER = -15
+		else:
+			draw_stunned_ready(self.screen, (x, y)) 
+
+	# xác nhận player bị đá 
+	def kicked_confirmation(self, player, x, y):
+		if player.push_cooldown_p1 > 0:
+			draw_push_cooldown(self.screen, player.push_cooldown_p1, (x, y))
+			player.push_cooldown_p1 -= self.clock.get_time()
+		elif not player.push_ready_p1:
+			player.push_ready_p1 = True
+			player.state = 'NO'
+		else:
+			draw_push_ready(self.screen, (x, y))
+
+	# gán phía bị đẩy cho player
+	def pushed_side(self, p1, p2):
+		if p1.side == 'L':
+			p2.state = 'PUS_R'  # đẩy về phía bên phải
+		else:
+			p2.state = 'PUS_L'  # đẩy về phía bên trái
+	
+	# xữ lý player2 khi player1 dùng đòn đá thành công
+	def player_kick(self, p1, p2):
+		if p1.state == 'KIC' and p2.state != 'ATK':
+			if p1.kicAcount > 30 and p2.state != 'PUS_R' and p2.state != 'PUS_L':
+				handle_attack(p1, p2)
+				self.pushed_side(p1, p2)
+				p2.velocity_x = 8.4
+				p2.push_cooldown_p1 = PUSH_COOLDOWN
+				p2.push_ready_p1 = False
+
+	# xữ lý player2 khi player1 dùng đòn đánh thường thành công
+	def player_attack(self ,p1, p2):
+		if p1.state == 'ATK' and p2.state != 'DEF':
+			if p1.atkAcount == 16 and p2.state != 'STUN':
+				handle_attack(p1, p2)
+				p2.state = 'STUN'
+				p2.stunned_cooldown_p1 = STUNNED_COOLDOWN
+				p2.JUMP_POWER = -10
+				p2.stunned_ready_p1 = False
+				p2.velocity_x = 6
+				p2.square_y_speed = p2.JUMP_POWER
+				p2.on_ground = False
+				self.pushed_side(p1, p2)
+
+	def run(self):
+		self.screen.fill(BLACK)
+		# vẽ sọc trắng lên màn hình
+		line_spacing = 50
+		for y in range(0, SCREEN_HEIGHT, line_spacing):
+			py.draw.line(self.screen, WHITE, (0, y), (SCREEN_WIDTH, y))
+		line_spacing_vertical = 50
+		for x in range(0, SCREEN_WIDTH, line_spacing_vertical):
+			py.draw.line(self.screen, WHITE, (x, 0), (x, SCREEN_HEIGHT))
+
+		if self.spkillp1.skill_use(self.screen, self.player1, self.player2): 
+			self.player1.skill1 = False
+			self.player1.state = 'NO'
+			self.player1.sp1count = 0
+
+		if self.player2.get_hit_by_skill :
+			self.player2.JUMP_POWER = -10 - (100 - self.player2.health) / 7
+			handle_attack(None, self.player2)
+			self.pushed_side(self.player1, self.player2)
+			self.player2.velocity_x = 10 + (100 - self.player2.health) / 7
+			self.player2.square_y_speed = self.player2.JUMP_POWER
+			self.player2.on_ground = False
+			self.player2.get_hit_by_skill = False
+		else: 
+			self.player2.JUMP_POWER = -15
+
+		for player in [self.player1, self.player2]:
+			player.move_logic(py.key.get_pressed())
+			player.action(py.key.get_pressed())
+			player.draw(self.screen)
+
+			if player.state == 'ATK' or player.state == 'KIC':
+				if player.attack_cooldown_p1 == 0:
+					player.attack_cooldown_p1 = ATTACK_COOLDOWN
+					player.attack_ready_p1 = False
+
+		self.attack_confirmation(self.player1, 10, 30)
+		self.attack_confirmation(self.player2, SCREEN_WIDTH - 110, 30)
+
+		if check_collision(self.player1, self.player2):
+			self.player_attack(self.player1, self.player2)
+			self.player_attack(self.player2, self.player1)
+			self.player_kick(self.player1, self.player2)
+			self.player_kick(self.player2, self.player1)
+
+		self.stunning_confirmation(self.player1, 10, 50)
+		self.stunning_confirmation(self.player2, SCREEN_WIDTH - 110, 50)
+
+		self.kicked_confirmation(self.player1, 10, 80)
+		self.kicked_confirmation(self.player2, SCREEN_WIDTH - 110, 80)
+
+		for event in py.event.get():
+			if event.type == py.QUIT:
+				self.running = False
+
+		py.display.update()
+		self.clock.tick(60)
+
+	def start(self):
+		while self.running:
+			self.run()
+			
