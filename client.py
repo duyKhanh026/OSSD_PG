@@ -3,7 +3,6 @@ import socket
 import re
 from classes.player import Player
 from classes.action import *
-from classes.spSkill import *
 from values.color import *
 from values.screen import *
 

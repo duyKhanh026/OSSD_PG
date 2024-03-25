@@ -15,7 +15,6 @@ class Player:
 		self.kickA = [py.image.load(f'assets/{strNam}_kick{i}.png') for i in range(1, 8)]
 		self.charIdle = [py.image.load(f'assets/{strNam}_idle{i}.png') for i in range(1, 6)]
 		self.defenseA = py.image.load(f'assets/{strNam}_defense.png')
-		self.sp1 = [py.image.load(f'assets/{strNam}_sp{i}.png') for i in range(1, 20)]
 
 	def set_starting_parameters(self, x, y, color, side):
 		self.rect = py.Rect(x, y, 100, 150)
@@ -56,21 +55,7 @@ class Player:
 		self.state = 'NO'
 
 	def redrawGameWindow(self, surface):
-		if self.walkCount + 1 >= 30: # 5frame
-			self.walkCount = 0
-		if self.kicAcount + 1 >= 42: # 7frame
-			self.kicAcount = 0
-		if self.sp1count + 1 >= 114: # 19 frame
-			self.skill1 = True
-			self.sp1count = 113
-		if self.idlecount >= 30:
-			self.idlecount = 0
-			
-		if self.state == 'SP1':
-			surface.blit(self.sp1[self.sp1count//6] if self.side == 'L' else py.transform.flip(self.sp1[self.sp1count//6], True, False), (self.rect.x - self.rect.width * (2 if self.side == 'L' else 1), self.rect.y - 100))
-			if self.sp1count < 113:
-				self.sp1count += 1
-		elif self.state == 'ATK':
+		if self.state == 'ATK':
 			if self.atkAcount < 23:
 				self.atkAcount += 1
 			elif self.atkAcount > 23:
@@ -172,6 +157,8 @@ class Player:
 			self.velocity_x += 0.2  # Giảm tốc độ âm
 		if abs(self.velocity_x) < 0.2:
 			self.velocity_x = 0  # Đảm bảo tốc độ không trở thành số âm nhỏ
+			if self.state == 'PUS_R' or self.state == 'PUS_L':
+				self.state = 'NO'
 		
 		# Kiểm tra không cho khối vuông đi ra ngoài màn hình bên trái
 		if self.rect.left < 0:

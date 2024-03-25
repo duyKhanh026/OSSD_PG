@@ -64,13 +64,13 @@ def display_students(data):
     if not data:
         print("Danh sách sinh viên rỗng.")
     else:
-        print("Thông tin của tất cả sinh viên:")
+        print("+-------------------------------------------------------------------------------+")
+        print("| {:<15} {:<20} {:<10} {:<30}|".format("Mã sinh viên", "Tên", "Tuổi", "Địa chỉ"))
+        print("|" + "-" * 79 + "|")
         for student in data:
-            print("Mã sinh viên:", student["mã sinh viên"])
-            print("Tên:", student["tên"])
-            print("Tuổi:", student["tuổi"])
-            print("Địa chỉ:", student["địa chỉ"])
-            print("-------------------------")
+            print("| {:<15} {:<20} {:<10} {:<30}|".format(student["mã sinh viên"], student["tên"], student["tuổi"], student["địa chỉ"]))
+        print("+" + "-" * 79 + "+")
+
 
 # Hàm main
 def main():

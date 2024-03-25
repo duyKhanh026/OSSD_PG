@@ -1,7 +1,8 @@
 import pygame as py
 from classes.player import Player
+from classes.character1 import Character1
+from classes.character2 import Character2
 from classes.action import *
-from classes.spSkill import *
 from values.color import *
 from values.screen import *
 
@@ -12,11 +13,8 @@ class Offline_gameplay:
 		self.screen = py.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 		py.display.set_caption('Demo')
 
-		self.player1 = Player(200, 50, 'blue/stickman_blade', 300, 150, RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L')
-		self.player2 = Player(200, 80, 'purple/stickman', 1200, 150, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_KP1, py.K_KP2, py.K_KP3, py.K_KP4, 'R')
-
-		self.spkillp1 = SPskill1() 
-		self.spkillp2 = SPskill1()
+		self.player1 = Character1(200, 50, 'blue/stickman_blade', 300, 150, RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L')
+		self.player2 = Character2(200, 80, 'purple/stickman', 1200, 150, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_KP1, py.K_KP2, py.K_KP3, py.K_KP4, 'R')
 
 		self.running = True
 		self.clock = py.time.Clock()
@@ -82,7 +80,6 @@ class Offline_gameplay:
 				p2.stunned_cooldown_p1 = STUNNED_COOLDOWN
 				p2.JUMP_POWER = -10
 				p2.stunned_ready_p1 = False
-				p2.velocity_x = 6
 				p2.square_y_speed = p2.JUMP_POWER
 				p2.on_ground = False
 				self.pushed_side(p1, p2)
@@ -97,22 +94,7 @@ class Offline_gameplay:
 		for x in range(0, SCREEN_WIDTH, line_spacing_vertical):
 			py.draw.line(self.screen, WHITE, (x, 0), (x, SCREEN_HEIGHT))
 
-		if self.spkillp1.skill_use(self.screen, self.player1, self.player2): 
-			self.player1.skill1 = False
-			self.player1.state = 'NO'
-			self.player1.sp1count = 0
-
-		if self.player2.get_hit_by_skill :
-			self.player2.JUMP_POWER = -10 - (100 - self.player2.health) / 7
-			handle_attack(None, self.player2)
-			self.pushed_side(self.player1, self.player2)
-			self.player2.velocity_x = 10 + (100 - self.player2.health) / 7
-			self.player2.square_y_speed = self.player2.JUMP_POWER
-			self.player2.on_ground = False
-			self.player2.get_hit_by_skill = False
-		else: 
-			self.player2.JUMP_POWER = -15
-
+		# xữ lý đầu vào để di chuyển và thực hiện hành động cho nhân vật 
 		for player in [self.player1, self.player2]:
 			player.move_logic(py.key.get_pressed())
 			player.action(py.key.get_pressed())
@@ -122,6 +104,10 @@ class Offline_gameplay:
 				if player.attack_cooldown_p1 == 0:
 					player.attack_cooldown_p1 = ATTACK_COOLDOWN
 					player.attack_ready_p1 = False
+
+		if self.player1.skill_active(self.screen, self.player2):
+			handle_attack(None, self.player2)
+			self.pushed_side(self.player1, self.player2)
 
 		self.attack_confirmation(self.player1, 10, 30)
 		self.attack_confirmation(self.player2, SCREEN_WIDTH - 110, 30)
