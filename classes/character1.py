@@ -30,7 +30,7 @@ class Character1(Player): # the blue guy
 			self.idlecount = 0
 			
 		if self.state == 'SP1':
-			surface.blit(self.sp1[self.sp1count//6] if self.side == 'L' else py.transform.flip(self.sp1[self.sp1count//6], True, False), (self.rect.x - self.rect.width * (2 if self.side == 'L' else 1), self.rect.y - 100))
+			surface.blit(self.sp1[self.sp1count//6] if self.side == 'L' else py.transform.flip(self.sp1[self.sp1count//6], True, False), (self.rect.x - self.rect.width, self.rect.y - 100))
 			if self.sp1count < 113:
 				self.sp1count += 1
 		else :
@@ -47,7 +47,7 @@ class Character1(Player): # the blue guy
 				x = self.startX + i * 50
 			else: 
 				x = self.startX - i * 50
-			y = 800 - 150
+			y = 600 - 150
 			objA = py.Rect(x, y, 50, 150)
 			surface.blit(self.hinh_1_list[i], (x, y))
 			if (objA.colliderect(player2.rect)):

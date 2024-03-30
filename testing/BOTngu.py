@@ -1,116 +1,67 @@
-import pygame
+#following this tutorial with CUDA 10.1 https://towardsdatascience.com/installing-tensorflow-with-cuda-cudnn-and-gpu-support-on-windows-10-60693e46e781 . 
+#After this tutorial I uninstall this Libs and install it again
+#pip install keras
+#pip install --upgrade setuptools
+#pip install cmake, pip install keras-models
+#pip install keras-applications
+#pip install keras-preprocessing 
+
 import random
+import gym
+import numpy as np
 
-# Định nghĩa màu sắc
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Flatten
+from tensorflow.keras.optimizers.legacy import Adam
 
-# Khởi tạo pygame
-pygame.init()
+import tensorflow as tf
+from keras import __version__
+tf.keras.__version__ = __version__
 
-# Thiết lập màn hình
-WIDTH, HEIGHT = 800, 600
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption('Bot Game')
+from rl.agents import DQNAgent
+from rl.policy import BoltzmannQPolicy
+from rl.memory import SequentialMemory
 
-# Định nghĩa lớp cho khối vuông đỏ
-class RedSquare:
-    def __init__(self, x, y):
-        self.rect = pygame.Rect(x, y, 50, 50)
-        self.color = RED
-    
-    def draw(self):
-        pygame.draw.rect(screen, self.color, self.rect)
+env = gym.make("CartPole-v1")
 
-    def move_towards(self, target, grid):
-        # Tính toán hướng di chuyển
-        dx = target.rect.x - self.rect.x
-        dy = target.rect.y - self.rect.y
+states = env.observation_space.shape[0]
+actions = env.action_space.n
 
-        # Tìm hướng di chuyển tối ưu dựa trên mảng địa hình
-        if dx != 0:
-            dx = dx // abs(dx)
-        if dy != 0:
-            dy = dy // abs(dy)
+model = Sequential()
+model.add(Flatten(input_shape=(1, states)))
+model.add(Dense(24, activation="relu"))
+model.add(Dense(24, activation="relu"))
+model.add(Dense(actions, activation="linear"))
 
-        # Di chuyển theo hướng tối ưu
-        next_x = self.rect.x + dx * 5
-        next_y = self.rect.y + dy * 5
-        if grid[next_y // 50][next_x // 50] == 1:
-            self.rect.x = next_x
-            self.rect.y = next_y
+agent = DQNAgent(
+	model= model,
+	memory= SequentialMemory(limit=50000, window_length=1),
+	policy= BoltzmannQPolicy(),
+	nb_actions=actions,
+	nb_steps_warmup=10,
+	target_model_update=0.01
+)
 
-            # Kiểm tra va chạm với địa hình
-            if grid[self.rect.y // 50][self.rect.x // 50] == 0:
-                self.rect.x -= dx * 5
-                self.rect.y -= dy * 5
+agent.compile(Adam(lr=0.001), metrics=["mae"])
+agent.fit(env, nb_steps=100000, visualize=False, verbose=1)
 
+result = agent.test(env, nb_episodes=10, visualize=True)
+print(np.mean(result.history["episode_reward"]))
 
-# Định nghĩa lớp cho khối vuông xanh
-class GreenSquare:
-    def __init__(self, x, y):
-        self.rect = pygame.Rect(x, y, 50, 50)
-        self.color = GREEN
-    
-    def draw(self):
-        pygame.draw.rect(screen, self.color, self.rect)
+env.close()
 
-    def move_random(self, grid):
-        # Tạo vị trí ngẫu nhiên cho khối vuông xanh
-        while True:
-            x = random.randint(0, WIDTH - 50)
-            y = random.randint(0, HEIGHT - 50)
-            if grid[y // 50][x // 50] == 1:
-                self.rect.x = x
-                self.rect.y = y
-                break
+# episodes = 10
+# for episode in range(1, episodes+1):
+# 	state = env.reset()
+# 	done = False
+# 	score = 0
 
-# Tạo một mảng địa hình
-grid = [[1 for _ in range(WIDTH // 50)] for _ in range(HEIGHT // 50)]
-# Thiết lập các ô không thể đi qua
-grid[1][4] = 0
-grid[2][4] = 0
-grid[3][4] = 0
-grid[4][4] = 0
+# 	while not done:
+# 		action = random.choice([0,1])
+# 		_, reward, done, _ = env.step(action)
+# 		score += reward
+# 		env.render()
 
-# Khởi tạo đối tượng cho khối vuông đỏ và khối vuông xanh
-red_square = RedSquare(50, 50)
-green_square = GreenSquare(random.randint(0, WIDTH - 50), random.randint(0, HEIGHT - 50))
+# 	print(f"Episode {episode}, Score: {score}")
 
-# Vòng lặp chính của trò chơi
-clock = pygame.time.Clock()
-running = True
-while running:
-    screen.fill(WHITE)
-
-    # Xử lý sự kiện
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-
-    # Di chuyển khối vuông đỏ tới khối vuông xanh
-    red_square.move_towards(green_square, grid)
-
-    # Kiểm tra va chạm giữa khối vuông đỏ và khối vuông xanh
-    if red_square.rect.colliderect(green_square.rect):
-        # Di chuyển khối vuông xanh đến vị trí mới
-        green_square.move_random(grid)
-
-    # Vẽ các khối vuông
-    red_square.draw()
-    green_square.draw()
-
-    # Vẽ địa hình
-    for y in range(len(grid)):
-        for x in range(len(grid[0])):
-            if grid[y][x] == 0:
-                pygame.draw.rect(screen, BLACK, pygame.Rect(x * 50, y * 50, 50, 50))
-
-    # Cập nhật màn hình
-    pygame.display.flip()
-    clock.tick(60)
-
-pygame.quit()
+# env.close()

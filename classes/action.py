@@ -7,11 +7,17 @@ DAMAGE = 10
 TEXT_COLOR = (255, 255, 255)
 
 def check_collision(p1, p2):
-	return p1.rect.colliderect(p2.rect)
+	if p1.side == 'L':
+		return py.Rect(p1.rect.x + p1.hitbox,p1.rect.y, 100,100).colliderect(p2.rect)
+	else:
+		return py.Rect(p1.rect.x - p1.hitbox,p1.rect.y, 100,100).colliderect(p2.rect)
+
 
 def handle_attack(attacker, victim):
 	if attacker == None or check_collision(attacker, victim) :
 		victim.health -= DAMAGE
+		return True
+	return False
 
 def draw_atk_effect(screen, player):
 	if player.state == 'ATK' or player.state == 'KIC':
