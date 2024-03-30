@@ -17,7 +17,9 @@ class Agent:
         self.epsilon = 0 # randomness
         self.gamma = 0.9 # discount rate
         self.memory = deque(maxlen=MAX_MEMORY) # popleft()
+        # if not have model.pth code: 
         self.model = Linear_QNet(11, 256, 3)
+        # self.model = Linear_QNet.load()
         self.trainer = QTrainer(self.model, lr=LR, gamma=self.gamma)
 
 
@@ -104,8 +106,9 @@ def train():
     plot_scores = []
     plot_mean_scores = []
     total_score = 0
-    record = 0
     agent = Agent()
+
+    record = agent.model.record
     game = SnakeGameAI()
     while True:
         # get old state
@@ -132,6 +135,7 @@ def train():
 
             if score > record:
                 record = score
+                agent.model.record = record
                 agent.model.save()
 
             print('Game', agent.n_games, 'Score', score, 'Record:', record)

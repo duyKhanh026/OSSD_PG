@@ -10,6 +10,7 @@ class Linear_QNet(nn.Module):
         super().__init__()
         self.linear1 = nn.Linear(input_size, hidden_size)
         self.linear2 = nn.Linear(hidden_size, output_size)
+        self.record = 0
 
     def forward(self, x):
         x = F.relu(self.linear1(x))
@@ -21,8 +22,24 @@ class Linear_QNet(nn.Module):
         if not os.path.exists(model_folder_path):
             os.makedirs(model_folder_path)
 
-        file_name = os.path.join(model_folder_path, file_name)
-        torch.save(self.state_dict(), file_name)
+        file_path = os.path.join(model_folder_path, file_name)
+        torch.save({
+            'state_dict': self.state_dict(),
+            'record': self.record
+        }, file_path)
+
+    @staticmethod
+    def load(file_name='model.pth'):
+        model_folder_path = './model'
+        file_path = os.path.join(model_folder_path, file_name)
+        if os.path.exists(file_path):
+            checkpoint = torch.load(file_path)
+            model = Linear_QNet(11, 256, 3)  # You need to define input_size, hidden_size, and output_size
+            model.load_state_dict(checkpoint['state_dict'])
+            model.record = checkpoint['record']
+            return model
+        else:
+            raise FileNotFoundError("Model file not found.")
 
 
 class QTrainer:
