@@ -17,9 +17,9 @@ class Agent:
         self.epsilon = 0 # randomness
         self.gamma = 0.9 # discount rate
         self.memory = deque(maxlen=MAX_MEMORY) # popleft()
-        # if not have model.pth code: 
-        self.model = Linear_QNet(11, 256, 3)
-        # self.model = Linear_QNet.load()
+        # if not have model.pth code:
+        # self.model = Linear_QNet(11, 256, 3)
+        self.model = Linear_QNet.load()
         self.trainer = QTrainer(self.model, lr=LR, gamma=self.gamma)
 
 
