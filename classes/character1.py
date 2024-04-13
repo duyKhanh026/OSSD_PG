@@ -9,6 +9,7 @@ class Character1(Player): # the blue guy
 		self.hinh_1_list = []
 		self.lengt = int(600 / 50)
 		self.startX = 0
+		self.GRAVITY = 0
 
 		# Thêm 10 biến hình 1 vào list
 		for i in range(0, self.lengt):
@@ -39,14 +40,14 @@ class Character1(Player): # the blue guy
 	def skill_use(self, surface, player2):
 		if not self.skill1:
 			self.spam_l = self.lengt
-			self.startX = self.rect.x
+			self.startX = self.rect.x + self.rect.width
 			return False
 		# Vẽ hình 1
 		for i in range(0, self.lengt - self.spam_l):
 			if self.side == 'L':
 				x = self.startX + i * 50
 			else: 
-				x = self.startX - i * 50
+				x = (self.startX - self.rect.width - 50) - i * 50
 			y = 600 - 150
 			objA = py.Rect(x, y, 50, 150)
 			surface.blit(self.hinh_1_list[i], (x, y))

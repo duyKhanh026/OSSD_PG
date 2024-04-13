@@ -1,6 +1,7 @@
 from offline_2player import Offline_2player
 from vsAImode import Vs_AI_Mode
 from client import Player_client
+from AI_OSSD.agent import train
 
 class Main:
     def run(self):
@@ -16,4 +17,4 @@ class Main:
                 print("Lựa chọn không hợp lệ. Vui lòng nhập lại.")
 
 if __name__ == "__main__":
-	Offline_2player().start()
+    train()

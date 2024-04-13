@@ -6,6 +6,8 @@ class Player:
 		self.health_bar_y = hy
 		self.name = ''
 		self.hitbox = 100
+		self.right = False
+		self.left = False
 		self.load_images(strNam)
 		self.set_starting_parameters(x, y, color, side)
 		self.set_control_keys(move_left_key, move_right_key, jump_key, atk_key, def_key, kick_key, sp1_key)
@@ -92,7 +94,7 @@ class Player:
 		py.draw.line(surface, (26, 243, 0), (self.rect.x, 0), (self.rect.x, 800))
 		py.draw.line(surface, (26, 243, 0), (0, self.rect.y), (1500, self.rect.y))
 		font = py.font.SysFont(None, 16)
-		text = font.render(' (' + str(self.rect.x) + ',' + str(self.rect.y) + ')', True, (0, 0, 0))
+		text = font.render(' (' + str(self.rect.x) + ',' + str(self.rect.y) + ')', True, (255, 255,255))
 		surface.blit(text, (self.rect.x, 10))
 
 		# Draw health bar
@@ -100,11 +102,31 @@ class Player:
 		py.draw.rect(surface, (0, 255, 0), (self.health_bar_x, self.health_bar_y, int(self.rect.width * (self.health / self.max_health)), 10))
 		
 		# Draw text about the current state 
-		# font = py.font.SysFont(None, 46)
-		# text = font.render(' ' + self.state, True, (255, 255,255))
-		# surface.blit(text, (self.rect.x, self.rect.y + self.rect.height // 2))
+		font = py.font.SysFont(None, 46)
+		text = font.render(' ' + self.state, True, (255, 255,255))
+		surface.blit(text, (self.rect.x, self.rect.y + self.rect.height // 2))
 
-	def action(self, key):
+	def go_left(self):
+		self.right = False
+		self.side = 'R'
+		self.left = True
+		self.move(-self.speed, 0)
+
+	def go_right(self):
+		self.right = True
+		self.side = 'L'
+		self.left = False
+		self.move(self.speed, 0)
+
+	def do_jump(self):
+		self.square_y_speed = self.JUMP_POWER
+		self.on_ground = False
+
+	def do_atk(self):
+		self.atkAcount = 0
+		self.state = 'ATK'
+
+	def sp_move(self, key):
 		if self.move_left_key == None:
 			return 
 
@@ -130,10 +152,13 @@ class Player:
 			self.rect.y += self.square_y_speed
 
 		# Kiểm tra va chạm với mặt đất
-		if self.rect.y >= 600 - self.rect.height:
-			self.rect.y = 600 - self.rect.height
-			self.square_y_speed = 0
-			self.on_ground = True
+		if self.rect.x > 150 and self.rect.x < 1250:
+			if self.rect.y >= 600 - self.rect.height:
+				self.rect.y = 600 - self.rect.height
+				self.square_y_speed = 0
+				self.on_ground = True
+		else:
+			self.on_ground = False
 
 		# Giới hạn không cho khối vuông đi quá biên
 		if self.rect.x < 0:
@@ -169,21 +194,14 @@ class Player:
 
 		# kiểm tra input từ bàn phím
 		if key[self.move_left_key]:
-			self.right = False
-			self.side = 'R'
-			self.left = True
-			self.move(-self.speed, 0)
+			self.go_left()
 		elif key[self.move_right_key]:
-			self.right = True
-			self.side = 'L'
-			self.left = False
-			self.move(self.speed, 0)
+			self.go_right()
 		else:
 			self.right = False
 			self.left = False
 		if key[self.jump_key] and self.on_ground:
-			self.square_y_speed = self.JUMP_POWER
-			self.on_ground = False
+			self.do_jump()
 
 	def __str__(self):   # Tạo một chuỗi đại diện cho đối tượng Player
 		player_info = [

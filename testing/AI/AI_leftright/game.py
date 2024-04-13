@@ -17,7 +17,6 @@ plt.ion()
 def plot(scores, mean_scores):
     display.clear_output(wait=True)
     display.display(plt.gcf())
-    plt.figure(figsize=(10, 10))
     plt.clf()
     plt.title('Training...')
     plt.xlabel('Number of Games')
@@ -379,7 +378,7 @@ class Game:
 				pygame.time.delay(100)
 				if Game.game_count % 10 == 0:
 					self.save_agent("agent_checkpoint.pth")
-				print(f"Score: {self.score}, highest score: {Game.highest_score}, game {Game.game_count}")
+				print(f"Score: {self.score}, highest score: {Game.highest_score}, Train number:{Game.agent.n_games}, game {Game.game_count}")
 				self.reset()
 
 

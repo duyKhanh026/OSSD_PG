@@ -8,9 +8,7 @@ class Character2(Player): # the blue guy
 		self.charIdle_sp = [py.image.load(f'assets/purple_sp/stickman_idle{i}.png') for i in range(1, 6)]
 		self.walkRight_sp = [py.image.load(f'assets/purple_sp/stickman_running{i}.png') for i in range(1, 6)]
 		self.slashA1_sp = [py.image.load(f'assets/purple_sp/stickman_punch{i}.png') for i in range(1, 5)]
-		self.speed = 3
-
-		self.hitbox = 160
+		self.speed = 8
 
 	def redrawGameWindow(self, surface):
 		if self.walkCount + 1 >= 30: # 5frame
@@ -23,24 +21,24 @@ class Character2(Player): # the blue guy
 		if self.idlecount >= 30:
 			self.idlecount = 0
 
-		if self.state == 'ATK':
-			if self.atkAcount < 23:
-				self.atkAcount += 1
-			elif self.atkAcount > 23:
-				self.atkAcount = 0
-			surface.blit(self.slashA1_sp[self.atkAcount//6] if self.side == 'L' else py.transform.flip(self.slashA1_sp[self.atkAcount//6], True, False), (self.rect.x - 200, self.rect.y - 200))
-		elif self.state == 'KIC':
-			surface.blit(self.kickA[self.kicAcount//6] if self.side == 'L' else py.transform.flip(self.kickA[self.kicAcount//6], True, False), (self.rect.x - self.rect.width, self.rect.y))
-			self.kicAcount += 1
-		elif self.right:
-			surface.blit(self.walkRight_sp[self.walkCount//6], (self.rect.x - self.rect.width, self.rect.y - 100))
-			self.walkCount += 1
-		elif self.left:
-			surface.blit(py.transform.flip(self.walkRight_sp[self.walkCount//6], True, False), (self.rect.x - self.rect.width, self.rect.y - 100))
-			self.walkCount += 1
-		elif self.state == 'DEF':
-			surface.blit(self.defenseA if self.side == 'L' else py.transform.flip(self.defenseA, True, False), (self.rect.x - self.rect.width, self.rect.y))
-		else :
-			surface.blit(self.charIdle_sp[self.idlecount//6] if self.side == 'L' else py.transform.flip(self.charIdle_sp[self.idlecount//6], True, False), (self.rect.x - self.rect.width, self.rect.y - self.rect.height + 50))
-			self.idlecount += 1
-		# return super().redrawGameWindow(surface)
+		# if self.state == 'ATK':
+		# 	if self.atkAcount < 23:
+		# 		self.atkAcount += 1
+		# 	elif self.atkAcount > 23:
+		# 		self.atkAcount = 0
+		# 	surface.blit(self.slashA1_sp[self.atkAcount//6] if self.side == 'L' else py.transform.flip(self.slashA1_sp[self.atkAcount//6], True, False), (self.rect.x - 200, self.rect.y - 200))
+		# elif self.state == 'KIC':
+		# 	surface.blit(self.kickA[self.kicAcount//6] if self.side == 'L' else py.transform.flip(self.kickA[self.kicAcount//6], True, False), (self.rect.x - self.rect.width, self.rect.y))
+		# 	self.kicAcount += 1
+		# elif self.right:
+		# 	surface.blit(self.walkRight_sp[self.walkCount//6], (self.rect.x - self.rect.width, self.rect.y - 100))
+		# 	self.walkCount += 1
+		# elif self.left:
+		# 	surface.blit(py.transform.flip(self.walkRight_sp[self.walkCount//6], True, False), (self.rect.x - self.rect.width, self.rect.y - 100))
+		# 	self.walkCount += 1
+		# elif self.state == 'DEF':
+		# 	surface.blit(self.defenseA if self.side == 'L' else py.transform.flip(self.defenseA, True, False), (self.rect.x - self.rect.width, self.rect.y))
+		# else :
+		# 	surface.blit(self.charIdle_sp[self.idlecount//6] if self.side == 'L' else py.transform.flip(self.charIdle_sp[self.idlecount//6], True, False), (self.rect.x - self.rect.width, self.rect.y - self.rect.height + 50))
+		# 	self.idlecount += 1
+		return super().redrawGameWindow(surface)
