@@ -9,7 +9,6 @@ class Character1(Player): # the blue guy
 		self.hinh_1_list = []
 		self.lengt = int(600 / 50)
 		self.startX = 0
-		self.GRAVITY = 0
 
 		# Thêm 10 biến hình 1 vào list
 		for i in range(0, self.lengt):

@@ -17,4 +17,4 @@ class Main:
                 print("Lựa chọn không hợp lệ. Vui lòng nhập lại.")
 
 if __name__ == "__main__":
-    train()
+    Offline_2player().start()
