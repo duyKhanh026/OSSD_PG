@@ -213,6 +213,7 @@ class Player:
 			self.key_twice -= 1
 			if self.key_twice <= 0:
 				self.click_jump_enable = True
+				
 		if self.on_ground: 
 			self.Max_jump = 2
 			self.key_twice = 10
