@@ -34,7 +34,7 @@ font_player = pygame.font.SysFont("Arial", 24)
 # Kích thước và màu sắc của nút
 BUTTON_WIDTH = 200
 BUTTON_HEIGHT = 40
-BUTTON_MARGIN = 118  # Khoảng cách tăng giữa các nút
+BUTTON_MARGIN = 122  # Khoảng cách tăng giữa các nút
 BUTTON_COLOR = (255, 255, 255)  # Màu trắng cho nút
 BUTTON_TEXT_COLOR = (0, 0, 0)  # Màu đen cho chữ trên nút
 
@@ -56,7 +56,7 @@ def draw_waiting_room(room_list, scroll_pos, table_height):
     screen.blit(waiting_title, title_rect)
     
     # Tính toán kích thước của bảng
-    table_width = SCREEN_WIDTH - 230
+    table_width = SCREEN_WIDTH - 240
 
     # Vẽ bảng để hiển thị danh sách phòng
     table_rect = pygame.Rect(0, 150, table_width, table_height)
@@ -84,7 +84,8 @@ def draw_waiting_room(room_list, scroll_pos, table_height):
 
     # Vẽ nút
     draw_button("Join Room", 2 * (SCREEN_WIDTH // 3) + BUTTON_MARGIN, SCREEN_HEIGHT // 3)
-    draw_button("Create Room", 2 * (SCREEN_WIDTH // 3) + BUTTON_MARGIN, SCREEN_HEIGHT // 3 + 2 * (BUTTON_HEIGHT + BUTTON_MARGIN))
+    draw_button("Create Room", 2 * (SCREEN_WIDTH // 3) + BUTTON_MARGIN, SCREEN_HEIGHT // 3 + (BUTTON_HEIGHT + BUTTON_MARGIN))
+    draw_button("Back", 2 * (SCREEN_WIDTH // 3) + BUTTON_MARGIN, SCREEN_HEIGHT // 3 + 2 * (BUTTON_HEIGHT + BUTTON_MARGIN))
     pygame.display.flip()
 
 # Hàm chính
