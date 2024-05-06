@@ -2,19 +2,13 @@ from offline_2player import Offline_2player
 from vsAImode import Vs_AI_Mode
 from client import Player_client
 from AI_OSSD.agent import train
+from GUI.Menu import Menu
 
 class Main:
     def run(self):
-        while True:
-            choice = input("Bạn muốn chạy trò chơi Offline (O) hay Player2_client (P)? Nhập O hoặc P: ").upper()
-            if choice == "O":
-                Offline_2player().start()
-                break
-            elif choice == "P":
-                Player_client().run()
-                break
-            else:
-                print("Lựa chọn không hợp lệ. Vui lòng nhập lại.")
+        menu = Menu()
+        while menu.play_option == -1: 
+            menu.run()
 
-if __name__ == "__main__":
-    Offline_2player().start()
+if __name__ == "__main__": 
+    Main().run()

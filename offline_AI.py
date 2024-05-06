@@ -14,7 +14,7 @@ from values.screen import *
 def distance(x1, y1, x2, y2):
 	return abs(x1 - x2)
 
-class Offline_2player:
+class Offline_AI:
 	def __init__(self):
 		py.init()
 		self.count_frame = 0

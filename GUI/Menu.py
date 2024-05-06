@@ -2,73 +2,77 @@ import pygame
 import sys
 import os
 
-# Khởi tạo Pygame
-pygame.init()
+class Menu:
+    def __init__(self):
+        # Khởi tạo Pygame
+        pygame.init()
+        self.play_option = -1
 
-# Kích thước màn hình
-SCREEN_WIDTH = 994
-SCREEN_HEIGHT = 705
+        # Kích thước màn hình
+        self.SCREEN_WIDTH = 994
+        self.SCREEN_HEIGHT = 705
 
-# Khởi tạo cửa sổ
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Fighting Game")
+        # Khởi tạo cửa sổ
+        self.screen = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
+        pygame.display.set_caption("Fighting Game")
 
-# Tải hình ảnh nền
-background_image = pygame.image.load("GUI/background.jpg")
+        # Tải hình ảnh nền
+        self.background_image = pygame.image.load("GUI/background.jpg")
 
-# Kích thước cửa sổ pygame
-window_width, window_height = pygame.display.get_surface().get_size()
+        # Select a font from the available fonts in the system
+        self.font_title = pygame.font.SysFont("Arial", 72)
+        self.font_button = pygame.font.SysFont("Arial", 24)
+        self.font_player = pygame.font.SysFont("Arial", 24)
 
-# Tính toán vị trí để cửa sổ xuất hiện ở giữa màn hình
-x_pos = (pygame.display.Info().current_w - window_width) // 2
-y_pos = (pygame.display.Info().current_h - window_height) // 2
+        # Button dimensions and colors
+        self.BUTTON_WIDTH = 200
+        self.BUTTON_HEIGHT = 40
+        self.BUTTON_MARGIN = 40  # Increased margin between buttons
+        self.BUTTON_COLOR = (255, 255, 255)  # White color for buttons
+        self.BUTTON_TEXT_COLOR = (0, 0, 0)  # Black color for text on buttons
 
-# Đặt vị trí cho cửa sổ
-os.environ['SDL_VIDEO_WINDOW_POS'] = f"{x_pos},{y_pos}"
+        # Kích thước cửa sổ pygame
+        self.window_width, self.window_height = pygame.display.get_surface().get_size()
 
-# Select a font from the available fonts in the system
-font_title = pygame.font.SysFont("Arial", 72)
-font_button = pygame.font.SysFont("Arial", 24)
-font_player = pygame.font.SysFont("Arial", 24)
+        # Tính toán vị trí để cửa sổ xuất hiện ở giữa màn hình
+        self.x_pos = (pygame.display.Info().current_w - self.window_width) // 2
+        self.y_pos = (pygame.display.Info().current_h - self.window_height) // 2
 
-# Button dimensions and colors
-BUTTON_WIDTH = 200
-BUTTON_HEIGHT = 40
-BUTTON_MARGIN = 40  # Increased margin between buttons
-BUTTON_COLOR = (255, 255, 255)  # White color for buttons
-BUTTON_TEXT_COLOR = (0, 0, 0)  # Black color for text on buttons
+        # Đặt vị trí cho cửa sổ
+        os.environ['SDL_VIDEO_WINDOW_POS'] = f"{self.x_pos},{self.y_pos}"
 
-# Function to draw a button
-def draw_button(text, x, y):
-    pygame.draw.rect(screen, BUTTON_COLOR, (x, y, BUTTON_WIDTH, BUTTON_HEIGHT), border_radius=20)
-    text_surface = font_button.render(text, True, BUTTON_TEXT_COLOR)
-    text_rect = text_surface.get_rect(center=(x + BUTTON_WIDTH // 2, y + BUTTON_HEIGHT // 2))
-    screen.blit(text_surface, text_rect)
+        # Default player name
+        self.player_name = "Player 1"
 
-# Function to draw the menu interface
-def draw_menu(player_name):
-    # Draw background image
-    screen.blit(background_image, (0, 0))
+    # Function to draw a button
+    def draw_button(self, text, x, y):
+        pygame.draw.rect(self.screen, self.BUTTON_COLOR, (x, y, self.BUTTON_WIDTH, self.BUTTON_HEIGHT), border_radius=20)
+        text_surface = self.font_button.render(text, True, self.BUTTON_TEXT_COLOR)
+        text_rect = text_surface.get_rect(center=(x + self.BUTTON_WIDTH // 2, y + self.BUTTON_HEIGHT // 2))
+        self.screen.blit(text_surface, text_rect)
 
-    # Game title
-    game_title = font_title.render("Fighting Game", True, (255, 255, 255))
-    title_rect = game_title.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3))
-    screen.blit(game_title, title_rect)
-    # Player name
-    player_text = font_player.render(player_name, True, (255, 255, 0))
-    player_rect = player_text.get_rect(topright=(SCREEN_WIDTH - 20, 20))
-    screen.blit(player_text, player_rect)
-    # Draw buttons
-    draw_button("Play with Bot", (SCREEN_WIDTH - BUTTON_WIDTH) // 2, SCREEN_HEIGHT // 2)
-    draw_button("Play 2 Players", (SCREEN_WIDTH - BUTTON_WIDTH) // 2, SCREEN_HEIGHT // 2 + BUTTON_HEIGHT + BUTTON_MARGIN)
-    draw_button("Play Online", (SCREEN_WIDTH - BUTTON_WIDTH) // 2, SCREEN_HEIGHT // 2 + 2 * (BUTTON_HEIGHT + BUTTON_MARGIN))
-    pygame.display.flip()
+    # Function to draw the menu interface
+    def draw_menu(self):
+        # Draw background image
+        self.screen.blit(self.background_image, (0, 0))
 
-# Main function
-def main():
-    player_name = "Player 1"  # Default player name
-    while True:
-        draw_menu(player_name)
+        # Game title
+        game_title = self.font_title.render("Fighting Game", True, (255, 255, 255))
+        title_rect = game_title.get_rect(center=(self.SCREEN_WIDTH // 2, self.SCREEN_HEIGHT // 3))
+        self.screen.blit(game_title, title_rect)
+        # Player name
+        player_text = self.font_player.render(self.player_name, True, (255, 255, 0))
+        player_rect = player_text.get_rect(topright=(self.SCREEN_WIDTH - 20, 20))
+        self.screen.blit(player_text, player_rect)
+        # Draw buttons
+        self.draw_button("Play with Bot", (self.SCREEN_WIDTH - self.BUTTON_WIDTH) // 2, self.SCREEN_HEIGHT // 2)
+        self.draw_button("Play 2 Players", (self.SCREEN_WIDTH - self.BUTTON_WIDTH) // 2, self.SCREEN_HEIGHT // 2 + self.BUTTON_HEIGHT + self.BUTTON_MARGIN)
+        self.draw_button("Play Online", (self.SCREEN_WIDTH - self.BUTTON_WIDTH) // 2, self.SCREEN_HEIGHT // 2 + 2 * (self.BUTTON_HEIGHT + self.BUTTON_MARGIN))
+        pygame.display.flip()
+
+    # Main function
+    def run(self):
+        self.draw_menu()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -76,18 +80,18 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
                 # Check which button the player clicked
-                if (SCREEN_WIDTH - BUTTON_WIDTH) // 2 <= mouse_x <= (SCREEN_WIDTH - BUTTON_WIDTH) // 2 + BUTTON_WIDTH:
-                    if SCREEN_HEIGHT // 2 <= mouse_y <= SCREEN_HEIGHT // 2 + BUTTON_HEIGHT:
-                        print("Play with Bot")
-                    elif SCREEN_HEIGHT // 2 + BUTTON_HEIGHT + BUTTON_MARGIN <= mouse_y <= SCREEN_HEIGHT // 2 + 2 * (BUTTON_HEIGHT + BUTTON_MARGIN):
+                if (self.SCREEN_WIDTH - self.BUTTON_WIDTH) // 2 <= mouse_x <= (self.SCREEN_WIDTH - self.BUTTON_WIDTH) // 2 + self.BUTTON_WIDTH:
+                    if self.SCREEN_HEIGHT // 2 <= mouse_y <= self.SCREEN_HEIGHT // 2 + self.BUTTON_HEIGHT:
+                        print("Play with Bot") 
+                        play_option = 1
+                    elif self.SCREEN_HEIGHT // 2 + self.BUTTON_HEIGHT + self.BUTTON_MARGIN <= mouse_y <= self.SCREEN_HEIGHT // 2 + 2 * (self.BUTTON_HEIGHT + self.BUTTON_MARGIN):
                         print("Play 2 Players")
-                    elif SCREEN_HEIGHT // 2 + 2 * (BUTTON_HEIGHT + BUTTON_MARGIN) <= mouse_y <= SCREEN_HEIGHT // 2 + 3 * (BUTTON_HEIGHT + BUTTON_MARGIN):
+                        play_option = 2
+                    elif self.SCREEN_HEIGHT // 2 + 2 * (self.BUTTON_HEIGHT + self.BUTTON_MARGIN) <= mouse_y <= self.SCREEN_HEIGHT // 2 + 3 * (self.BUTTON_HEIGHT + self.BUTTON_MARGIN):
                         print("Play Online")
+                        play_option = 3
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_n:
                     # Change player name when 'n' key is pressed
-                    player_name = input("Enter player name: ")
+                    self.player_name = input("Enter player name: ")
 
-# Run the game
-if __name__ == "__main__":
-    main()
