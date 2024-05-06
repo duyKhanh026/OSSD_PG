@@ -4,7 +4,7 @@ from AI_OSSD.model import *
 from collections import deque
 import math
 from AI_OSSD.helper import plot
-from offline_2player import *
+from offline_AI import *
 
 MAX_MEMORY = 100_000
 BATCH_SIZE = 1000
@@ -95,7 +95,7 @@ def train():
 	total_score = 0
 
 	agent = Agent()
-	game = Offline_2player()
+	game = Offline_AI()
 	while True:
 		state_old = agent.get_state(game)
 
