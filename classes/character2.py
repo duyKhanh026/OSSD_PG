@@ -46,6 +46,6 @@ class Character2(Player): # the blue guy
 			else :
 				surface.blit(self.charIdle_sp[self.idlecount//6] if self.side == 'L' else py.transform.flip(self.charIdle_sp[self.idlecount//6], True, False), (self.rect.x - self.rect.width, self.rect.y - self.rect.height + 50))
 				self.idlecount += 1
-		else: 
+		else : 
 			return super().redrawGameWindow(surface)
 		

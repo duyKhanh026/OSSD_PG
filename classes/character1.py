@@ -28,6 +28,11 @@ class Character1(Player): # the blue guy
 			self.sp1count = 113
 		if self.idlecount >= 30:
 			self.idlecount = 0
+
+		if self.state != 'NO':
+			self.moveEnable = False
+		else :
+			self.moveEnable = True
 			
 		if self.state == 'SP1':
 			surface.blit(self.sp1[self.sp1count//6] if self.side == 'L' else py.transform.flip(self.sp1[self.sp1count//6], True, False), (self.rect.x - self.rect.width, self.rect.y - 100))

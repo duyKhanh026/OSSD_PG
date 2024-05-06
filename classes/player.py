@@ -15,6 +15,7 @@ class Player:
 		self.set_control_keys(move_left_key, move_right_key, jump_key, atk_key, def_key, kick_key, sp1_key)
 		self.set_default_values()
 		self.key_twice = 10
+		self.moveEnable = True
 
 	def load_images(self, strNam):
 		self.walkRight = [py.image.load(f'assets/{strNam}_running{i}.png') for i in range(1, 6)]
@@ -194,7 +195,8 @@ class Player:
 
 		if self.move_left_key == None:
 			return 
-		if self.state != 'NO' and self.on_ground:
+		
+		if not self.moveEnable:
 			return
 
 		# kiểm tra input từ bàn phím
@@ -213,7 +215,7 @@ class Player:
 			self.key_twice -= 1
 			if self.key_twice <= 0:
 				self.click_jump_enable = True
-				
+
 		if self.on_ground: 
 			self.Max_jump = 2
 			self.key_twice = 10
