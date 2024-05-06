@@ -13,7 +13,7 @@ class Offline_2player:
 		self.count_frame = 0
 		self.game_over = 0
 		self.screen = py.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-		py.display.set_caption('Demo')
+		py.display.set_caption('Fighting Game')
 		self.player1 = Character1(200, 50, 'blue/stickman_blade', 300, 150, RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L')
 		self.player2 = Character2(200, 80, 'purple/stickman', 1200, 150, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_KP1, py.K_KP2, py.K_KP3, py.K_KP4, 'R')
 		self.player1.name = 'player1'
@@ -124,7 +124,7 @@ class Offline_2player:
 					player.attack_cooldown_p1 = ATTACK_COOLDOWN
 					player.attack_ready_p1 = False
 
-			if player.rect.y > SCREEN_HEIGHT - 150:
+			if player.rect.y > SCREEN_HEIGHT:
 				self.game_over = (1 if player == self.player1 else 2) 
 			elif player.health <= 0:
 				self.game_over = (1 if player == self.player1 else 2) 
@@ -161,7 +161,8 @@ class Offline_2player:
 			for player in [self.player1, self.player2]:
 				player.draw(self.screen)
 		else :
-			text = py.font.SysFont(None, 48).render("GAME OVER", True, WHITE)
+			textEnd = "PLAYER 1 WIN" if self.game_over == 2 else "PLAYER 2 WIN"
+			text = py.font.SysFont(None, 64).render(textEnd, True, WHITE)
 			text_rect = text.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
 			self.screen.blit(text, text_rect)
 

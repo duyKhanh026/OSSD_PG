@@ -8,6 +8,8 @@ class Player:
 		self.hitbox = 100
 		self.right = False
 		self.left = False
+		self.Max_jump = 2
+		self.click_jump_enable = True
 		self.load_images(strNam)
 		self.set_starting_parameters(x, y, color, side)
 		self.set_control_keys(move_left_key, move_right_key, jump_key, atk_key, def_key, kick_key, sp1_key)
@@ -121,6 +123,8 @@ class Player:
 	def do_jump(self):
 		self.square_y_speed = self.JUMP_POWER
 		self.on_ground = False
+		self.Max_jump -= 1
+		self.click_jump_enable = False
 
 	def do_atk(self):
 		self.atkAcount = 0
@@ -200,8 +204,10 @@ class Player:
 		else:
 			self.right = False
 			self.left = False
-		if key[self.jump_key] and self.on_ground:
+		if key[self.jump_key] and self.click_jump_enable:
 			self.do_jump()
+		else:
+			self.click_jump_enable = True
 
 	def __str__(self):   # Tạo một chuỗi đại diện cho đối tượng Player
 		player_info = [

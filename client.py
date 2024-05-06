@@ -7,7 +7,7 @@ from values.color import *
 from values.screen import *
 
 class Player_client:
-    def __init__(self, server_ip="192.168.56.1", port=5050):
+    def __init__(self, server_ip="127.0.0.1", port=5050):
         self.SERVER = server_ip
         self.PORT = port
         self.FORMAT = 'utf-8'
@@ -56,7 +56,7 @@ class Player_client:
 
             for player in [self.player1, self.player2]:
                 player.move_logic(py.key.get_pressed())
-                player.action(py.key.get_pressed())
+                player.sp_move(py.key.get_pressed())
                 player.draw(self.screen)
 
                 if player.state == 'ATK' or player.state == 'KIC':
