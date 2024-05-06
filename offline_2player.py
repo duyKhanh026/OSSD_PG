@@ -11,7 +11,7 @@ class Offline_2player:
 	def __init__(self):
 		py.init()
 		self.count_frame = 0
-		self.game_over = False
+		self.game_over = 0
 		self.screen = py.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 		py.display.set_caption('Demo')
 		self.player1 = Character1(200, 50, 'blue/stickman_blade', 300, 150, RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L')
@@ -25,7 +25,7 @@ class Offline_2player:
 
 	def reset(self):
 		self.count_frame = 0
-		self.game_over = False
+		self.game_over = 0
 		self.screen = py.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 		py.display.set_caption('Demo')
 		self.player1 = Character1(200, 50, 'blue/stickman_blade', 300, 150, RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L')
@@ -124,6 +124,11 @@ class Offline_2player:
 					player.attack_cooldown_p1 = ATTACK_COOLDOWN
 					player.attack_ready_p1 = False
 
+			if player.rect.y > SCREEN_HEIGHT - 150:
+				self.game_over = (1 if player == self.player1 else 2) 
+			elif player.health <= 0:
+				self.game_over = (1 if player == self.player1 else 2) 
+
 		if self.player1.skill_active(self.screen, self.player2):
 			handle_attack(None, self.player2)
 			self.pushed_side(self.player1, self.player2)
@@ -150,15 +155,16 @@ class Offline_2player:
 			if event.type == py.QUIT:
 				py.quit()
 				quit()
+		if self.game_over == 0:
+			self._update_ui()
 
-		if self.player2.rect.y > SCREEN_HEIGHT - 150:
-			self.game_over = True
+			for player in [self.player1, self.player2]:
+				player.draw(self.screen)
+		else :
+			text = py.font.SysFont(None, 48).render("GAME OVER", True, WHITE)
+			text_rect = text.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
+			self.screen.blit(text, text_rect)
 
-
-		self._update_ui()
-
-		for player in [self.player1, self.player2]:
-			player.draw(self.screen)
 
 		self.clock.tick(60)
 		py.display.update()
@@ -166,5 +172,5 @@ class Offline_2player:
 
 
 	def start(self):
-		while not self.game_over:
+		while True:
 			self.run()
