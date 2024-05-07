@@ -3,12 +3,18 @@ import sys
 import os
 import time
 
+
+
 # Khởi tạo Pygame
 pygame.init()
 
 # Kích thước màn hình
 SCREEN_WIDTH = 994
 SCREEN_HEIGHT = 705
+
+default_font_size = 30
+font_path = os.path.join("Font", "1FTV-Rexilya.otf")
+font_vietnamese = pygame.font.Font(font_path, default_font_size)
 
 # Khởi tạo cửa sổ
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -28,9 +34,9 @@ y_pos = (pygame.display.Info().current_h - window_height) // 2
 os.environ['SDL_VIDEO_WINDOW_POS'] = f"{x_pos},{y_pos}"
 
 # Chọn font từ các font có sẵn trong hệ thống
-font_title = pygame.font.SysFont("Arial", 72)
-font_button = pygame.font.SysFont("Arial", 24)
-font_player = pygame.font.SysFont("Arial", 24)
+font_title = font_vietnamese = pygame.font.Font(font_path, 72)
+font_button = font_vietnamese = pygame.font.Font(font_path, 24)
+font_player = font_vietnamese = pygame.font.Font(font_path, 24)
 
 # Kích thước và màu sắc của nút
 BUTTON_WIDTH = 200
@@ -49,6 +55,7 @@ def draw_button(text, x, y):
     text_rect = text_surface.get_rect(center=(x + BUTTON_WIDTH // 2, y + BUTTON_HEIGHT // 2))
     screen.blit(text_surface, text_rect)
 
+# Hàm để vẽ giao diện phòng chờ
 # Hàm để vẽ giao diện phòng chờ
 def draw_waiting_room(room_list, scroll_pos, table_height):
     global selected_index
@@ -77,7 +84,6 @@ def draw_waiting_room(room_list, scroll_pos, table_height):
     for i, room in enumerate(room_list[start_index:end_index], start=start_index):
         room_rect = pygame.Rect(table_rect.left + 10, table_rect.top + 10 + (i - start_index) * 60, table_width - 20, 50)
         
-
         # Kiểm tra xem chuột có hover trên hàng này không
         if room_rect.collidepoint(pygame.mouse.get_pos()):
             pygame.draw.rect(screen, (220, 220, 220), room_rect)
@@ -86,12 +92,18 @@ def draw_waiting_room(room_list, scroll_pos, table_height):
         if selected_index == i:
             pygame.draw.rect(screen, (0, 255, 0), room_rect)  # Chọn màu xanh lá cây cho hàng được chọn
         
+        
         # Vẽ thông tin phòng
-        room_text = font_button.render(f"Room {i+1}: {room['name']} ({room['players']} players)", True, (255, 255, 255))
+        room_text_color = (255, 255, 255) if room['players'] < 2 else (150, 150, 150)  # Màu chữ phòng thay đổi khi có ít nhất 2 người chơi
+        
+
+        room_text = font_button.render(f"Room {i+1}: {room['name']} ({room['players']} players)", True, room_text_color)
+        room_text = font_vietnamese.render(f"Room: {room['name']} ({room['players']} players)", True, room_text_color)
         room_text_rect = room_text.get_rect(left=room_rect.left + 10, centery=room_rect.centery)
         screen.blit(room_text, room_text_rect)
 
-        if room_rect.collidepoint(pygame.mouse.get_pos()):
+        # Chỉ cho phép chọn phòng khi có ít hơn 2 người chơi
+        if room['players'] < 2 and room_rect.collidepoint(pygame.mouse.get_pos()):
             # In ra id của hàng nếu chuột được click
             if pygame.mouse.get_pressed()[0]:  # Kiểm tra nút chuột trái được click hay không
                 print(f"Selected Room ID: {i+1}")
@@ -113,24 +125,25 @@ def draw_waiting_room(room_list, scroll_pos, table_height):
     draw_button("Back", 2 * (SCREEN_WIDTH // 3) + BUTTON_MARGIN, SCREEN_HEIGHT // 3 + 2 * (BUTTON_HEIGHT + BUTTON_MARGIN))
     pygame.display.flip()
 
+
 # Hàm chính
 def main():
     room_list = [
-        {"name": "Room 1", "players": 1, "code": "ABC123"},
-        {"name": "Room 2", "players": 2, "code": "DEF456"},
-        {"name": "Room 3", "players": 1, "code": "GHI789"},
-        {"name": "Room 4", "players": 3, "code": "JKL012"},
-        {"name": "Room 5", "players": 2, "code": "MNO345"},
-        {"name": "Room 6", "players": 1, "code": "PQR678"},
-        {"name": "Room 7", "players": 2, "code": "STU901"},
-        {"name": "Room 8", "players": 1, "code": "VWX234"},
-        {"name": "Room 9", "players": 1, "code": "YZA567"},
-        {"name": "Room 10", "players": 2, "code": "BCD890"},
-        {"name": "Room 11", "players": 1, "code": "EFG123"},
-        {"name": "Room 12", "players": 2, "code": "HIJ456"},
-        {"name": "Room 13", "players": 1, "code": "KLM789"},
-        {"name": "Room 14", "players": 2, "code": "NOP012"},
-        {"name": "Room 15", "players": 1, "code": "QRS345"}
+        {"name": "Người lái đò", "players": 1, "code": "ABC123"},
+        {"name": "Chiến thắng Điện Biên Phủ", "players": 2, "code": "DEF456"},
+        {"name": "Không thể kết thúc", "players": 1, "code": "GHI789"},
+        {"name": "Quá mệt mỏi", "players": 2, "code": "JKL012"},
+        {"name": "Solo ys", "players": 2, "code": "MNO345"},
+        {"name": "Thua làm chóa", "players": 1, "code": "PQR678"},
+        {"name": "1vs1", "players": 2, "code": "STU901"},
+        {"name": "Ai win thì thua", "players": 1, "code": "VWX234"},
+        {"name": "Nobody said yes", "players": 1, "code": "YZA567"},
+        {"name": "*********", "players": 2, "code": "BCD890"},
+        {"name": "Mật khẩu : 123", "players": 1, "code": "EFG123"},
+        {"name": "Solo yasuoooooooooooooo", "players": 2, "code": "HIJ456"},
+        {"name": "Rất là mệt nhé", "players": 1, "code": "KLM789"},
+        {"name": "Cần tìm đối mạnh", "players": 2, "code": "NOP012"},
+        {"name": "Siêu dự bị", "players": 1, "code": "QRS345"}
     ]  # Danh sách phòng mẫu
 
     scroll_pos = 0
@@ -158,7 +171,7 @@ def main():
                 clicked = True
         
         if clicked and not pygame.mouse.get_pressed()[0]:
-            time.sleep(0.2)  # Chờ 0.2s trước khi nhận input tiếp theo
+             # Chờ 0.2s trước khi nhận input tiếp theo
             clicked = False
 
 
