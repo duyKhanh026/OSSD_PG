@@ -34,9 +34,9 @@ y_pos = (pygame.display.Info().current_h - window_height) // 2
 os.environ['SDL_VIDEO_WINDOW_POS'] = f"{x_pos},{y_pos}"
 
 # Chọn font từ các font có sẵn trong hệ thống
-font_title = font_vietnamese = pygame.font.Font(font_path, 72)
-font_button = font_vietnamese = pygame.font.Font(font_path, 24)
-font_player = font_vietnamese = pygame.font.Font(font_path, 24)
+font_title = font_vietnamese = pygame.font.Font(font_path, 108)
+font_button = font_vietnamese = pygame.font.Font(font_path, 30)
+font_player = font_vietnamese = pygame.font.Font(font_path, 40)
 
 # Kích thước và màu sắc của nút
 BUTTON_WIDTH = 200
@@ -97,10 +97,31 @@ def draw_waiting_room(room_list, scroll_pos, table_height):
         room_text_color = (255, 255, 255) if room['players'] < 2 else (150, 150, 150)  # Màu chữ phòng thay đổi khi có ít nhất 2 người chơi
         
 
-        room_text = font_button.render(f"Room {i+1}: {room['name']} ({room['players']} players)", True, room_text_color)
-        room_text = font_vietnamese.render(f"Room: {room['name']} ({room['players']} players)", True, room_text_color)
-        room_text_rect = room_text.get_rect(left=room_rect.left + 10, centery=room_rect.centery)
-        screen.blit(room_text, room_text_rect)
+        # Vẽ thông tin phòng
+        room_name_text = font_vietnamese.render(f"Room {i+1}: {room['name']}", True, room_text_color)
+        player_count_text = font_vietnamese.render(f"{room['players']} / 2", True, room_text_color)
+
+        # Lấy kích thước của văn bản để tính toán vị trí
+        room_name_text_rect = room_name_text.get_rect(left=room_rect.left , centery=room_rect.centery)
+        player_count_text_rect = player_count_text.get_rect(right=room_rect.right - 10, centery=room_rect.centery)
+
+        # Đặt khoảng cách giữa 2 phần văn bản là 10 pixel
+        spacing = 10
+
+        # Cập nhật vị trí của văn bản
+        room_name_text_rect.width = room_rect.width * 1/3 - spacing
+        player_count_text_rect.width = room_rect.width * 1/3 - spacing
+
+        # Đặt vị trí của văn bản room_name_text ở bên trái của room_rect
+        room_name_text_rect.right = room_name_text_rect.left + room_name_text_rect.width
+
+        # Đặt vị trí của văn bản player_count_text ở bên phải của room_rect
+        player_count_text_rect.left = player_count_text_rect.right - player_count_text_rect.width
+
+        # Vẽ văn bản
+        screen.blit(room_name_text, room_name_text_rect)
+        screen.blit(player_count_text, player_count_text_rect)
+
 
         # Chỉ cho phép chọn phòng khi có ít hơn 2 người chơi
         if room['players'] < 2 and room_rect.collidepoint(pygame.mouse.get_pos()):
