@@ -6,7 +6,7 @@ from GUI.Menu import Menu
 
 
 
-class Main:
+class Main: 
     def run(self):
         offline_2player = Offline_2player()
         menu = Menu(offline_2player.screen)

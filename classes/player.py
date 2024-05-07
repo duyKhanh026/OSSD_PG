@@ -229,29 +229,27 @@ class Player:
 
 	def __str__(self):   # Tạo một chuỗi đại diện cho đối tượng Player
 		player_info = [
-			str(self.speed),
-			str(self.Max_jump),
-			str(self.jump_count),
-			str(self.on_ground),
-			str(self.square_y_speed),
-			str(self.GRAVITY),
-			str(self.JUMP_POWER),
-			self.state,
-			str(self.max_health),
-			str(self.health),
-			str(self.velocity_x),
-			str(self.pushed),
-			str(self.rect.x),
-			str(self.rect.y),
-			str(self.side),
-			str(self.walkCount),
-			str(self.kicAcount),
-			str(self.atkAcount),
-			str(self.sp1count),
-			str(self.idlecount),
-			str(self.right),
-			str(self.left),
-			str(self.imgStr)
+			str(self.speed), # 0
+			str(self.Max_jump), # 1
+			str(self.on_ground), # 2
+			str(self.square_y_speed), # 3
+			str(self.GRAVITY), # 4
+			str(self.JUMP_POWER), # 5
+			self.state, # 6
+			str(self.max_health), # 7
+			str(self.health), # 8 
+			str(self.velocity_x), # 9
+			str(self.rect.x), # 10
+			str(self.rect.y), # 11
+			str(self.side), # 12
+			str(self.walkCount), # 13
+			str(self.kicAcount), # 14
+			str(self.atkAcount), # 15
+			str(self.sp1count), # 16
+			str(self.idlecount), # 17
+			str(self.right), # 18
+			str(self.left), # 19
+			str(self.key_twice) # 20
 		]
 		return ",".join(player_info)
 
@@ -259,23 +257,22 @@ class Player:
 		values = player_str.split(",")
 		self.speed = int(values[0])
 		self.Max_jump = int(values[1])
-		self.jump_count = int(values[2])
-		self.on_ground = values[3].lower() == 'true'
-		self.square_y_speed = float(values[4])
-		self.GRAVITY = float(values[5])
-		self.JUMP_POWER = float(values[6])
-		self.state = values[7]
-		self.max_health = int(values[8])
-		self.health = int(values[9])
-		self.velocity_x = float(values[10])
-		self.pushed = values[11].lower() == 'true'
-		self.rect.x = float(values[12])
-		self.rect.y = float(values[13])
-		self.side = values[14]
-		self.walkCount = int(values[15])
-		self.kicAcount = int(values[16])
-		self.atkAcount = int(values[17])
-		self.sp1count = int(values[18])
-		self.idlecount = int(values[19])
-		self.right = values[20].lower() == 'true'
-		self.left = values[21].lower() == 'true'
+		self.on_ground = values[2].lower() == 'true'
+		self.square_y_speed = float(values[3])
+		self.GRAVITY = float(values[4])
+		self.JUMP_POWER = float(values[5])
+		self.state = values[6]
+		self.max_health = int(values[7])
+		self.health = int(values[8])
+		self.velocity_x = float(values[9])
+		self.rect.x = float(values[10])
+		self.rect.y = float(values[11])
+		self.side = values[12]
+		self.walkCount = int(values[13])
+		self.kicAcount = int(values[14])
+		self.atkAcount = int(values[15])
+		self.sp1count = int(values[16])
+		self.idlecount = int(values[17])
+		self.right = values[18].lower() == 'true'
+		self.left = values[19].lower() == 'true'
+		self.key_twice = values[20].lower() == 'true'
