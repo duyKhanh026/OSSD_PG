@@ -1,6 +1,7 @@
 import pygame
 import sys
 import os
+import time
 
 # Khởi tạo Pygame
 pygame.init()
@@ -38,6 +39,9 @@ BUTTON_MARGIN = 122  # Khoảng cách tăng giữa các nút
 BUTTON_COLOR = (255, 255, 255)  # Màu trắng cho nút
 BUTTON_TEXT_COLOR = (0, 0, 0)  # Màu đen cho chữ trên nút
 
+# Biến lưu trữ index của hàng được chọn
+selected_index = -1
+
 # Hàm để vẽ một nút
 def draw_button(text, x, y):
     pygame.draw.rect(screen, BUTTON_COLOR, (x, y, BUTTON_WIDTH, BUTTON_HEIGHT), border_radius=20)
@@ -47,6 +51,8 @@ def draw_button(text, x, y):
 
 # Hàm để vẽ giao diện phòng chờ
 def draw_waiting_room(room_list, scroll_pos, table_height):
+    global selected_index
+    
     # Vẽ hình ảnh nền
     screen.blit(background_image, (0, 0))
 
@@ -69,9 +75,28 @@ def draw_waiting_room(room_list, scroll_pos, table_height):
     start_index = scroll_pos
     end_index = min(scroll_pos + num_visible_rows, len(room_list))
     for i, room in enumerate(room_list[start_index:end_index], start=start_index):
+        room_rect = pygame.Rect(table_rect.left + 10, table_rect.top + 10 + (i - start_index) * 60, table_width - 20, 50)
+        
+
+        # Kiểm tra xem chuột có hover trên hàng này không
+        if room_rect.collidepoint(pygame.mouse.get_pos()):
+            pygame.draw.rect(screen, (220, 220, 220), room_rect)
+        
+        # Kiểm tra xem hàng này có phải là hàng được chọn không
+        if selected_index == i:
+            pygame.draw.rect(screen, (0, 255, 0), room_rect)  # Chọn màu xanh lá cây cho hàng được chọn
+        
+        # Vẽ thông tin phòng
         room_text = font_button.render(f"Room {i+1}: {room['name']} ({room['players']} players)", True, (255, 255, 255))
-        room_rect = room_text.get_rect(left=table_rect.left + 10, top=table_rect.top + 10 + (i - start_index) * 60)
-        screen.blit(room_text, room_rect)
+        room_text_rect = room_text.get_rect(left=room_rect.left + 10, centery=room_rect.centery)
+        screen.blit(room_text, room_text_rect)
+
+        if room_rect.collidepoint(pygame.mouse.get_pos()):
+            # In ra id của hàng nếu chuột được click
+            if pygame.mouse.get_pressed()[0]:  # Kiểm tra nút chuột trái được click hay không
+                print(f"Selected Room ID: {i+1}")
+                time.sleep(0.2)  # Chờ 0.2s trước khi nhận input tiếp theo
+                selected_index = i
 
     # Vẽ thanh cuộn
     scrollbar_rect = pygame.Rect(table_rect.right + 5, table_rect.top, 20, table_height)
@@ -112,6 +137,9 @@ def main():
 
     # Tính toán chiều cao của bảng
     table_height = SCREEN_HEIGHT - 155
+    
+    # Biến cờ để theo dõi trạng thái của việc nhấn chuột
+    clicked = False
 
     while True:
         draw_waiting_room(room_list, scroll_pos, table_height)
@@ -126,7 +154,16 @@ def main():
                 elif event.button == 4:  # Cuộn xuống
                     if scroll_pos > 0:
                         scroll_pos = max(scroll_pos - 1, 0)
+                # Xác định khi nào chuột được nhấn xuống lần đầu tiên
+                clicked = True
+        
+        if clicked and not pygame.mouse.get_pressed()[0]:
+            time.sleep(0.2)  # Chờ 0.2s trước khi nhận input tiếp theo
+            clicked = False
+
 
 # Chạy trò chơi
 if __name__ == "__main__":
     main()
+
+
