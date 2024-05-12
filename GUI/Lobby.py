@@ -11,11 +11,11 @@ class WaitingRoom:
 
         self.screen = surface
         self.default_font_size = 30
-        self.font_path = "../Font/1FTV-Rexilya.otf"
+        self.font_path = "Font/1FTV-Rexilya.otf"
         self.font_vietnamese = pygame.font.Font(self.font_path, self.default_font_size)
 
         # Tải hình ảnh nền
-        self.background_image = pygame.image.load("background.jpg")
+        self.background_image = pygame.image.load("GUI/background.jpg")
         self.background_image = pygame.transform.scale(self.background_image, (self.SCREEN_WIDTH - 240, self.SCREEN_HEIGHT - 10))
 
         # Kích thước cửa sổ pygame
@@ -68,6 +68,7 @@ class WaitingRoom:
 
         # Biến cờ để theo dõi trạng thái của việc nhấn chuột
         self.clicked = False
+        self.option = -1
 
     # Hàm để vẽ một nút
     def draw_button(self, text, x, y):
@@ -177,6 +178,19 @@ class WaitingRoom:
                 elif event.button == 4:  # Cuộn xuống
                     if self.scroll_pos > 0:
                         self.scroll_pos = max(self.scroll_pos - 1, 0)
+                elif event.button == 1:
+                    mouse_x, mouse_y = pygame.mouse.get_pos()
+                    # Check which button the player clicked
+                    if 2.34 * (self.SCREEN_WIDTH // 3) + self.BUTTON_MARGIN <= mouse_x <= 2.34 * (self.SCREEN_WIDTH // 3) + self.BUTTON_MARGIN + self.BUTTON_WIDTH:
+                        if self.SCREEN_HEIGHT // 3 <= mouse_y <= self.SCREEN_HEIGHT // 3 + self.BUTTON_HEIGHT:
+                            self.option = 1
+                            print("chon 1")
+                        if self.SCREEN_HEIGHT // 3 + (self.BUTTON_HEIGHT + self.BUTTON_MARGIN) <= mouse_y <= self.SCREEN_HEIGHT // 3 + (self.BUTTON_HEIGHT + self.BUTTON_MARGIN) + self.BUTTON_HEIGHT:
+                            self.option = 2
+                            print("chon 2")
+                        if self.SCREEN_HEIGHT // 3 + 2 * (self.BUTTON_HEIGHT + self.BUTTON_MARGIN) <= mouse_y <= self.SCREEN_HEIGHT // 3 + 2 * (self.BUTTON_HEIGHT + self.BUTTON_MARGIN) + self.BUTTON_HEIGHT:
+                            self.option = 3
+                            print("chon 3")
                 # Xác định khi nào chuột được nhấn xuống lần đầu tiên
                 clicked = True
 
@@ -193,4 +207,3 @@ if __name__ == "__main__":
     game = WaitingRoom(screen)
     while True:
         game.run()
-    
