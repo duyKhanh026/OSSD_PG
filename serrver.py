@@ -18,7 +18,6 @@ class StringList:
 		self.strings = []
 		self.coordinates = []
 
-
 	def add_string(self, s, pler):
 		if s not in self.strings:
 			self.strings.append(s)

@@ -83,7 +83,6 @@ class Agent:
 			game.player2.rect.x < game.point[0],
 			game.player2.rect.y > game.point[1],
 			game.player2.rect.y < game.point[1]
-
 		] 
 		return np.array(state, dtype=int)
 

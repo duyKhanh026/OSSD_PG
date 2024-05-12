@@ -3,8 +3,6 @@ import sys
 import os
 import time
 
-
-
 # Khởi tạo Pygame
 pygame.init()
 
@@ -13,7 +11,7 @@ SCREEN_WIDTH = 994
 SCREEN_HEIGHT = 705
 
 default_font_size = 30
-font_path = os.path.join("Font", "1FTV-Rexilya.otf")
+font_path = "../Font/1FTV-Rexilya.otf"
 font_vietnamese = pygame.font.Font(font_path, default_font_size)
 
 # Khởi tạo cửa sổ
@@ -21,7 +19,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Waiting Room")
 
 # Tải hình ảnh nền
-background_image = pygame.image.load("GUI/background.jpg")
+background_image = pygame.image.load("background.jpg")
 
 # Kích thước cửa sổ pygame
 window_width, window_height = pygame.display.get_surface().get_size()

@@ -4,8 +4,6 @@ from client import Player_client
 # from AI_OSSD.agent import train
 from GUI.Menu import Menu
 
-
-
 class Main: 
     def run(self):
         offline_2player = Offline_2player()

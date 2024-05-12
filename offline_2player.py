@@ -150,13 +150,61 @@ class Offline_2player:
 		self.kicked_confirmation(self.player1, 10, 80)
 		self.kicked_confirmation(self.player2, SCREEN_WIDTH - 110, 80)
 
-	def run(self, action=None):
+	def _update_ui_client(self):
+		self.screen.fill(BLACK)
+		py.draw.rect(self.screen, (157,157,157), py.Rect(200, 600, SCREEN_WIDTH - 400, SCREEN_HEIGHT))
+		# vẽ sọc trắng lên màn hình
+		line_spacing = 50
+		for y in range(0, SCREEN_HEIGHT, line_spacing):
+			py.draw.line(self.screen, WHITE, (0, y), (SCREEN_WIDTH, y))
+		line_spacing_vertical = 50
+		for x in range(0, SCREEN_WIDTH, line_spacing_vertical):
+			py.draw.line(self.screen, WHITE, (x, 0), (x, SCREEN_HEIGHT))
+
+		# self.screen.blit(self.bg1, (0,0))
+		self.player1.move_logic(py.key.get_pressed())
+		self.player1.sp_move(py.key.get_pressed())
+		
+		for player in [self.player1, self.player2]:
+			if player.state == 'ATK' or player.state == 'KIC':
+				if player.attack_cooldown_p1 == 0:
+					player.attack_cooldown_p1 = ATTACK_COOLDOWN
+					player.attack_ready_p1 = False
+
+		if self.player1.rect.y > SCREEN_HEIGHT or self.player1.health <= 0:
+			self.game_over = 1
+
+		if self.player1.skill_active(self.screen, self.player2):
+			handle_attack(None, self.player2)
+			self.pushed_side(self.player1, self.player2)
+
+		self.attack_confirmation(self.player1, 10, 30)
+		self.attack_confirmation(self.player2, SCREEN_WIDTH - 110, 30)
+
+		self.player_attack(self.player1, self.player2)
+		if self.player_attack(self.player2, self.player1):
+			self.score += 1
+			self.hitpoint = True
+
+		self.player_kick(self.player1, self.player2)
+		self.player_kick(self.player2, self.player1)
+
+		self.stunning_confirmation(self.player1, 10, 50)
+		self.stunning_confirmation(self.player2, SCREEN_WIDTH - 110, 50)
+
+		self.kicked_confirmation(self.player1, 10, 80)
+		self.kicked_confirmation(self.player2, SCREEN_WIDTH - 110, 80)
+
+	def run(self, action=None , online=False):
 		for event in py.event.get():
 			if event.type == py.QUIT:
 				py.quit()
 				quit()
 		if self.game_over == 0:
-			self._update_ui()
+			if online:
+				self._update_ui_client()
+			else :
+				self._update_ui()
 
 			for player in [self.player1, self.player2]:
 				player.draw(self.screen)
