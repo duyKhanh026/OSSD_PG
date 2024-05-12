@@ -65,7 +65,7 @@ def handle_client(conn, addr):
 				my_string_list.remove_string(str(get_portt(addr)))
 				connected = False
 
-			print(f"[{addr}] {msg}")
+			# print(f"[{addr}] {msg}")
 			senback = "NOPLAY"
 			if connected:
 				my_string_list.add_string(str(get_portt(addr)), msg)
