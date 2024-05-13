@@ -16,12 +16,16 @@ class Main:
             if menu.play_option == 2:
                 offline_2player.start()
             if menu.play_option == 3:
-                Player_client().run()
-                Player_client().send(self.DISCONNECT_MESSAGE)
-                # while lobby.option != 3:
-                #     lobby.run()
-                # lobby.option = -1  
+                # Player_client().run()
+                # Player_client().send(self.DISCONNECT_MESSAGE)
+                while lobby.option != 3:
+                    lobby.run()
+                lobby.option = -1  
             menu.play_option = -1
 
 if __name__ == "__main__":
-    Main().run()
+    # Main().run()
+    offline_2player = Offline_2player()
+    lobby = WaitingRoom(offline_2player.screen)
+    while lobby.option != 3:
+        lobby.run()
