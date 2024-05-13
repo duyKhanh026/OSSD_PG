@@ -16,6 +16,7 @@ server.bind(ADDR)
 class StringList:
 	def __init__(self):
 		self.strings = []
+		#name
 		self.coordinates = []
 		self.roomconnect = None
 
