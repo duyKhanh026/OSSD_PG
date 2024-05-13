@@ -1,23 +1,20 @@
 import pygame
 import sys
 import os
+from values.screen import *
 
 class Menu:
-    def __init__(self, surface):
+    def __init__(self):
         # Khởi tạo Pygame
         self.play_option = -1
 
-        # Kích thước màn hình
-        # self.window_width = 994
-        # self.window_height = 705
-
+        pygame.init()
         # Khởi tạo cửa sổ
-        # self.screen = pygame.display.set_mode((self.window_width, self.window_height))
-        # pygame.display.set_caption("Fighting Game")
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        pygame.display.set_caption('Fighting Game')
 
-        self.screen = surface
         # Kích thước cửa sổ pygame
-        self.window_width, self.window_height = surface.get_size()
+        self.window_width, self.window_height = self.screen.get_size()
 
         # Tải hình ảnh nền
         self.background_image = pygame.image.load("GUI/background.jpg")

@@ -7,14 +7,14 @@ from GUI.Lobby import WaitingRoom
 
 class Main: 
     def run(self):
-        offline_2player = Offline_2player()
-        menu = Menu(offline_2player.screen)
-        lobby = WaitingRoom(offline_2player.screen)
+        menu = Menu()
+        lobby = WaitingRoom(menu.screen)
         while True:
             menu.run()
-            print(menu.play_option)
             if menu.play_option == 2:
-                offline_2player.start()
+                offline_2player = Offline_2player(menu.screen)
+                while offline_2player.retrunMenu == -1:
+                    offline_2player.run()
             if menu.play_option == 3: 
                 Player_client().run()
                 # while lobby.option != 3:
@@ -24,6 +24,7 @@ class Main:
 
 if __name__ == "__main__":
     Main().run()
+    # Offline_2player().start()
     # offline_2player = Offline_2player()
     # lobby = WaitingRoom(offline_2player.screen)
     # while lobby.option != 3:

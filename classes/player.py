@@ -209,7 +209,6 @@ class Player:
 			self.left = False
 		if key[self.jump_key] and self.click_jump_enable and self.Max_jump > 0:
 			self.do_jump()
-			print(self.Max_jump)
 
 		if not self.click_jump_enable:
 			self.key_twice -= 1
