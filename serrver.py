@@ -17,16 +17,17 @@ class StringList:
 	def __init__(self):
 		self.strings = []
 		self.coordinates = []
+		self.roomconnect = None
 
 	def add_string(self, s, pler):
 		if s not in self.strings:
 			self.strings.append(s)
 			self.coordinates.append(pler)
-			print(f"String '{s}' with coordinates {pler}")
+			# print(f"String '{s}' with coordinates {pler}.")
 		else:
 			index = self.strings.index(s)
 			self.coordinates[index] = pler
-			print(f"String '{s}' coordinates updated to {pler}.")
+			# print(f"String '{s}' coordinates updated to {pler}.")
 
 	def contains_string(self, s):
 		return s in self.strings
