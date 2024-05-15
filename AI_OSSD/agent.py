@@ -24,12 +24,11 @@ class Agent:
 	def choose_action(self, state):
 		# Khởi tạo vector hành động cuối cùng
 		final_move = [0,0,0,0]
-		epsilon = 30 - self.n_games
+		epsilon = 10 - self.n_games
 		# Kiểm tra nếu một số ngẫu nhiên nhỏ hơn giá trị epsilon
 		# if random.randint(0, 200) < epsilon:
 		if epsilon > 0:
 			move = random.randint(0, 3)
-			print (move)
 			final_move[move] = 1
 		else:
 			state0 = torch.tensor(state, dtype=torch.float)
@@ -114,8 +113,10 @@ def train():
 		if game.game_over:
 			game_count += 1
 			agent.train_long_memory()
+			
 			if score > agent.highest_score:
 				agent.highest_score = score
+
 			agent.n_games += 1
 			scores.append(score)
 			total_score += score
@@ -125,7 +126,8 @@ def train():
 			#plot(scores, mean_scores)
 			py.time.delay(100)
 			agent.save_agent("agent_checkpoint.pth")
-			print(f"Score: {score}, highest score: {agent.highest_score}, Train number:{agent.n_games}, game {game_count}")
+			# print(f"Reward:Score: {score}, highest score: {agent.highest_score}, Train number:{agent.n_games}, game {game_count}")
+			print(f"Reward: {reward}, Score: {score}, highest score: {agent.highest_score}, Train number:{agent.n_games}, game {game_count}")
 			game.reset()
 
 	py.quit()

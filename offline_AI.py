@@ -29,6 +29,7 @@ class Offline_AI:
 		self.player2 = Character2(200, 80, 'purple/stickman', 1200, 150, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_KP1, py.K_KP2, py.K_KP3, py.K_KP4, 'R')
 		self.player1.name = 'player1'
 		self.player2.name = 'player2'
+		self.player_distance = distance(self.player1.rect.x,self.player1.rect.y,self.player2.rect.x,self.player2.rect.y)
 		self.clock = py.time.Clock()
 		bg = py.image.load(f'assets/bg2.jpg')
 		self.bg1 = py.transform.scale(bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -137,9 +138,12 @@ class Offline_AI:
 		self.attack_confirmation(self.player2, SCREEN_WIDTH - 110, 30)
 
 		self.player_attack(self.player1, self.player2)
-		if self.player_attack(self.player2, self.player1):
-			self.score += 1
-			self.hitpoint = True
+		# if self.player_attack(self.player2, self.player1):
+		# 	self.score += 1
+		# 	self.hitpoint = True
+
+
+		self.hitpoint = self.player_attack(self.player2, self.player1)
 
 		self.player_kick(self.player1, self.player2)
 		self.player_kick(self.player2, self.player1)
@@ -164,15 +168,22 @@ class Offline_AI:
 
 		reward = 0
 
-		if self.game_over:
-			reward = -10
-		elif self.hitpoint:
+		if self.hitpoint:
 			reward = 10
 			self.count_frame = 0
+		else:
+			# Khuyến khích agent bằng việc lại gần nhân vật
+			new_player_distance = distance(self.player1.rect.x,self.player1.rect.y,self.player2.rect.x,self.player2.rect.y)
+
+			if self.player_distance > new_player_distance:
+				reward = 5
+				self.player_distance = new_player_distance
+			else :
+				reward = -5
 
 
 		if self.hitpoint:
-			self.score += 1
+			self.score += 2
 			self.hitpoint = False # Chạm vào ng player
 			self.point = self.random_point()
 			self.player1.rect.x = self.point[0]
@@ -183,28 +194,15 @@ class Offline_AI:
 				py.quit()
 				quit()
 
-		if self.count_frame >= 500 and self.score == 0 :
+
+		if self.count_frame >= 200 and self.score == 0:
 			self.game_over = True
+			reward -= 10
 		else :
 			self.count_frame += 1
 
 		if self.player2.rect.y > SCREEN_HEIGHT - 150:
 			self.game_over = True
-
-		# if self.count_frame >= 500:
-		# 	self.game_over = True
-		# else :
-		# 	self.count_frame += 1
-
-		new_player_distance = distance(self.point[0], self.player2.rect.x, 0, 0) 
-
-		
-
-		# if self.player_distance > new_player_distance:
-		# 	reward += 1
-		# 	self.player_distance = new_player_distance
-		# else :
-		# 	reward -= 1
 
 		
 		# print(f'reward: {reward}, distance: {new_player_distance}')
