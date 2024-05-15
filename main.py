@@ -16,10 +16,10 @@ class Main:
                 while offline_2player.retrunMenu == -1:
                     offline_2player.run()
             if menu.play_option == 3: 
-                Player_client().run()
-                # while lobby.option != 3:
-                #     lobby.run()
-                # lobby.option = -1  
+                # Player_client().run()
+                while lobby.option != 3:
+                    lobby.run()
+                lobby.option = -1  
             menu.play_option = -1
 
 if __name__ == "__main__":
