@@ -80,10 +80,10 @@ class Agent:
 			game.player2.state == 'NO',
 			game.player2.left,
 			game.player2.right,
-			game.player2.rect.x > game.point[0],
-			game.player2.rect.x < game.point[0],
-			game.player2.rect.y > game.point[1],
-			game.player2.rect.y < game.point[1]
+			game.player2.rect.x > game.player1.rect.x,
+			game.player2.rect.x < game.player1.rect.x,
+			game.player2.rect.y > game.player1.rect.y,
+			game.player2.rect.y < game.player1.rect.y
 		] 
 		return np.array(state, dtype=int)
 
