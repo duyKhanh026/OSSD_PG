@@ -12,7 +12,7 @@ BATCH_SIZE = 1000
 
 class Agent:
 	def __init__(self, learning_rate=0.001, gamma=0.99):
-		self.q_network = QNetwork(9, 256, 3)
+		self.q_network = QNetwork(11, 256, 3)
 		self.optimizer = optim.Adam(self.q_network.parameters(), lr=learning_rate)
 		self.memory = deque(maxlen=MAX_MEMORY) # popleft()
 		self.gamma = gamma
@@ -26,8 +26,8 @@ class Agent:
 		final_move = [0,0,0]
 		epsilon = 80 - self.n_games
 		# Kiểm tra nếu một số ngẫu nhiên nhỏ hơn giá trị epsilon
-		# if random.randint(0, 200) < epsilon:
-		if epsilon > 0:
+		if random.randint(0, 200) < epsilon:
+		# if epsilon > 0:
 			move = random.randint(0, 2)
 			final_move[move] = 1
 		else:
@@ -78,6 +78,8 @@ class Agent:
 			game.player2.on_ground,
 			game.player2.state == 'ATK',
 			game.player2.state == 'NO',
+			game.player2.left,
+			game.player2.right,
 			game.player2.rect.x > game.point[0],
 			game.player2.rect.x < game.point[0],
 			game.player2.rect.y > game.point[1],
@@ -112,10 +114,10 @@ def train():
 			game_count += 1
 			agent.train_long_memory()
 
-			if score > agent.highest_score:
-				agent.highest_score = score
-				agent.save_agent("agent_checkpoint.pth")
-
+			# if score > agent.highest_score:
+			# 	agent.highest_score = score
+			# 	agent.save_agent("agent_checkpoint.pth")
+			agent.save_agent("agent_checkpoint.pth")
 			agent.n_games += 1
 			scores.append(score)
 			total_score += score
