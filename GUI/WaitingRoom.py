@@ -20,7 +20,7 @@ font_name = pygame.font.Font(None, 48)
 
 # Tạo màn hình
 screen = pygame.display.set_mode((screen_width, screen_height))
-# pygame.display.setCaption("Game Lobby")
+# pygame.display.set_caption("Game Lobby")
 
 # Tải hình nền
 background_image = pygame.image.load("background_waitingroom.png")
@@ -56,9 +56,15 @@ players = [
     Player("Leesin", None)
 ]
 
+# Danh sách tin nhắn chat
+chat_messages = []
+
 # Tên phòng
 room_name = "Room name: Solo kill"
 room_name_x = (screen_width - font_name.size(room_name)[0]) // 2
+
+# Biến lưu trữ nội dung tin nhắn đang nhập
+input_text = ""
 
 # Hàm vẽ giao diện
 def draw_interface():
@@ -92,7 +98,17 @@ def draw_interface():
         screen.blit(scaled_image, (image_x, image_y))
 
     # Hiển thị đoạn chat
-    pygame.draw.rect(screen, GRAY, (20, 530, 1460, 200))
+    chat_box_rect = pygame.Rect(20, 530, 1460, 150)
+    pygame.draw.rect(screen, GRAY, chat_box_rect)
+
+    # Hiển thị các tin nhắn chat
+    for i, message in enumerate(chat_messages[-5:]):  # Hiển thị tối đa 5 tin nhắn cuối
+        draw_text(message, font, WHITE, screen, 30, 540 + i * 30)
+
+    # Vẽ hộp nhập liệu
+    input_box_rect = pygame.Rect(20, 690, 1460, 40)
+    pygame.draw.rect(screen, WHITE, input_box_rect)
+    draw_text(input_text, font, BLACK, screen, 25, 700)
 
     # Vẽ nút Ready với bo tròn góc
     for i, player in enumerate(players):
@@ -128,6 +144,14 @@ while running:
             for player in players:
                 if player.ready_button_rect.collidepoint(mouse_pos):
                     player.ready = not player.ready
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RETURN:
+                chat_messages.append(input_text)
+                input_text = ""
+            elif event.key == pygame.K_BACKSPACE:
+                input_text = input_text[:-1]
+            else:
+                input_text += event.unicode
 
     draw_interface()
     pygame.display.flip()
