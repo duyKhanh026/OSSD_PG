@@ -97,6 +97,7 @@ class Offline_AI:
 	# xữ lý player2 khi player1 dùng đòn đánh thường thành công
 	def player_attack(self ,p1, p2):
 		if p1.state == 'ATK' and p2.state != 'DEF':
+			print(p1.atkAcount)
 			if p1.atkAcount == 16 and p2.state != 'STUN':
 				if handle_attack(p1, p2):
 					p2.state = 'STUN'
@@ -159,7 +160,7 @@ class Offline_AI:
 			self.player2.go_left()
 		elif np.array_equal(action, [0, 1, 0, 0]) and self.player2.state != 'ATK':
 			self.player2.go_right()
-		elif np.array_equal(action, [0, 0, 1, 0]):
+		elif np.array_equal(action, [0, 0, 1, 0]) and self.player2.state != 'ATK':
 			self.player2.do_atk()
 		elif self.player2.on_ground:
 			self.player2.do_jump()
@@ -216,7 +217,8 @@ class Offline_AI:
 
 		for player in [self.player1, self.player2]:
 			player.draw(self.screen)
-
+		
+		self.clock.tick(60)
 		py.display.update()
 
 

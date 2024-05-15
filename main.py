@@ -24,10 +24,7 @@ class Main:
 
 if __name__ == "__main__":
     train()
-<<<<<<< HEAD
-=======
     # Main().run()
->>>>>>> 91e7c2dc4c320745c6028481207965df0efcfe14
     # Offline_2player().start()
     # offline_2player = Offline_2player()
     # lobby = WaitingRoom(offline_2player.screen)
