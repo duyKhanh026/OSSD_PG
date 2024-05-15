@@ -8,7 +8,7 @@ class Character2(Player): # the blue guy
 		self.charIdle_sp = [py.image.load(f'assets/purple_sp/stickman_idle{i}.png') for i in range(1, 6)]
 		self.walkRight_sp = [py.image.load(f'assets/purple_sp/stickman_running{i}.png') for i in range(1, 6)]
 		self.slashA1_sp = [py.image.load(f'assets/purple_sp/stickman_punch{i}.png') for i in range(1, 5)]
-		self.speed = 8
+		self.speed = 6
 		self.ulti = False
 
 	def redrawGameWindow(self, surface):

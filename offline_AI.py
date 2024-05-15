@@ -12,25 +12,12 @@ from values.screen import *
 
 
 def distance(x1, y1, x2, y2):
-	return abs(x1 - x2)
+    return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
 class Offline_AI:
 	def __init__(self):
 		py.init()
-		self.count_frame = 0
-		self.game_over = False
-		self.screen = py.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-		py.display.set_caption('Demo')
-		self.point = self.random_point()
-		self.player1 = Character1(200, 50, 'blue/stickman_blade', self.point[0], self.point[1], RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L')
-		self.player2 = Character2(200, 80, 'purple/stickman', 1200, 150, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_KP1, py.K_KP2, py.K_KP3, py.K_KP4, 'R')
-		self.player1.name = 'player1'
-		self.player2.name = 'player2'
-		self.clock = py.time.Clock()
-		bg = py.image.load(f'assets/bg2.jpg')
-		self.bg1 = py.transform.scale(bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
-		self.score = 0
-		self.hitpoint = False
+		self.reset()
 
 	def reset(self):
 		self.count_frame = 0
@@ -38,10 +25,11 @@ class Offline_AI:
 		self.screen = py.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 		py.display.set_caption('Demo')
 		self.point = self.random_point()
-		self.player1 = Character1(200, 50, 'blue/stickman_blade', self.point[0], self.point[1], RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L')
-		self.player2 = Character2(200, 80, 'purple/stickman', 1200, 150, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_KP1, py.K_KP2, py.K_KP3, py.K_KP4, 'R')
+		self.player1 = Character1(200, 50, 'blue/stickman_blade', 160, self.point[1], RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L')
+		self.player2 = Character2(200, 80, 'purple/stickman', 1200, 350, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_KP1, py.K_KP2, py.K_KP3, py.K_KP4, 'R')
 		self.player1.name = 'player1'
 		self.player2.name = 'player2'
+		self.player_distance = distance(self.player1.rect.x,self.player1.rect.y,self.player2.rect.x,self.player2.rect.y)
 		self.clock = py.time.Clock()
 		bg = py.image.load(f'assets/bg2.jpg')
 		self.bg1 = py.transform.scale(bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -109,6 +97,7 @@ class Offline_AI:
 	# xữ lý player2 khi player1 dùng đòn đánh thường thành công
 	def player_attack(self ,p1, p2):
 		if p1.state == 'ATK' and p2.state != 'DEF':
+			# print(p1.atkAcount)
 			if p1.atkAcount == 16 and p2.state != 'STUN':
 				if handle_attack(p1, p2):
 					p2.state = 'STUN'
@@ -150,9 +139,12 @@ class Offline_AI:
 		self.attack_confirmation(self.player2, SCREEN_WIDTH - 110, 30)
 
 		self.player_attack(self.player1, self.player2)
-		if self.player_attack(self.player2, self.player1):
-			self.score += 1
-			self.hitpoint = True
+		# if self.player_attack(self.player2, self.player1):
+		# 	self.score += 1
+		# 	self.hitpoint = True
+
+
+		self.hitpoint = self.player_attack(self.player2, self.player1)
 
 		self.player_kick(self.player1, self.player2)
 		self.player_kick(self.player2, self.player1)
@@ -164,69 +156,73 @@ class Offline_AI:
 		self.kicked_confirmation(self.player2, SCREEN_WIDTH - 110, 80)
 
 	def move_player(self, action):
-		if np.array_equal(action, [1, 0, 0, 0]) and self.player2.state != 'ATK':
+		if np.array_equal(action, [1, 0, 0]) and self.player2.state != 'ATK':
 			self.player2.go_left()
-		elif np.array_equal(action, [0, 1, 0, 0]) and self.player2.state != 'ATK':
+		elif np.array_equal(action, [0, 1, 0]) and self.player2.state != 'ATK':
 			self.player2.go_right()
-		elif np.array_equal(action, [0, 0, 1, 0]):
-			self.player2.do_atk()
-		elif self.player2.on_ground:
+		elif self.player2.Max_jump > 0 and self.player2.state != 'ATK':
 			self.player2.do_jump()
 
 	def run(self, action=None):
 
-		if self.hitpoint:
+		temp = False
+
+		reward = 0
+
+		# Khuyến khích agent bằng việc lại gần nhân vật
+		new_player_distance = distance(self.player1.rect.x,self.player1.rect.y,self.player2.rect.x,self.player2.rect.y)
+		if new_player_distance <= 150:
 			self.score += 1
-			self.hitpoint = False
-			self.point = self.random_point()
-			self.player1.rect.x = self.point[0]
-			self.player1.rect.y = self.point[1]
+			temp = True
+			self.count_frame = 0
+			reward = 10
+
+			if self.player2.state != 'ATK' and self.player2.state != 'STUN':
+				self.player2.do_atk()
+			# self.point = self.random_point()
+			# self.player1.rect.x = self.point[0]
+			# self.player1.rect.y = self.point[1]
+			# self.player_distance = new_player_distance
+		else :
+			reward = -2
+
+
+		# if self.hitpoint:
+		# 	self.score += 2
+		# 	self.hitpoint = False # Chạm vào ng player
+		
+
 
 		for event in py.event.get():
 			if event.type == py.QUIT:
 				py.quit()
 				quit()
 
-		# if self.count_frame >= 200 and self.score == 0 :
+
+		# if self.count_frame >= 120 and temp == False:
 		# 	self.game_over = True
+		# 	reward -= 10
 		# else :
 		# 	self.count_frame += 1
 
 		if self.player2.rect.y > SCREEN_HEIGHT - 150:
 			self.game_over = True
+			reward -= 10
 
-		# if self.count_frame >= 500:
-		# 	self.game_over = True
-		# else :
-		# 	self.count_frame += 1
-
-		new_player_distance = distance(self.point[0], self.player2.rect.x, 0, 0) 
-
-		reward = 0
-
-		# if self.player_distance > new_player_distance:
-		# 	reward += 1
-		# 	self.player_distance = new_player_distance
-		# else :
-		# 	reward -= 1
-
-		if self.game_over:
-			reward = -10
-		elif self.hitpoint:
-			reward = 10
-			self.count_frame = 0
-
+		
 		# print(f'reward: {reward}, distance: {new_player_distance}')
 		done = self.game_over
 
 
 		self._update_ui()
+
 		if action != None:
 			self.move_player(action)
 
 		for player in [self.player1, self.player2]:
 			player.draw(self.screen)
-
+		
+		self.clock.tick(60)
 		py.display.update()
 
 

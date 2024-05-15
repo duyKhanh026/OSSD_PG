@@ -1,3 +1,4 @@
+import math
 import pygame as py
 import numpy as np
 from classes.player import Player
@@ -260,9 +261,16 @@ class Offline_2player:
         if self.settingClicked: 
             self._ui_setting()
 
+        print(distance_2d(self.player1.rect.x, self.player1.rect.y, self.player2.rect.x, self.player2.rect.y))
+
+
         self.clock.tick(60)
         py.display.update()
 
     def start(self):
         while True:
             self.run()
+
+
+def distance_2d(x1, y1, x2, y2):
+    return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)

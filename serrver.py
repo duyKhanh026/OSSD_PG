@@ -123,8 +123,8 @@ def start():
 	print(f"[LISTENING] Server is listening on {SERVER}")
 	while True:
 		conn, addr = server.accept()
-		thread = threading.Thread(target=handle_room_client, args=(conn, addr))
-		thread.start()
+		# thread = threading.Thread(target=handle_room_client, args=(conn, addr))
+		# thread.start()
 		thread1= threading.Thread(target=handle_client, args=(conn, addr))
 		thread1.start()
 		
