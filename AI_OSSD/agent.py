@@ -12,7 +12,7 @@ BATCH_SIZE = 1000
 
 class Agent:
 	def __init__(self, learning_rate=0.001, gamma=0.99):
-		self.q_network = QNetwork(11, 256, 4)
+		self.q_network = QNetwork(9, 256, 3)
 		self.optimizer = optim.Adam(self.q_network.parameters(), lr=learning_rate)
 		self.memory = deque(maxlen=MAX_MEMORY) # popleft()
 		self.gamma = gamma
@@ -23,12 +23,12 @@ class Agent:
 
 	def choose_action(self, state):
 		# Khởi tạo vector hành động cuối cùng
-		final_move = [0,0,0,0]
-		epsilon = 10 - self.n_games
+		final_move = [0,0,0]
+		epsilon = 80 - self.n_games
 		# Kiểm tra nếu một số ngẫu nhiên nhỏ hơn giá trị epsilon
 		# if random.randint(0, 200) < epsilon:
 		if epsilon > 0:
-			move = random.randint(0, 3)
+			move = random.randint(0, 2)
 			final_move[move] = 1
 		else:
 			state0 = torch.tensor(state, dtype=torch.float)
@@ -76,8 +76,6 @@ class Agent:
 			game.player2.rect.x < 152,
 			game.player2.rect.x > 1248,
 			game.player2.on_ground,
-			game.player2.left,
-			game.player2.right,
 			game.player2.state == 'ATK',
 			game.player2.state == 'NO',
 			game.player2.rect.x > game.point[0],
@@ -113,9 +111,10 @@ def train():
 		if game.game_over:
 			game_count += 1
 			agent.train_long_memory()
-			
+
 			if score > agent.highest_score:
 				agent.highest_score = score
+				agent.save_agent("agent_checkpoint.pth")
 
 			agent.n_games += 1
 			scores.append(score)
@@ -125,7 +124,7 @@ def train():
 
 			#plot(scores, mean_scores)
 			py.time.delay(100)
-			agent.save_agent("agent_checkpoint.pth")
+			
 			# print(f"Reward:Score: {score}, highest score: {agent.highest_score}, Train number:{agent.n_games}, game {game_count}")
 			print(f"Reward: {reward}, Score: {score}, highest score: {agent.highest_score}, Train number:{agent.n_games}, game {game_count}")
 			game.reset()

@@ -26,7 +26,7 @@ class Offline_AI:
 		py.display.set_caption('Demo')
 		self.point = self.random_point()
 		self.player1 = Character1(200, 50, 'blue/stickman_blade', self.point[0], self.point[1], RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L')
-		self.player2 = Character2(200, 80, 'purple/stickman', 1200, 150, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_KP1, py.K_KP2, py.K_KP3, py.K_KP4, 'R')
+		self.player2 = Character2(200, 80, 'purple/stickman', 600, 150, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_KP1, py.K_KP2, py.K_KP3, py.K_KP4, 'R')
 		self.player1.name = 'player1'
 		self.player2.name = 'player2'
 		self.player_distance = distance(self.player1.rect.x,self.player1.rect.y,self.player2.rect.x,self.player2.rect.y)
@@ -156,39 +156,40 @@ class Offline_AI:
 		self.kicked_confirmation(self.player2, SCREEN_WIDTH - 110, 80)
 
 	def move_player(self, action):
-		if np.array_equal(action, [1, 0, 0, 0]) and self.player2.state != 'ATK':
+		if np.array_equal(action, [1, 0, 0]) and self.player2.state != 'ATK':
 			self.player2.go_left()
-		elif np.array_equal(action, [0, 1, 0, 0]) and self.player2.state != 'ATK':
+		elif np.array_equal(action, [0, 1, 0]) and self.player2.state != 'ATK':
 			self.player2.go_right()
-		elif np.array_equal(action, [0, 0, 1, 0]) and self.player2.state != 'ATK':
-			self.player2.do_atk()
 		elif self.player2.on_ground:
 			self.player2.do_jump()
 
 	def run(self, action=None):
 
+		temp = False
+
 		reward = 0
 
-		if self.hitpoint:
-			reward = 10
+
+		# Khuyến khích agent bằng việc lại gần nhân vật
+		new_player_distance = distance(self.player1.rect.x,self.player1.rect.y,self.player2.rect.x,self.player2.rect.y)
+		if new_player_distance <= 150:
+			self.score += 1
+			temp = True
 			self.count_frame = 0
-		else:
-			# Khuyến khích agent bằng việc lại gần nhân vật
-			new_player_distance = distance(self.player1.rect.x,self.player1.rect.y,self.player2.rect.x,self.player2.rect.y)
-
-			if self.player_distance > new_player_distance:
-				reward = 5
-				self.player_distance = new_player_distance
-			else :
-				reward = -5
-
-
-		if self.hitpoint:
-			self.score += 2
-			self.hitpoint = False # Chạm vào ng player
+			reward = 5
 			self.point = self.random_point()
 			self.player1.rect.x = self.point[0]
 			self.player1.rect.y = self.point[1]
+			# self.player_distance = new_player_distance
+		else :
+			reward = -5
+
+
+		# if self.hitpoint:
+		# 	self.score += 2
+		# 	self.hitpoint = False # Chạm vào ng player
+		
+
 
 		for event in py.event.get():
 			if event.type == py.QUIT:
@@ -196,7 +197,7 @@ class Offline_AI:
 				quit()
 
 
-		if self.count_frame >= 200 and self.score == 0:
+		if self.count_frame >= 120 and temp == False:
 			self.game_over = True
 			reward -= 10
 		else :
@@ -204,6 +205,7 @@ class Offline_AI:
 
 		if self.player2.rect.y > SCREEN_HEIGHT - 150:
 			self.game_over = True
+			reward -=10
 
 		
 		# print(f'reward: {reward}, distance: {new_player_distance}')
