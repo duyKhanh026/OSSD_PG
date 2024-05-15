@@ -176,13 +176,13 @@ class Offline_AI:
 			self.score += 1
 			temp = True
 			self.count_frame = 0
-			reward = 5
+			reward = 10
 			self.point = self.random_point()
 			self.player1.rect.x = self.point[0]
 			self.player1.rect.y = self.point[1]
 			# self.player_distance = new_player_distance
-		else :
-			reward = -5
+		# else :
+		# 	reward = -2
 
 
 		# if self.hitpoint:
@@ -205,7 +205,7 @@ class Offline_AI:
 
 		if self.player2.rect.y > SCREEN_HEIGHT - 150:
 			self.game_over = True
-			reward -=10
+			reward -= 10
 
 		
 		# print(f'reward: {reward}, distance: {new_player_distance}')

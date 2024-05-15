@@ -114,8 +114,8 @@ def train():
 			game_count += 1
 			agent.train_long_memory()
 
-			# if score > agent.highest_score:
-			# 	agent.highest_score = score
+			if score > agent.highest_score:
+				agent.highest_score = score
 			# 	agent.save_agent("agent_checkpoint.pth")
 			agent.save_agent("agent_checkpoint.pth")
 			agent.n_games += 1
