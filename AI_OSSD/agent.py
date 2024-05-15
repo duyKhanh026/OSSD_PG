@@ -3,7 +3,7 @@ import os
 from AI_OSSD.model import *
 from collections import deque
 import math
-from AI_OSSD.helper import plot
+#from AI_OSSD.helper import plot
 from offline_AI import *
 
 MAX_MEMORY = 100_000
@@ -24,9 +24,10 @@ class Agent:
 	def choose_action(self, state):
 		# Khởi tạo vector hành động cuối cùng
 		final_move = [0,0,0,0]
-		epsilon = 80 - self.n_games
+		epsilon = 10 - self.n_games
 		# Kiểm tra nếu một số ngẫu nhiên nhỏ hơn giá trị epsilon
-		if random.randint(0, 200) < epsilon:
+		# if random.randint(0, 200) < epsilon:
+		if epsilon > 0:
 			move = random.randint(0, 3)
 			final_move[move] = 1
 		else:
@@ -112,18 +113,21 @@ def train():
 		if game.game_over:
 			game_count += 1
 			agent.train_long_memory()
+			
 			if score > agent.highest_score:
 				agent.highest_score = score
+
 			agent.n_games += 1
 			scores.append(score)
 			total_score += score
 			mean_score = total_score / game_count
 			mean_scores.append(mean_score)
 
-			plot(scores, mean_scores)
+			#plot(scores, mean_scores)
 			py.time.delay(100)
 			agent.save_agent("agent_checkpoint.pth")
-			print(f"Score: {score}, highest score: {agent.highest_score}, Train number:{agent.n_games}, game {game_count}")
+			# print(f"Reward:Score: {score}, highest score: {agent.highest_score}, Train number:{agent.n_games}, game {game_count}")
+			print(f"Reward: {reward}, Score: {score}, highest score: {agent.highest_score}, Train number:{agent.n_games}, game {game_count}")
 			game.reset()
 
 	py.quit()
