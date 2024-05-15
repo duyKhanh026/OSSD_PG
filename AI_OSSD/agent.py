@@ -105,10 +105,10 @@ def train():
 
 		state_new = agent.get_state(game)
 
-		agent.trainer.train_step(state_old, final_move, reward, state_new, done)
+		# agent.trainer.train_step(state_old, final_move, reward, state_new, done)
 
 		# remember
-		agent.remember(state_old, final_move, reward, state_new, done)
+		# agent.remember(state_old, final_move, reward, state_new, done)
 
 		if game.game_over:
 			game_count += 1

@@ -25,7 +25,7 @@ class Offline_AI:
 		self.screen = py.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 		py.display.set_caption('Demo')
 		self.point = self.random_point()
-		self.player1 = Character1(200, 50, 'blue/stickman_blade', 1200, self.point[1], RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L')
+		self.player1 = Character1(200, 50, 'blue/stickman_blade', self.point[0], self.point[1], RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L')
 		self.player2 = Character2(200, 80, 'purple/stickman', 600, 350, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_KP1, py.K_KP2, py.K_KP3, py.K_KP4, 'R')
 		self.player1.name = 'player1'
 		self.player2.name = 'player2'
@@ -160,11 +160,8 @@ class Offline_AI:
 			self.player2.go_left()
 		elif np.array_equal(action, [0, 1, 0]) and self.player2.state != 'ATK':
 			self.player2.go_right()
-		elif self.player2.Max_jump > 0 and self.player2.state != 'ATK':
+		elif self.player2.Max_jump > 0:
 			self.player2.do_jump()
-
-
-			
 
 	def run(self, action=None):
 
@@ -175,23 +172,17 @@ class Offline_AI:
 
 		# Khuyến khích agent bằng việc lại gần nhân vật
 		new_player_distance = distance(self.player1.rect.x,self.player1.rect.y,self.player2.rect.x,self.player2.rect.y)
-
 		if new_player_distance <= 150:
 			self.score += 1
 			temp = True
 			self.count_frame = 0
 			reward = 10
-
-			# Thực hiện đánh
-			if self.player2.state != 'ATK':
-				self.player2.do_atk()
-
 			# self.point = self.random_point()
 			# self.player1.rect.x = self.point[0]
 			# self.player1.rect.y = self.point[1]
-
-		else :
-			reward = -5
+			# self.player_distance = new_player_distance
+		# else :
+		# 	reward = -2
 
 
 		# if self.hitpoint:
@@ -206,11 +197,11 @@ class Offline_AI:
 				quit()
 
 
-		# if self.count_frame >= 120 and temp == False:
-		# 	self.game_over = True
-		# 	reward -= 10
-		# else :
-		# 	self.count_frame += 1
+		if self.count_frame >= 120 and temp == False:
+			self.game_over = True
+			reward -= 10
+		else :
+			self.count_frame += 1
 
 		if self.player2.rect.y > SCREEN_HEIGHT - 150:
 			self.game_over = True
