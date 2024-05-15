@@ -2,6 +2,7 @@ import random
 import pygame
 import sys
 from classes.room import Room,RoomClient
+from classes.hostData import StringList
 
 
 class CreateRoomForm:
@@ -44,6 +45,7 @@ class CreateRoomForm:
         self.cancel_button_rect = pygame.Rect(self.FORM_X + (self.FORM_WIDTH + self.BUTTON_MARGIN) // 2,
                                               self.FORM_Y + 120, self.BUTTON_WIDTH, self.BUTTON_HEIGHT)
 
+        self.responStrLs = StringList()
         self.running = True
 
     def handle_events(self):
@@ -57,7 +59,8 @@ class CreateRoomForm:
                     if self.create_button_rect.collidepoint(mouse_pos):
                         room= Room(self.generate_room_code(),self.input_text,1)
                         roomclient= RoomClient()
-                        roomclient.create_room(room)
+                        self.responStrLs = roomclient.create_room(room)
+
                         self.running = False
                     elif self.cancel_button_rect.collidepoint(mouse_pos):
                         self.running = False
@@ -103,9 +106,8 @@ class CreateRoomForm:
     
     
     def run(self):
-        while self.running:
-            self.handle_events()
-            self.draw()
+        self.handle_events()
+        self.draw() 
 
 if __name__ == "__main__":
     pygame.init()

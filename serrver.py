@@ -2,6 +2,7 @@ import json
 import socket
 import threading
 from classes.player import Player
+from classes.hostData import StringList
 
 HEADER = 64
 PORT = 5050
@@ -13,47 +14,6 @@ DISCONNECT_MESSAGE = "!DISCONNECT"
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDR)
-
-class StringList:
-	def __init__(self):
-		# lưu pid của client 1101,1102 
-		self.strings = []
-		# Lưu thông số room dựa theo pid
-		self.information = []
-		#Thông số của nhân vật của client đó (dòng cuối player)
-		self.coordinates = []
-		#Nó là chủ phòng hay là khách mời
-		self.roomconnect = None
-
-	def add_string(self, s, pler):
-		if s not in self.strings:
-			self.strings.append(s)
-			self.coordinates.append(pler)
-			# print(f"String '{s}' with coordinates {pler}.")
-		else:
-			index = self.strings.index(s)
-			self.coordinates[index] = pler
-			# print(f"String '{s}' coordinates updated to {pler}.")
-
-	def contains_string(self, s):
-		return s in self.strings
-
-	def get_coordinate(self, s):
-		if len(self.strings) < 2:
-			return "NOPLAY"
-		else:
-			for i, string in enumerate(self.strings):
-				if string != s:
-					return self.coordinates[i]
-			return "String not found"
-	def remove_string(self, s):
-		if s in self.strings:
-			index = self.strings.index(s)
-			del self.strings[index]
-			del self.coordinates[index]
-			print(f"String '{s}' and its coordinates removed from the list.")
-		else:
-			print(f"String '{s}' not found in the list.")
 
 
 my_string_list = StringList()
@@ -97,20 +57,25 @@ def handle_room_client(conn, addr):
             # Xử lý dữ liệu JSON
             try:
                 data = json.loads(msg)
+               	print(data)
                 # Thực hiện xử lý dữ liệu của room
-                handle_room_data(data)
+                if data != "con cak":
+                	handle_room_data(data, addr)
+                conn.send(str(my_string_list).encode(FORMAT))
             except json.JSONDecodeError as e:
                 print(f"[ERROR] Invalid JSON format: {e}")
 
     conn.close()
 
-def handle_room_data(data):
+def handle_room_data(data, addr):
     # Xử lý dữ liệu của room ở đây
     # Ví dụ:
     room_code = data.get("code")
     room_name = data.get("name")
     room_player = data.get("player")
     print(f"Room Code: {room_code}, Name: {room_name}, Player: {room_player}")
+    my_string_list.add_string(str(get_portt(addr)), str(room_name), str(room_player), 'tao ko bt')
+
     # Thực hiện các thao tác khác tùy thuộc vào dữ liệu nhận được
 
 
@@ -125,7 +90,7 @@ def start():
 		conn, addr = server.accept()
 		# thread = threading.Thread(target=handle_room_client, args=(conn, addr))
 		# thread.start()
-		thread1= threading.Thread(target=handle_client, args=(conn, addr))
+		thread1= threading.Thread(target=handle_room_client, args=(conn, addr))
 		thread1.start()
 		
 		print(f"[ACTIVE CONNECTIONS] {threading.active_count() - 1}")

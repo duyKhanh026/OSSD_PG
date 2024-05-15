@@ -1,5 +1,6 @@
 import socket
 import json
+from classes.hostData import StringList
 
 class Room:
     def __init__(self, code, name, player):
@@ -25,10 +26,13 @@ class RoomClient:
 
             # Nhận phản hồi từ server
             response = self.client_socket.recv(4096).decode()
-            print("Server response:", response)
-
+            responStrLs = StringList()
+            responStrLs.from_string(response)
+            print("Server response:", responStrLs.strings[0])
+            return responStrLs
         except Exception as e:
             print("Error:", e)
+        return None
 
     def close_connection(self):
         self.client_socket.close()
