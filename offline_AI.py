@@ -160,7 +160,7 @@ class Offline_AI:
 			self.player2.go_left()
 		elif np.array_equal(action, [0, 1, 0]) and self.player2.state != 'ATK':
 			self.player2.go_right()
-		elif self.player2.Max_jump > 0:
+		elif self.player2.Max_jump > 0 and self.player2.state != 'ATK':
 			self.player2.do_jump()
 
 	def run(self, action=None):
@@ -169,7 +169,6 @@ class Offline_AI:
 
 		reward = 0
 
-
 		# Khuyến khích agent bằng việc lại gần nhân vật
 		new_player_distance = distance(self.player1.rect.x,self.player1.rect.y,self.player2.rect.x,self.player2.rect.y)
 		if new_player_distance <= 150:
@@ -177,12 +176,15 @@ class Offline_AI:
 			temp = True
 			self.count_frame = 0
 			reward = 10
+
+			if self.player2.state != 'ATK':
+				self.player2.do_atk()
 			# self.point = self.random_point()
 			# self.player1.rect.x = self.point[0]
 			# self.player1.rect.y = self.point[1]
 			# self.player_distance = new_player_distance
-		# else :
-		# 	reward = -2
+		else :
+			reward = -2
 
 
 		# if self.hitpoint:
@@ -197,11 +199,11 @@ class Offline_AI:
 				quit()
 
 
-		if self.count_frame >= 120 and temp == False:
-			self.game_over = True
-			reward -= 10
-		else :
-			self.count_frame += 1
+		# if self.count_frame >= 120 and temp == False:
+		# 	self.game_over = True
+		# 	reward -= 10
+		# else :
+		# 	self.count_frame += 1
 
 		if self.player2.rect.y > SCREEN_HEIGHT - 150:
 			self.game_over = True

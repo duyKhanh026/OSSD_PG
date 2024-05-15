@@ -112,7 +112,7 @@ def train():
 
 		if game.game_over:
 			game_count += 1
-			agent.train_long_memory()
+			# agent.train_long_memory()
 
 			if score > agent.highest_score:
 				agent.highest_score = score
