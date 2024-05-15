@@ -1,7 +1,7 @@
 from offline_2player import *
 # from vsAImode import Vs_AI_Mode
 from client import Player_client
-# from AI_OSSD.agent import train
+from AI_OSSD.agent import train
 from GUI.Menu import Menu
 from GUI.Lobby import WaitingRoom
 
@@ -23,7 +23,7 @@ class Main:
             menu.play_option = -1
 
 if __name__ == "__main__":
-    Main().run()
+    train()
     # Offline_2player().start()
     # offline_2player = Offline_2player()
     # lobby = WaitingRoom(offline_2player.screen)
