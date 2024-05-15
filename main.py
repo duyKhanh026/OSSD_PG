@@ -18,7 +18,7 @@ class Main:
             if menu.play_option == 3: 
                 Player_client().run()
                 # while lobby.option != 3:
-                #     lobby.run()
+                #     lobby.run()ddd
                 # lobby.option = -1  
             menu.play_option = -1
 
