@@ -180,8 +180,25 @@ class Offline_2player:
 
     def _update_ui_client(self):
         self.screen.fill(BLACK)
-        py.draw.rect(self.screen, (157,157,157), py.Rect(200, 600, SCREEN_WIDTH - 400, SCREEN_HEIGHT))
-        # vẽ sọc trắng lên màn hình
+        self.screen.blit(self.bg1, (0, 0))
+
+        # Vẽ hình chữ nhật mờ trong suốt
+        bg_rect = py.Surface((SCREEN_WIDTH - 500, SCREEN_HEIGHT), py.SRCALPHA)
+        bg_rect.fill((157, 157, 157, 0))  # Màu với alpha = 128
+        self.screen.blit(bg_rect, (250, 600))  # Vị trí và kích thước của hình chữ nhật
+
+        bg_rect = py.Surface((SCREEN_WIDTH - 1350, SCREEN_HEIGHT-750), py.SRCALPHA)
+        bg_rect.fill((157, 157, 157, 0))  # Màu với alpha = 128
+        self.screen.blit(bg_rect, (100, 400))  # Vị trí và kích thước của hình chữ nhật
+
+        bg_rect = py.Surface((SCREEN_WIDTH - 1200, SCREEN_HEIGHT-700), py.SRCALPHA)
+        bg_rect.fill((157, 157, 157, 0))  # Màu với alpha = 128
+        self.screen.blit(bg_rect, (650, 250))  # Vị trí và kích thước của hình chữ nhật 
+
+        bg_rect = py.Surface((SCREEN_WIDTH - 1250, SCREEN_HEIGHT-700), py.SRCALPHA)
+        bg_rect.fill((157, 157, 157, 0))  # Màu với alpha = 128
+        self.screen.blit(bg_rect, (1150, 350))  # Vị trí và kích thước của hình chữ nhật 
+        
         line_spacing = 50
         for y in range(0, SCREEN_HEIGHT, line_spacing):
             py.draw.line(self.screen, WHITE, (0, y), (SCREEN_WIDTH, y))

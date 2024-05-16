@@ -49,6 +49,13 @@ class WaitingRoom:
         self.selected_index = -1
         self.selected_room_code = None  # Biến lưu mã phòng đã chọn
 
+        #biến cập nhật mỗi pid chỉ tạo 1 phòng
+        self.room_created=False
+
+        # alert
+        self.show_alert=False
+
+        # Server
         server_address=('127.0.0.1', 5050)
         self.server_address = server_address
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -85,6 +92,30 @@ class WaitingRoom:
 
         # Tạo form create
         self.creating_room = False
+    def draw_alert(self, message):
+        # Kích thước và vị trí của hộp thông báo
+        alert_width, alert_height = 400, 200
+        alert_x = (self.SCREEN_WIDTH - alert_width) // 2
+        alert_y = (self.SCREEN_HEIGHT - alert_height) // 2
+
+        # Vẽ hộp thông báo
+        pygame.draw.rect(self.screen, (255, 0, 0), (alert_x, alert_y, alert_width, alert_height), border_radius=20)
+        pygame.draw.rect(self.screen, (255, 255, 255), (alert_x + 10, alert_y + 10, alert_width - 20, alert_height - 20), border_radius=20)
+
+        # Vẽ nội dung thông báo
+        alert_font = pygame.font.Font(self.font_path, 30)
+        alert_text = alert_font.render(message, True, (0, 0, 0))
+        alert_text_rect = alert_text.get_rect(center=(alert_x + alert_width // 2, alert_y + alert_height // 2))
+        self.screen.blit(alert_text, alert_text_rect)
+
+        # Vẽ nút "OK"
+        ok_button = pygame.Rect(alert_x + alert_width // 2 - 50, alert_y + alert_height - 60, 100, 40)
+        pygame.draw.rect(self.screen, (0, 255, 0), ok_button, border_radius=20)
+        ok_text = alert_font.render("OK", True, (0, 0, 0))
+        ok_text_rect = ok_text.get_rect(center=ok_button.center)
+        self.screen.blit(ok_text, ok_text_rect)
+
+        return ok_button
 
     # Hàm để vẽ một nút
     def draw_button(self, text, x, y):
@@ -200,16 +231,35 @@ class WaitingRoom:
 
         if self.option == 1:  # Nút "Join Room"
             if self.selected_room_code:
-                selected_room_name = next(room['name'] for room in self.room_list if room['code'] == self.selected_room_code)
-                print(f"Selected Room Code: {self.selected_room_code}")
-                waitingR = WaitingRoom2(self.screen, self.selected_room_code, self.client_socket, selected_room_name)
+                
+                # Lấy thông tin của phòng được chọn từ danh sách các phòng
+                selected_room_name = next(room for room in self.room_list if room['code'] == self.selected_room_code)
+                
+                # Tăng số lượng người chơi trong phòng lên 1
+                data = {
+                    'code': self.selected_room_code,
+                    'name': selected_room_name['name'],
+                    'player': int(selected_room_name['players']) + 1
+                }
+                self.client_socket.send(json.dumps(data).encode())
+
+                # Tăng số lượng người chơi trong phòng lên 1
+                selected_room_name['players'] = str(data['player'])
+
+                waitingR = WaitingRoom2(self.screen, self.selected_room_code, self.client_socket, selected_room_name['name'])
                 while waitingR.running:
                     waitingR.run()
             self.option = -1
 
         elif self.option == 2:  # Nút "Create Room"
-            self.creating_room = True  # Vẽ form nhập liệu
-            self.option = -1
+            if not self.room_created:
+                self.creating_room = True  # Vẽ form nhập liệu
+                self.room_created = True  # Cập nhật biến cờ sau khi tạo phòng
+                self.option = -1
+            else:
+                self.show_alert = True  # Hiển thị thông báo
+                self.alert_message = "This machine has already created a room."  # Nội dung thông báo
+                self.option = -1
 
         if self.creating_room:  # Nếu đang hiển thị form tạo phòng
             create_room_form = CreateRoomForm(self.screen, self.client_socket)
@@ -224,3 +274,6 @@ class WaitingRoom:
                 self.room_list.append(new_room)
 
             self.creating_room= False
+
+    
+    

@@ -24,17 +24,19 @@ class StringList:
             self.coordinates[index] = pler
             # print(f"String '{s}' coordinates updated to {pler}.")
 
+    def add_pler(self, s, pler):
+        index = self.strings.index(s)
+        self.coordinates[index] = pler
+        # print(f"String '{s}' coordinates updated to {pler}.")
+
     def contains_string(self, s):
         return s in self.strings
 
     def get_coordinate(self, s):
         if len(self.strings) < 2:
             return "NOPLAY"
-        else:
-            for i, string in enumerate(self.strings):
-                if string != s:
-                    return self.coordinates[i]
-            return "String not found"
+        return "NOPLAY"
+
     def remove_string(self, s):
         if s in self.strings:
             index = self.strings.index(s)
