@@ -43,6 +43,8 @@ def handle_client(conn, addr):
 
 	# conn.close()
 
+
+
 def handle_room_client(conn, addr):
 	print(f"[NEW ROOM CONNECTION] {addr} connected.")
 	connected = True
