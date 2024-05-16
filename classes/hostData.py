@@ -4,18 +4,18 @@ class StringList:
         # lưu pid của client 1101,1102 
         self.strings = []
         # Lưu thông số room dựa theo pid
-        self.information = []
+        self.name = []
         #Thông số của nhân vật của client đó (dòng cuối player)
         self.coordinates = []
         #Nó là chủ phòng hay là khách mời
-        self.roomconnect = []
+        self.player = []
 
     def add_string(self, s, information, roomconnect, pler):
         if s not in self.strings:
             self.strings.append(s)
             self.coordinates.append(pler)
-            self.information.append(information)
-            self.roomconnect.append(roomconnect)
+            self.name.append(information)
+            self.player.append(roomconnect)
             # print(f"String '{s}' with coordinates {pler}.")
         else:
             index = self.strings.index(s)
@@ -46,9 +46,9 @@ class StringList:
         # Tạo một chuỗi đại diện cho đối tượng Player
         user_info = [
             ','.join(self.strings),  # 0
-            ','.join(self.roomconnect),  # 0
+            ','.join(self.player),  # 0
             ','.join(self.coordinates),  # 0
-            ','.join(self.information)  # 1
+            ','.join(self.name)  # 1
         ]
         return ",".join(user_info)
 
@@ -56,6 +56,6 @@ class StringList:
         # chuyển string lấy từ server thành giá trị cho player
         values = user_info.split(",")
         self.strings = values[0].split(',')
-        self.roomconnect = values[1].split(',')
+        self.player = values[1].split(',')
         self.coordinates = values[2].split(',')
-        self.information = values[3].split(',')
+        self.name = values[3].split(',')

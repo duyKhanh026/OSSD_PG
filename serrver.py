@@ -44,39 +44,39 @@ def handle_client(conn, addr):
 	import json
 
 def handle_room_client(conn, addr):
-    print(f"[NEW ROOM CONNECTION] {addr} connected.")
+	print(f"[NEW ROOM CONNECTION] {addr} connected.")
 
-    connected = True
-    while connected:
-        # Nhận dữ liệu từ client room
-        msg = conn.recv(4096).decode(FORMAT)
-        if msg:
-            # Hiển thị dữ liệu nhận được từ client room
-            print(f"[{addr}] Sent message: {msg}")
+	connected = True
+	while connected:
+		# Nhận dữ liệu từ client room
+		msg = conn.recv(4096).decode(FORMAT)
+		if msg:
+			# Hiển thị dữ liệu nhận được từ client room
+			print(f"[{addr}] Sent message: {msg}")
 
-            # Xử lý dữ liệu JSON
-            try:
-                data = json.loads(msg)
-               	print(data)
-                # Thực hiện xử lý dữ liệu của room
-                if data != "con cak":
-                	handle_room_data(data, addr)
-                conn.send(str(my_string_list).encode(FORMAT))
-            except json.JSONDecodeError as e:
-                print(f"[ERROR] Invalid JSON format: {e}")
+			# Xử lý dữ liệu JSON
+			try:
+				data = json.loads(msg)
+			   	
+				# Thực hiện xử lý dữ liệu của room
+				if data != "con cak":
+					handle_room_data(data, addr)
+				conn.send(str(my_string_list).encode(FORMAT))
+			except json.JSONDecodeError as e:
+				print(f"[ERROR] Invalid JSON format: {e}")
 
-    conn.close()
+	conn.close()
 
 def handle_room_data(data, addr):
-    # Xử lý dữ liệu của room ở đây
-    # Ví dụ:
-    room_code = data.get("code")
-    room_name = data.get("name")
-    room_player = data.get("player")
-    print(f"Room Code: {room_code}, Name: {room_name}, Player: {room_player}")
-    my_string_list.add_string(str(get_portt(addr)), str(room_name), str(room_player), 'tao ko bt')
+	# Xử lý dữ liệu của room ở đây
+	# Ví dụ:
+	room_code = data.get("code")
+	room_name = data.get("name")
+	room_player = data.get("player")
+	print(f"Room Code: {room_code}, Name: {room_name}, Player: {room_player}")
+	my_string_list.add_string(str(get_portt(addr)), str(room_name), str(room_player), 'tao ko bt')
 
-    # Thực hiện các thao tác khác tùy thuộc vào dữ liệu nhận được
+	# Thực hiện các thao tác khác tùy thuộc vào dữ liệu nhận được
 
 
 
