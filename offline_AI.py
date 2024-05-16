@@ -156,16 +156,16 @@ class Offline_AI:
 		self.kicked_confirmation(self.player2, SCREEN_WIDTH - 110, 80)
 
 	def move_player(self, action):
-		if np.array_equal(action, [1, 0, 0]) and self.player2.state != 'ATK':
+		if np.array_equal(action, [1, 0, 0]) and self.player2.state != 'ATK' and self.player2.state != 'KIC':
 			self.player2.go_left()
-		elif np.array_equal(action, [0, 1, 0]) and self.player2.state != 'ATK':
+		elif np.array_equal(action, [0, 1, 0]) and self.player2.state != 'ATK' and self.player2.state != 'KIC':
 			self.player2.go_right()
-		elif self.player2.Max_jump > 0 and self.player2.state != 'ATK':
+		elif self.player2.Max_jump > 0 and self.player2.state != 'ATK' and self.player2.state != 'KIC':
 			self.player2.do_jump()
 
 	def run(self, action=None):
 
-		temp = False
+		# temp = False
 
 		reward = 0
 
@@ -173,12 +173,19 @@ class Offline_AI:
 		new_player_distance = distance(self.player1.rect.x,self.player1.rect.y,self.player2.rect.x,self.player2.rect.y)
 		if new_player_distance <= 150:
 			self.score += 1
-			temp = True
+			# temp = True
 			self.count_frame = 0
 			reward = 10
 
-			if self.player2.state != 'ATK' and self.player2.state != 'STUN':
-				self.player2.do_atk()
+			if self.player2.state != 'ATK' and self.player2.state != 'STUN' and self.player2.state != 'KIC':
+				move = random.randint(0, 1)
+				if move == 0:
+					self.player2.do_atk()
+				else:
+					self.player2.do_k
+			
+
+				
 			# self.point = self.random_point()
 			# self.player1.rect.x = self.point[0]
 			# self.player1.rect.y = self.point[1]
