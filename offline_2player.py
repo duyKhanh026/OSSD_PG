@@ -107,7 +107,7 @@ class Offline_2player:
                     return True
         return False
 
-    def _update_ui(self):
+    def backgr_ui(self):
         self.screen.fill(BLACK)
         self.screen.blit(self.bg1, (0, 0))
 
@@ -141,6 +141,9 @@ class Offline_2player:
 
         # self.screen.blit(self.bg1, (0,0))
         self.screen.blit(self.settingBtn, (10,10))
+
+    def _update_ui(self):
+        self.backgr_ui()
 
         # xữ lý đầu vào để di chuyển và thực hiện hành động cho nhân vật 
         for player in [self.player1, self.player2]:
@@ -179,17 +182,9 @@ class Offline_2player:
         self.kicked_confirmation(self.player2, SCREEN_WIDTH - 110, toadoInfo + 50)
 
     def _update_ui_client(self):
-        self.screen.fill(BLACK)
-        py.draw.rect(self.screen, (157,157,157), py.Rect(200, 600, SCREEN_WIDTH - 400, SCREEN_HEIGHT))
-        # vẽ sọc trắng lên màn hình
-        line_spacing = 50
-        for y in range(0, SCREEN_HEIGHT, line_spacing):
-            py.draw.line(self.screen, WHITE, (0, y), (SCREEN_WIDTH, y))
-        line_spacing_vertical = 50
-        for x in range(0, SCREEN_WIDTH, line_spacing_vertical):
-            py.draw.line(self.screen, WHITE, (x, 0), (x, SCREEN_HEIGHT))
 
-        # self.screen.blit(self.bg1, (0,0))
+        self.backgr_ui()
+        
         self.player1.move_logic(py.key.get_pressed())
         self.player1.sp_move(py.key.get_pressed())
         
