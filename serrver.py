@@ -17,6 +17,7 @@ server.bind(ADDR)
 
 
 my_string_list = StringList()
+conns = []
 
 
 def handle_client(conn, addr):
@@ -39,13 +40,12 @@ def handle_client(conn, addr):
 				senback = my_string_list.get_coordinate(str(get_portt(addr)))
 			conn.send(str(senback).encode(FORMAT))
 
-	conn.close()
+	# conn.close()
 
 	import json
 
 def handle_room_client(conn, addr):
 	print(f"[NEW ROOM CONNECTION] {addr} connected.")
-
 	connected = True
 	while connected:
 		# Nhận dữ liệu từ client room
@@ -60,7 +60,10 @@ def handle_room_client(conn, addr):
 			   	
 				# Thực hiện xử lý dữ liệu của room
 				if extract_after_chat(str(data)) != None:
-					conn.send(extract_after_chat(str(data)).encode(FORMAT))
+					chat = extract_after_chat(str(data))
+					# conn.send(chat.encode(FORMAT))
+					for connnn in conns:
+						connnn.send(chat.encode(FORMAT))
 				elif data != "Lobby connected":
 					handle_room_data(data, addr) 
 					conn.send(str(my_string_list).encode(FORMAT))
@@ -80,7 +83,7 @@ def extract_after_chat(string):
     else:
         return None
 
-def handle_room_data(data, addr):
+def handle_room_data(data ,addr):
 	# Xử lý dữ liệu của room ở đây
 	# Ví dụ:
 	room_code = data.get("code")
@@ -103,6 +106,7 @@ def start():
 		conn, addr = server.accept()
 		# thread = threading.Thread(target=handle_room_client, args=(conn, addr))
 		# thread.start()
+		conns.append(conn)
 		thread1= threading.Thread(target=handle_room_client, args=(conn, addr))
 		thread1.start()
 		

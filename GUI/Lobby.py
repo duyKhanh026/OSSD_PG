@@ -67,13 +67,12 @@ class WaitingRoom:
             if responSrlist.strings[0] != "":
                 for i in range(len(responSrlist.strings)):
                     new_room = {"name": responSrlist.name[i],
-                             "players": str(responSrlist.player[i]), 
-                             "code": responSrlist.strings[i]}
+                                "players": str(responSrlist.player[i]), 
+                                "code": responSrlist.strings[i]}
                     # Thêm phần tử mới vào danh sách
                     self.room_list.append(new_room)
         except Exception as e:
             print("Error:", e)
-        self.client_socket.close()
 
         self.scroll_pos = 0
 
@@ -202,7 +201,7 @@ class WaitingRoom:
         if self.option == 1:  # Nút "Join Room"
             if self.selected_room_code:
                 print(f"Selected Room Code: {self.selected_room_code}")
-                waitingR = WaitingRoom2(self.screen, self.selected_room_code)
+                waitingR = WaitingRoom2(self.screen, self.selected_room_code, self.client_socket)
                 while waitingR.running:
                     waitingR.run()
             self.option = -1
@@ -212,7 +211,7 @@ class WaitingRoom:
             self.option = -1
 
         if self.creating_room:  # Nếu đang hiển thị form tạo phòng
-            create_room_form = CreateRoomForm(self.screen)
+            create_room_form = CreateRoomForm(self.screen, self.client_socket)
             
             while create_room_form.running:
                 create_room_form.run()  # Vẽ form nhập liệu
