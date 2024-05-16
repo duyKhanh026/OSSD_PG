@@ -2,7 +2,7 @@ import pygame
 import sys
 
 class WaitingRoom2:
-    def __init__(self, surface):
+    def __init__(self, surface, roomCode):
 
         # Kích thước màn hình
         self.screen_width, self.screen_height = surface.get_size()
