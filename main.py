@@ -31,4 +31,4 @@ if __name__ == "__main__":
     # offline_2player = Offline_2player()
     # lobby = WaitingRoom(offline_2player.screen)
     # while lobby.option != 3:
-    #     lobby.run()
+    #     lobby.run()ădưdwada

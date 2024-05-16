@@ -132,8 +132,13 @@ class Player:
 		self.atkAcount = 0
 		self.state = 'ATK'
 
-	#def do_kic(self):
-		
+	def do_kic(self):
+		self.kicAcount = 0
+		self.state = 'KIC'
+
+	def do_def(self):
+		self.state = 'DEF'
+
 
 	def sp_move(self, key):
 		if self.move_left_key == None:

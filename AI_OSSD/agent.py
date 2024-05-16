@@ -116,7 +116,7 @@ def train():
 
 			if score > agent.highest_score:
 				agent.highest_score = score
-				#agent.save_agent("agent_checkpoint.pth")
+				# agent.save_agent("agent_checkpoint.pth")
 
 			agent.n_games += 1
 			scores.append(score)
