@@ -107,7 +107,7 @@ class Offline_2player:
                     return True
         return False
 
-    def _update_ui(self):
+    def backgr(self):
         self.screen.fill(BLACK)
         self.screen.blit(self.bg1, (0, 0))
 
@@ -127,6 +127,9 @@ class Offline_2player:
         bg_rect = py.Surface((SCREEN_WIDTH - 1250, SCREEN_HEIGHT-700), py.SRCALPHA)
         bg_rect.fill((157, 157, 157, 0))  # Màu với alpha = 128
         self.screen.blit(bg_rect, (1150, 350))  # Vị trí và kích thước của hình chữ nhật 
+
+    def _update_ui(self):
+        self.backgr()
 
 
         # vẽ sọc trắng lên màn hình
@@ -179,15 +182,7 @@ class Offline_2player:
         self.kicked_confirmation(self.player2, SCREEN_WIDTH - 110, toadoInfo + 50)
 
     def _update_ui_client(self):
-        self.screen.fill(BLACK)
-        py.draw.rect(self.screen, (157,157,157), py.Rect(200, 600, SCREEN_WIDTH - 400, SCREEN_HEIGHT))
-        # vẽ sọc trắng lên màn hình
-        line_spacing = 50
-        for y in range(0, SCREEN_HEIGHT, line_spacing):
-            py.draw.line(self.screen, WHITE, (0, y), (SCREEN_WIDTH, y))
-        line_spacing_vertical = 50
-        for x in range(0, SCREEN_WIDTH, line_spacing_vertical):
-            py.draw.line(self.screen, WHITE, (x, 0), (x, SCREEN_HEIGHT))
+        self.backgr()
 
         # self.screen.blit(self.bg1, (0,0))
         self.player1.move_logic(py.key.get_pressed())
@@ -281,7 +276,7 @@ class Offline_2player:
         if self.settingClicked: 
             self._ui_setting()
 
-        print(distance_2d(self.player1.rect.x, self.player1.rect.y, self.player2.rect.x, self.player2.rect.y))
+        # print(distance_2d(self.player1.rect.x, self.player1.rect.y, self.player2.rect.x, self.player2.rect.y))
 
 
         self.clock.tick(60)
