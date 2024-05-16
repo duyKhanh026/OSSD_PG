@@ -67,8 +67,8 @@ class WaitingRoom:
             if responSrlist.strings[0] != "":
                 for i in range(len(responSrlist.strings)):
                     new_room = {"name": responSrlist.name[i],
-                             "players": str(responSrlist.player[i]), 
-                             "code": responSrlist.strings[i]}
+                                "players": str(responSrlist.player[i]), 
+                                "code": responSrlist.strings[i]}
                     # Thêm phần tử mới vào danh sách
                     self.room_list.append(new_room)
         except Exception as e:

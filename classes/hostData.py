@@ -9,7 +9,7 @@ class StringList:
         self.coordinates = []
         #Phòng đang nhiêu đứa
         self.player = []
-
+        
         self.code = []
 
     def add_string(self, s, information, roomconnect, pler):
