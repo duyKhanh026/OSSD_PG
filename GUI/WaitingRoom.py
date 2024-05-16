@@ -1,11 +1,14 @@
 import pygame
 import sys
+import socket
+import json
 
 class WaitingRoom2:
     def __init__(self, surface, roomCode):
 
         # Kích thước màn hình
         self.screen_width, self.screen_height = surface.get_size()
+        self.roomCode = roomCode
 
         # Màu sắc
         self.WHITE = (255, 255, 255)
@@ -128,7 +131,9 @@ class WaitingRoom2:
                         player.ready = not player.ready
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
-                    self.chat_messages.append(self.input_text)
+                    # gửi đoạn chat đén server và server gửi lại chat
+                    self.chat_messages.append(sendChat_message(self.input_text))
+                    # sendChat_message(self.input_text)
                     self.input_text = ""
                 elif event.key == pygame.K_BACKSPACE:
                     self.input_text = self.input_text[:-1]
@@ -138,6 +143,23 @@ class WaitingRoom2:
     def run(self):            
         self.handle_events()
         self.draw_interface()
+
+def sendChat_message(chat):
+    server_address=('127.0.0.1', 5050)
+    server_address = server_address
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client_socket.connect(server_address)
+    response = ""
+    try:
+        client_socket.sendall(json.dumps("chat/" + chat).encode())
+
+        # Nhận phản hồi từ server
+        response = client_socket.recv(4096).decode()
+
+    except Exception as e:
+        print("Error:", e)
+    client_socket.close()
+    return response
 
 class Player:
     def __init__(self, name, character):

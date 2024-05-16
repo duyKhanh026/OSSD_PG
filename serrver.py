@@ -59,13 +59,26 @@ def handle_room_client(conn, addr):
 				data = json.loads(msg)
 			   	
 				# Thực hiện xử lý dữ liệu của room
-				if data != "con cak":
+				if extract_after_chat(str(data)) != None:
+					conn.send(extract_after_chat(str(data)).encode(FORMAT))
+				elif data != "con cak":
 					handle_room_data(data, addr)
-				conn.send(str(my_string_list).encode(FORMAT))
+					conn.send(str(my_string_list).encode(FORMAT))
+				else:
+					conn.send(str(my_string_list).encode(FORMAT))
+
 			except json.JSONDecodeError as e:
 				print(f"[ERROR] Invalid JSON format: {e}")
 
 	conn.close()
+
+def extract_after_chat(string):
+    keyword = "chat/"
+    index = string.find(keyword)
+    if index != -1:
+        return string[index + len(keyword):]
+    else:
+        return None
 
 def handle_room_data(data, addr):
 	# Xử lý dữ liệu của room ở đây
