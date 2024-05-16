@@ -3,6 +3,7 @@ from PIL import  ImageTk, Image
 import tkinter.messagebox
 import KetNoiCSDL
 import SignUp
+from main import Main
 
 
 def TaoCuaSo(win: Tk):
@@ -94,6 +95,8 @@ def LogIn():
         tkinter.messagebox.showerror(title= "Error", message= "Sai thong tin dang nhap hoac tai khoan dang bi khoa")
     else:
         tkinter.messagebox.showinfo(title= "Welcome", message = "Welcome " + userName)
+        main_app = Main()  # Tạo đối tượng Main
+        main_app.run()
         
 # Tao nut an de dang nhap
 
