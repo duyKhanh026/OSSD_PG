@@ -17,7 +17,7 @@ class Offline_2player:
         # py.display.set_caption('Fighting Game')
         self.screen = screen
         self.player1 = Character1(200, 50, 'blue/stickman_blade', 300, 150, RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L')
-        self.player2 = Character2(200, 80, 'purple/stickman', 1200, 150, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_KP1, py.K_KP2, py.K_KP3, py.K_p, 'R')
+        self.player2 = Character2(200, 80, 'purple/stickman', 1200, 150, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_b, py.K_n, py.K_m, py.K_p, 'R')
         self.player1.name = 'player1'
         self.player2.name = 'player2'
         self.clock = py.time.Clock()
@@ -138,7 +138,7 @@ class Offline_2player:
                 self.game_over = (1 if player == self.player1 else 2) 
 
         if self.player1.skill_active(self.screen, self.player2):
-            handle_attack(None, self.player2)
+            handle_attack(None, self.player2,1)
             self.pushed_side(self.player1, self.player2)
 
         self.attack_confirmation(self.player1, 10, toadoInfo)
