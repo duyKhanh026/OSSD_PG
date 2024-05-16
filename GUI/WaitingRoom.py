@@ -2,6 +2,7 @@ import pygame
 import sys
 import json
 import threading
+from client import Player_client
 
 class WaitingRoom2:
     def __init__(self, surface, roomCode, client_socket, room_name):
@@ -61,8 +62,8 @@ class WaitingRoom2:
         self.running = True
         
         # Khởi tạo và bắt đầu luồng nhận tin nhắn
-        message_receiver = MessageReceiver(self.client_socket, self.chat_messages)
-        message_receiver.start()
+        self.message_receiver = MessageReceiver(self.client_socket, self.chat_messages)
+        self.message_receiver.start()
 
     def draw_interface(self):
         # Vẽ hình nền
@@ -140,13 +141,18 @@ class WaitingRoom2:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     # gửi đoạn chat đén server và server gửi lại chat
-                    self.chat_messages.append(sendChat_message(self.input_text, self.client_socket))
+                    sendChat_message(self.input_text, self.client_socket)
                     # sendChat_message(self.input_text)
                     self.input_text = ""
                 elif event.key == pygame.K_BACKSPACE:
                     self.input_text = self.input_text[:-1]
                 else:
                     self.input_text += event.unicode
+        if self.players[0].ready and self.players[1].ready:
+            self.message_receiver.running = False
+            self.client_socket.settimeout(1.0)
+            Player_client(self.client_socket, self.screen).run()
+
 
     # Bạn có thể gọi hàm này trong vòng lặp chính của ứng dụng của bạn, ví dụ:
     def run(self):
@@ -172,8 +178,10 @@ def receive_chat_message(client_socket):
     try:
         message = client_socket.recv(4096).decode()
         return message
+    except client_socket.timeout:
+        return None
     except Exception as e:
-        print("Error receiving message from server:", e)
+        # print("Error receiving message from server:", e)
         return None
 
 class MessageReceiver(threading.Thread):

@@ -12,7 +12,7 @@ from values.screen import *
 
 
 def distance(x1, y1, x2, y2):
-    return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+	return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
 class Offline_AI:
 	def __init__(self):
@@ -25,13 +25,14 @@ class Offline_AI:
 		self.screen = py.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 		py.display.set_caption('Demo')
 		self.point = self.random_point()
-		self.player1 = Character1(200, 50, 'blue/stickman_blade', 160, self.point[1], RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L')
-		self.player2 = Character2(200, 80, 'purple/stickman', 1200, 350, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_KP1, py.K_KP2, py.K_KP3, py.K_KP4, 'R')
+		self.point_AI =  self.random_point()
+		self.player1 = Character1(200, 50, 'blue/stickman_blade', self.point[0], self.point[1], RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L')
+		self.player2 = Character2(200, 80, 'purple/stickman', self.point_AI[0], self.point_AI[1], BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_KP1, py.K_KP2, py.K_KP3, py.K_KP4, 'R')
 		self.player1.name = 'player1'
 		self.player2.name = 'player2'
 		self.player_distance = distance(self.player1.rect.x,self.player1.rect.y,self.player2.rect.x,self.player2.rect.y)
 		self.clock = py.time.Clock()
-		bg = py.image.load(f'assets/bg2.jpg')
+		bg = py.image.load(f'assets/mapgame.jpg')
 		self.bg1 = py.transform.scale(bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
 		self.score = 0
 		self.hitpoint = False
@@ -110,16 +111,27 @@ class Offline_AI:
 
 	def _update_ui(self):
 		self.screen.fill(BLACK)
-		py.draw.rect(self.screen, (157,157,157), py.Rect(200, 600, SCREEN_WIDTH - 400, SCREEN_HEIGHT))
-		# vẽ sọc trắng lên màn hình
-		line_spacing = 50
-		for y in range(0, SCREEN_HEIGHT, line_spacing):
-			py.draw.line(self.screen, WHITE, (0, y), (SCREEN_WIDTH, y))
-		line_spacing_vertical = 50
-		for x in range(0, SCREEN_WIDTH, line_spacing_vertical):
-			py.draw.line(self.screen, WHITE, (x, 0), (x, SCREEN_HEIGHT))
+		self.screen.blit(self.bg1, (0, 0))
 
-		# self.screen.blit(self.bg1, (0,0))
+		# Vẽ hình chữ nhật mờ trong suốt
+		bg_rect = py.Surface((SCREEN_WIDTH - 500, SCREEN_HEIGHT), py.SRCALPHA)
+		bg_rect.fill((157, 157, 157, 0))  # Màu với alpha = 128
+		self.screen.blit(bg_rect, (250, 600))  # Vị trí và kích thước của hình chữ nhật
+
+		bg_rect = py.Surface((SCREEN_WIDTH - 1350, SCREEN_HEIGHT-750), py.SRCALPHA)
+		bg_rect.fill((157, 157, 157, 0))  # Màu với alpha = 128
+		self.screen.blit(bg_rect, (100, 400))  # Vị trí và kích thước của hình chữ nhật
+
+		bg_rect = py.Surface((SCREEN_WIDTH - 1200, SCREEN_HEIGHT-700), py.SRCALPHA)
+		bg_rect.fill((157, 157, 157, 0))  # Màu với alpha = 128
+		self.screen.blit(bg_rect, (650, 250))  # Vị trí và kích thước của hình chữ nhật 
+
+		bg_rect = py.Surface((SCREEN_WIDTH - 1250, SCREEN_HEIGHT-700), py.SRCALPHA)
+		bg_rect.fill((157, 157, 157, 0))  # Màu với alpha = 128
+		self.screen.blit(bg_rect, (1150, 350))  # Vị trí và kích thước của hình chữ nhật 
+		
+		
+	
 
 		# xữ lý đầu vào để di chuyển và thực hiện hành động cho nhân vật 
 		for player in [self.player1, self.player2]:
@@ -177,21 +189,23 @@ class Offline_AI:
 			self.count_frame = 0
 			reward = 10
 
-			if self.player2.state != 'ATK' and self.player2.state != 'STUN' and self.player2.state != 'KIC':
-				move = random.randint(0, 1)
+			if self.player2.state == 'NO' and self.player2.on_ground:
+				move = random.randint(0, 2)
 				if move == 0:
 					self.player2.do_atk()
-				else:
-					self.player2.do_k
+				elif move == 1:
+					self.player2.do_kic()
+				elif move == 2:
+					self.player2.do_def()
 			
 
 				
 			# self.point = self.random_point()
 			# self.player1.rect.x = self.point[0]
 			# self.player1.rect.y = self.point[1]
-			# self.player_distance = new_player_distance
+
 		else :
-			reward = -2
+			reward = -5
 
 
 		# if self.hitpoint:
@@ -206,11 +220,12 @@ class Offline_AI:
 				quit()
 
 
-		# if self.count_frame >= 120 and temp == False:
+		# if self.count_frame >= 240 and temp == False:
 		# 	self.game_over = True
 		# 	reward -= 10
 		# else :
 		# 	self.count_frame += 1
+
 
 		if self.player2.rect.y > SCREEN_HEIGHT - 150:
 			self.game_over = True

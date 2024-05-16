@@ -1,6 +1,7 @@
 import json
 import socket
 import threading
+import json
 from classes.player import Player
 from classes.hostData import StringList
 
@@ -42,8 +43,6 @@ def handle_client(conn, addr):
 
 	# conn.close()
 
-	import json
-
 def handle_room_client(conn, addr):
 	print(f"[NEW ROOM CONNECTION] {addr} connected.")
 	connected = True
@@ -53,30 +52,44 @@ def handle_room_client(conn, addr):
 		if msg:
 			# Hiển thị dữ liệu nhận được từ client room
 			print(f"[{addr}] Sent message: {msg}")
+			data = json.loads(msg)
+			if extract_pler(str(data)) != None:
+				# print(f"[{addr}] {msg}")
+				senback = "NOPLAY"
+				my_string_list.add_pler(str(get_portt(addr)), extract_pler(str(data)))
+				# senback = my_string_list.get_coordinate(str(get_portt(addr)))
+				conn.send(str(senback).encode(FORMAT))
+			else :
+				# Xử lý dữ liệu JSON
+				try:
+				   	
+					# Thực hiện xử lý dữ liệu của room
+					if extract_after_chat(str(data)) != None:
+						chat = extract_after_chat(str(data))
+						# conn.send(chat.encode(FORMAT))
+						for connnn in conns:
+							connnn.send(chat.encode(FORMAT))
+					elif data != "Lobby connected":
+						handle_room_data(data, addr) 
+						conn.send(str(my_string_list).encode(FORMAT))
+					else:
+						conn.send(str(my_string_list).encode(FORMAT))
 
-			# Xử lý dữ liệu JSON
-			try:
-				data = json.loads(msg)
-			   	
-				# Thực hiện xử lý dữ liệu của room
-				if extract_after_chat(str(data)) != None:
-					chat = extract_after_chat(str(data))
-					# conn.send(chat.encode(FORMAT))
-					for connnn in conns:
-						connnn.send(chat.encode(FORMAT))
-				elif data != "Lobby connected":
-					handle_room_data(data, addr) 
-					conn.send(str(my_string_list).encode(FORMAT))
-				else:
-					conn.send(str(my_string_list).encode(FORMAT))
-
-			except json.JSONDecodeError as e:
-				print(f"[ERROR] Invalid JSON format: {e}")
+				except json.JSONDecodeError as e:
+					print(f"[ERROR] Invalid JSON format: {e}")
 
 	conn.close()
 
 def extract_after_chat(string):
     keyword = "chat/"
+    index = string.find(keyword)
+    if index != -1:
+        return string[index + len(keyword):]
+    else:
+        return None
+
+def extract_pler(string):
+    keyword = "pler/"
     index = string.find(keyword)
     if index != -1:
         return string[index + len(keyword):]
