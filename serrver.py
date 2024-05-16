@@ -59,7 +59,7 @@ def handle_room_client(conn, addr):
 				data = json.loads(msg)
 			   	
 				# Thực hiện xử lý dữ liệu của room
-				if data != "con cak":
+				if data != "Lobby connected":
 					handle_room_data(data, addr)
 				conn.send(str(my_string_list).encode(FORMAT))
 			except json.JSONDecodeError as e:

@@ -56,7 +56,7 @@ class WaitingRoom:
         self.room_list = []  # Danh sách phòng mẫu
 
         try:
-            self.client_socket.sendall(json.dumps("con cak").encode())
+            self.client_socket.sendall(json.dumps("Lobby connected").encode())
 
             # Nhận phản hồi từ server
             response = self.client_socket.recv(4096).decode()
@@ -215,8 +215,8 @@ class WaitingRoom:
 
             for i in range(len(create_room_form.responStrLs.strings)):
                 new_room = {"name": create_room_form.responStrLs.name[i],
-                             "players": str(create_room_form.responStrLs.player[i]), 
-                             "code": create_room_form.responStrLs.strings[i]}
+                            "players": str(create_room_form.responStrLs.player[i]), 
+                            "code": create_room_form.responStrLs.strings[i]}
                 self.room_list.append(new_room)
 
             self.creating_room= False
