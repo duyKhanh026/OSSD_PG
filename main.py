@@ -19,7 +19,7 @@ class Main:
                 # Player_client().run()
                 while lobby.option != 3:
                     lobby.run()
-                lobby.option = -1  
+                lobby.option = -1
             menu.play_option = -1
 
 if __name__ == "__main__":

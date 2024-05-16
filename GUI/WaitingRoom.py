@@ -52,7 +52,6 @@ class WaitingRoom2:
 
         # Chạy vòng lặp chính
         self.running = True
-        self.main_loop()
 
     def draw_interface(self):
         # Vẽ hình nền

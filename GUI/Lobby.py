@@ -202,9 +202,9 @@ class WaitingRoom:
         if self.option == 1:  # Nút "Join Room"
             if self.selected_room_code:
                 print(f"Selected Room Code: {self.selected_room_code}")
-                waitingR = WaitingRoom2()
-                while waitingR.running:
-                    waitingR.run()
+            waitingR = WaitingRoom2(self.screen)
+            while waitingR.running:
+                waitingR.run()
             self.option = -1
 
         elif self.option == 2:  # Nút "Create Room"
