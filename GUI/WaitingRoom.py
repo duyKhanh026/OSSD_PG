@@ -1,14 +1,16 @@
 import pygame
 import sys
-import socket
 import json
+import threading
 
 class WaitingRoom2:
-    def __init__(self, surface, roomCode):
+    def __init__(self, surface, roomCode, client_socket):
 
         # Kích thước màn hình
         self.screen_width, self.screen_height = surface.get_size()
         self.roomCode = roomCode
+
+        self.client_socket = client_socket
 
         # Màu sắc
         self.WHITE = (255, 255, 255)
@@ -55,6 +57,10 @@ class WaitingRoom2:
 
         # Chạy vòng lặp chính
         self.running = True
+        
+        # Khởi tạo và bắt đầu luồng nhận tin nhắn
+        message_receiver = MessageReceiver(self.client_socket, self.chat_messages)
+        message_receiver.start()
 
     def draw_interface(self):
         # Vẽ hình nền
@@ -132,7 +138,7 @@ class WaitingRoom2:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     # gửi đoạn chat đén server và server gửi lại chat
-                    self.chat_messages.append(sendChat_message(self.input_text))
+                    self.chat_messages.append(sendChat_message(self.input_text, self.client_socket))
                     # sendChat_message(self.input_text)
                     self.input_text = ""
                 elif event.key == pygame.K_BACKSPACE:
@@ -140,26 +146,46 @@ class WaitingRoom2:
                 else:
                     self.input_text += event.unicode
 
-    def run(self):            
+    # Bạn có thể gọi hàm này trong vòng lặp chính của ứng dụng của bạn, ví dụ:
+    def run(self):
         self.handle_events()
         self.draw_interface()
+        
 
-def sendChat_message(chat):
-    server_address=('127.0.0.1', 5050)
-    server_address = server_address
-    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_socket.connect(server_address)
+
+def sendChat_message(chat, client_socket):
+    # server_address=('127.0.0.1', 5050)
+    # server_address = server_address
+    # client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    # client_socket.connect(server_address)
     response = ""
     try:
         client_socket.sendall(json.dumps("chat/" + chat).encode())
-
-        # Nhận phản hồi từ server
-        response = client_socket.recv(4096).decode()
-
     except Exception as e:
         print("Error:", e)
-    client_socket.close()
+    # client_socket.close()
     return response
+
+def receive_chat_message(client_socket):
+    try:
+        message = client_socket.recv(4096).decode()
+        return message
+    except Exception as e:
+        print("Error receiving message from server:", e)
+        return None
+
+class MessageReceiver(threading.Thread):
+    def __init__(self, client_socket, chat_messages):
+        threading.Thread.__init__(self)
+        self.client_socket = client_socket
+        self.chat_messages = chat_messages
+        self.running = True
+
+    def run(self):
+        while self.running:
+            message = receive_chat_message(self.client_socket)
+            if message:
+                self.chat_messages.append(message)
 
 class Player:
     def __init__(self, name, character):
@@ -172,5 +198,3 @@ class Character:
         self.name = name
         self.image = image
 
-if __name__ == "__main__":
-    WaitingRoom()

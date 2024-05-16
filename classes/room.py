@@ -9,10 +9,11 @@ class Room:
         self.player = player
 
 class RoomClient:
-    def __init__(self, server_address=('127.0.0.1', 5050)):
-        self.server_address = server_address
-        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.client_socket.connect(self.server_address)
+    def __init__(self, client_socket):
+        # self.server_address = server_address
+        # self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # self.client_socket.connect(self.server_address)
+        self.client_socket = client_socket
 
     def create_room(self, room):
         try:

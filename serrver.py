@@ -40,13 +40,12 @@ def handle_client(conn, addr):
 				senback = my_string_list.get_coordinate(str(get_portt(addr)))
 			conn.send(str(senback).encode(FORMAT))
 
-	conn.close()
+	# conn.close()
 
 	import json
 
 def handle_room_client(conn, addr):
 	print(f"[NEW ROOM CONNECTION] {addr} connected.")
-
 	connected = True
 	while connected:
 		# Nhận dữ liệu từ client room
@@ -66,12 +65,10 @@ def handle_room_client(conn, addr):
 					for connnn in conns:
 						connnn.send(chat.encode(FORMAT))
 				elif data != "Lobby connected":
-					handle_room_data(data, conn, addr)
+					handle_room_data(data, addr)
 					conn.send(str(my_string_list).encode(FORMAT))
-					print("tao conn1")
 				else:
 					conn.send(str(my_string_list).encode(FORMAT))
-					print("tao conn2")
 
 			except json.JSONDecodeError as e:
 				print(f"[ERROR] Invalid JSON format: {e}")
@@ -86,7 +83,7 @@ def extract_after_chat(string):
     else:
         return None
 
-def handle_room_data(data, conn,addr):
+def handle_room_data(data ,addr):
 	# Xử lý dữ liệu của room ở đây
 	# Ví dụ:
 	room_code = data.get("code")

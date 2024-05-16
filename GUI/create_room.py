@@ -6,8 +6,9 @@ from classes.hostData import StringList
 
 
 class CreateRoomForm:
-    def __init__(self, surface):
+    def __init__(self, surface, client):
         self.screen = surface
+        self.client = client
         self.SCREEN_WIDTH, self.SCREEN_HEIGHT = surface.get_size()
 
         # Màu sắc
@@ -58,7 +59,7 @@ class CreateRoomForm:
                     mouse_pos = pygame.mouse.get_pos()
                     if self.create_button_rect.collidepoint(mouse_pos):
                         room= Room(self.generate_room_code(),self.input_text,1)
-                        roomclient= RoomClient()
+                        roomclient= RoomClient(self.client)
                         self.responStrLs = roomclient.create_room(room)
 
                         self.running = False
