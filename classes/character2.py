@@ -16,16 +16,18 @@ class Character2(Player): # the blue guy
 			self.walkCount = 0
 		if self.kicAcount + 1 >= 42: # 7frame
 			self.kicAcount = 0
-		if self.sp1count + 1 >= 114: # 19 frame
-			self.skill1 = True
-			self.sp1count = 113
+		# if self.sp1count + 1 >= 114: # 19 frame
+		# 	self.skill1 = True
 		if self.idlecount >= 30:
 			self.idlecount = 0
 
-		if self.state == 'SP1':
+		if self.state == 'SP1' and self.max_health == 100:
 			self.ulti = True
 			self.max_health = 200
-			self.health = self.max_health
+			print(self.health)
+			self.health = self.health * 2
+			print(self.health)
+			self.state = 'NO'
 
 		if self.ulti:
 			if self.state == 'ATK':
