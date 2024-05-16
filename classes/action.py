@@ -13,9 +13,12 @@ def check_collision(p1, p2):
 		return py.Rect(p1.rect.x - p1.hitbox,p1.rect.y, 100,100).colliderect(p2.rect)
 
 
-def handle_attack(attacker, victim):
+def handle_attack(attacker, victim, newdame=None):
 	if attacker == None or check_collision(attacker, victim) :
-		victim.health -= DAMAGE
+		if (newdame==None):
+			victim.health -= DAMAGE
+		else:
+			victim.health -= newdame
 		return True
 	return False
 
