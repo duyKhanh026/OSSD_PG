@@ -18,15 +18,17 @@ cd OSSD_PG
 - pip install pygame
 - pip install torch
 - pip install numpy
+- pip install mysql-connector-python
 
 
 ### LIBARIES
-- Pygame: Pygame is a cross-platform set of Python modules designed for writing video games. It provides capabilities for creating and managing graphics, sound, and user input, making it an excellent choice for developing interactive applications and games.
+- Pygame is a cross-platform set of Python modules designed for writing video games. It provides capabilities for creating and managing graphics, sound, and user input, making it an excellent choice for developing interactive applications and games.
 
-- Torch: Torch is a scientific computing framework with wide support for machine learning algorithms. It provides a powerful array library and a collection of neural network models, making it suitable for building and training deep learning models.
+- Torch is a scientific computing framework with wide support for machine learning algorithms. It provides a powerful array library and a collection of neural network models, making it suitable for building and training deep learning models.
 
-- Numpy: Numpy is the fundamental package for scientific computing in Python. It provides support for large, multi-dimensional arrays and matrices, along with a wide range of mathematical functions to operate on these arrays efficiently.
+- Numpy is the fundamental package for scientific computing in Python. It provides support for large, multi-dimensional arrays and matrices, along with a wide range of mathematical functions to operate on these arrays efficiently.
 
+- MySQL is one of the most popular open-source relational database management systems. It is widely used for managing and organizing structured data. In Python, you can interact with MySQL databases
 
 ### Step 4: Run the game
 Once you have installed all the dependencies, you can run the game using the following command in terminal:
