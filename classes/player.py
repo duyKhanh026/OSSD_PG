@@ -157,8 +157,10 @@ class Player:
 		self.square_y_speed += self.GRAVITY
 		self.rect.y += self.square_y_speed
 
-		# Kiểm tra va chạm với mặt đấtma
-		if self.rect.x > 200 and self.rect.x < 1200:
+		
+
+		# Kiểm tra va chạm với mặt đất ma
+		if self.rect.x > 150 and self.rect.x < 1250:
 			if self.rect.y >= 600 - self.rect.height:
 				self.rect.y = 600 - self.rect.height
 				self.square_y_speed = 0
@@ -166,6 +168,7 @@ class Player:
 		else:
 			self.on_ground = False
 		player_rect = self.rect
+		
 		for rect_pos_x, rect_pos_y, rect_width, rect_height in [(350, 600, 1500 - 650, 800), 
 																(150, 375, 1500 - 1430, 800 - 750), 
 																(700, 250, 1500 - 1240, 800 - 700), 
