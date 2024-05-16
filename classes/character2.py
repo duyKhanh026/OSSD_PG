@@ -24,6 +24,8 @@ class Character2(Player): # the blue guy
 
 		if self.state == 'SP1':
 			self.ulti = True
+			self.max_health = 200
+			self.health = self.max_health
 
 		if self.ulti:
 			if self.state == 'ATK':
