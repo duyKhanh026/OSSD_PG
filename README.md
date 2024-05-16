@@ -43,16 +43,16 @@ python main.py
 
 ## Advantages of the project
 
-Skill Development: Playing a fighting game requires mastering various techniques, timing, and strategies, which can enhance players' reflexes, decision-making skills, and hand-eye coordination.
+- Skill Development: Playing a fighting game requires mastering various techniques, timing, and strategies, which can enhance players' reflexes, decision-making skills, and hand-eye coordination.
 
-Social Interaction: Two-player fighting games encourage social interaction and friendly competition among players, fostering camaraderie and social bonding.
+- Social Interaction: Two-player fighting games encourage social interaction and friendly competition among players, fostering camaraderie and social bonding.
 
-Variety of Moves and Characters: With a wide range of moves, combos, and characters to choose from, players have the opportunity to experiment and develop their own unique playstyles.
+- Variety of Moves and Characters: With a wide range of moves, combos, and characters to choose from, players have the opportunity to experiment and develop their own unique playstyles.
 
-AI Gameplay: The inclusion of AI opponents provides players with the option to enjoy the game even when friends are not available, offering challenging matches and opportunities for skill improvement in single-player mode.
+- AI Gameplay: The inclusion of AI opponents provides players with the option to enjoy the game even when friends are not available, offering challenging matches and opportunities for skill improvement in single-player mode.
 
 ## Disadvantages of the project
 
-Limited Combo Options: The game may have a limited number of combo moves, potentially reducing the depth of gameplay and variety of strategies available to players.
+- Limited Combo Options: The game may have a limited number of combo moves, potentially reducing the depth of gameplay and variety of strategies available to players.
 
-Limited AI Complexity: The current AI implementation may only execute simple actions, lacking the depth and adaptability of human players. As a result, single-player matches against AI opponents may feel predictable and less engaging compared to playing against human opponents. 
+- Limited AI Complexity: The current AI implementation may only execute simple actions, lacking the depth and adaptability of human players. As a result, single-player matches against AI opponents may feel predictable and less engaging compared to playing against human opponents. 
