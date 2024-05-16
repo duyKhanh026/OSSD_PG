@@ -2,6 +2,11 @@ import pygame
 import sys
 import os
 import time
+import socket
+import json
+from GUI.create_room import CreateRoomForm
+from classes.hostData import StringList
+from GUI.WaitingRoom import WaitingRoom2
 
 class WaitingRoom:
     def __init__(self, surface):
@@ -29,9 +34,9 @@ class WaitingRoom:
         os.environ['SDL_VIDEO_WINDOW_POS'] = f"{self.x_pos},{self.y_pos}"
 
         # Chọn font từ các font có sẵn trong hệ thống
-        self.font_title = self.font_vietnamese = pygame.font.Font(self.font_path, 108)
-        self.font_button = self.font_vietnamese = pygame.font.Font(self.font_path, 30)
-        self.font_player = self.font_vietnamese = pygame.font.Font(self.font_path, 40)
+        self.font_title = pygame.font.Font(self.font_path, 108)
+        self.font_button = pygame.font.Font(self.font_path, 30)
+        self.font_player = pygame.font.Font(self.font_path, 40)
 
         # Kích thước và màu sắc của nút
         self.BUTTON_WIDTH = 200
@@ -42,24 +47,32 @@ class WaitingRoom:
 
         # Biến lưu trữ index của hàng được chọn
         self.selected_index = -1
+        self.selected_room_code = None  # Biến lưu mã phòng đã chọn
 
-        self.room_list = [
-            {"name": "Người lái đò", "players": 1, "code": "ABC123"},
-            {"name": "Chiến thắng Điện Biên Phủ", "players": 2, "code": "DEF456"},
-            {"name": "Không thể kết thúc", "players": 1, "code": "GHI789"},
-            {"name": "Quá mệt mỏi", "players": 2, "code": "JKL012"},
-            {"name": "Solo ys", "players": 2, "code": "MNO345"},
-            {"name": "Thua làm chóa", "players": 1, "code": "PQR678"},
-            {"name": "1vs1", "players": 2, "code": "STU901"},
-            {"name": "Ai win thì thua", "players": 1, "code": "VWX234"},
-            {"name": "Nobody said yes", "players": 1, "code": "YZA567"},
-            {"name": "*********", "players": 2, "code": "BCD890"},
-            {"name": "Mật khẩu : 123", "players": 1, "code": "EFG123"},
-            {"name": "Solo yasuoooooooooooooo", "players": 2, "code": "HIJ456"},
-            {"name": "Rất là mệt nhé", "players": 1, "code": "KLM789"},
-            {"name": "Cần tìm đối mạnh", "players": 2, "code": "NOP012"},
-            {"name": "Siêu dự bị", "players": 1, "code": "QRS345"}
-        ]  # Danh sách phòng mẫu
+        server_address=('127.0.0.1', 5050)
+        self.server_address = server_address
+        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client_socket.connect(self.server_address)
+
+        self.room_list = []  # Danh sách phòng mẫu
+
+        try:
+            self.client_socket.sendall(json.dumps("Lobby connected").encode())
+
+            # Nhận phản hồi từ server
+            response = self.client_socket.recv(4096).decode()
+            responSrlist = StringList()
+            responSrlist.from_string(response)
+            print(str(len(responSrlist.strings)))
+            if responSrlist.strings[0] != "":
+                for i in range(len(responSrlist.strings)):
+                    new_room = {"name": responSrlist.name[i],
+                                "players": str(responSrlist.player[i]), 
+                                "code": responSrlist.strings[i]}
+                    # Thêm phần tử mới vào danh sách
+                    self.room_list.append(new_room)
+        except Exception as e:
+            print("Error:", e)
 
         self.scroll_pos = 0
 
@@ -69,6 +82,9 @@ class WaitingRoom:
         # Biến cờ để theo dõi trạng thái của việc nhấn chuột
         self.clicked = False
         self.option = -1
+
+        # Tạo form create
+        self.creating_room = False
 
     # Hàm để vẽ một nút
     def draw_button(self, text, x, y):
@@ -112,59 +128,48 @@ class WaitingRoom:
                 pygame.draw.rect(self.screen, (0, 255, 0), room_rect)  # Chọn màu xanh lá cây cho hàng được chọn
 
             # Vẽ thông tin phòng
-            room_text_color = (255, 255, 255) if room['players'] < 2 else (150, 150, 150)  # Màu chữ phòng thay đổi khi có ít nhất 2 người chơi
+            room_text_color = (255, 255, 255) if int(room['players']) < 2 else (150, 150, 150)  # Màu chữ phòng thay đổi khi có ít nhất 2 người chơi
 
-            # Vẽ thông tin phòng
             room_name_text = self.font_vietnamese.render(f"Room {i+1}: {room['name']}", True, room_text_color)
             player_count_text = self.font_vietnamese.render(f"{room['players']} / 2", True, room_text_color)
 
-            # Lấy kích thước của văn bản để tính toán vị trí
             room_name_text_rect = room_name_text.get_rect(left=room_rect.left , centery=room_rect.centery)
             player_count_text_rect = player_count_text.get_rect(right=room_rect.right - 10, centery=room_rect.centery)
 
-            # Đặt khoảng cách giữa 2 phần văn bản là 10 pixel
             spacing = 10
 
-            # Cập nhật vị trí của văn bản
             room_name_text_rect.width = room_rect.width * 1/3 - spacing
             player_count_text_rect.width = room_rect.width * 1/3 - spacing
 
-            # Đặt vị trí của văn bản room_name_text ở bên trái của room_rect
             room_name_text_rect.right = room_name_text_rect.left + room_name_text_rect.width
-
-            # Đặt vị trí của văn bản player_count_text ở bên phải của room_rect
             player_count_text_rect.left = player_count_text_rect.right - player_count_text_rect.width
 
-            # Vẽ văn bản
             self.screen.blit(room_name_text, room_name_text_rect)
             self.screen.blit(player_count_text, player_count_text_rect)
 
             # Chỉ cho phép chọn phòng khi có ít hơn 2 người chơi
-            if room['players'] < 2 and room_rect.collidepoint(pygame.mouse.get_pos()):
-                # In ra id của hàng nếu chuột được click
+            if int(room['players']) < 2 and room_rect.collidepoint(pygame.mouse.get_pos()):
                 if pygame.mouse.get_pressed()[0]:  # Kiểm tra nút chuột trái được click hay không
                     print(f"Selected Room ID: {i+1}")
-                    time.sleep(0.2)  # Chờ 0.2s trước khi nhận input tiếp theo
                     self.selected_index = i
+                    self.selected_room_code = room['code']  # Lưu mã phòng đã chọn
+                    time.sleep(0.2)  # Chờ 0.2s trước khi nhận input tiếp theo
 
         # Vẽ thanh cuộn
         scrollbar_rect = pygame.Rect(table_rect.right + 5, table_rect.top, 20, self.table_height)
         pygame.draw.rect(self.screen, (200, 200, 200), scrollbar_rect)
-        # Tính toán vị trí và chiều cao của nút cuộn
-        thumb_height = self.table_height / len(self.room_list) * num_visible_rows
-        thumb_pos = self.scroll_pos / len(self.room_list) * self.table_height
-        thumb_rect = pygame.Rect(scrollbar_rect.left + 5, scrollbar_rect.top + thumb_pos, 10, thumb_height)
-        pygame.draw.rect(self.screen, (100, 100, 100), thumb_rect)
+        if len(self.room_list) > 0:
+            thumb_height = self.table_height / len(self.room_list) * num_visible_rows
+            thumb_pos = self.scroll_pos / len(self.room_list) * self.table_height
+            thumb_rect = pygame.Rect(scrollbar_rect.left + 5, scrollbar_rect.top + thumb_pos, 10, thumb_height)
+            pygame.draw.rect(self.screen, (100, 100, 100), thumb_rect)
 
-        # Vẽ nút
         self.draw_button("Join Room", 2.34 * (self.SCREEN_WIDTH // 3) + self.BUTTON_MARGIN, self.SCREEN_HEIGHT // 3)
         self.draw_button("Create Room", 2.34 * (self.SCREEN_WIDTH // 3) + self.BUTTON_MARGIN, self.SCREEN_HEIGHT // 3 + (self.BUTTON_HEIGHT + self.BUTTON_MARGIN))
         self.draw_button("Back", 2.34 * (self.SCREEN_WIDTH // 3) + self.BUTTON_MARGIN, self.SCREEN_HEIGHT // 3 + 2 * (self.BUTTON_HEIGHT + self.BUTTON_MARGIN))
         pygame.display.flip()
 
-    # Hàm chính
     def run(self):
-        # Biến cờ để theo dõi trạng thái của việc nhấn chuột
         clicked = False
         self.draw_waiting_room()
         for event in pygame.event.get():
@@ -184,26 +189,37 @@ class WaitingRoom:
                     if 2.34 * (self.SCREEN_WIDTH // 3) + self.BUTTON_MARGIN <= mouse_x <= 2.34 * (self.SCREEN_WIDTH // 3) + self.BUTTON_MARGIN + self.BUTTON_WIDTH:
                         if self.SCREEN_HEIGHT // 3 <= mouse_y <= self.SCREEN_HEIGHT // 3 + self.BUTTON_HEIGHT:
                             self.option = 1
-                            print("chon 1")
                         if self.SCREEN_HEIGHT // 3 + (self.BUTTON_HEIGHT + self.BUTTON_MARGIN) <= mouse_y <= self.SCREEN_HEIGHT // 3 + (self.BUTTON_HEIGHT + self.BUTTON_MARGIN) + self.BUTTON_HEIGHT:
                             self.option = 2
-                            print("chon 2")
                         if self.SCREEN_HEIGHT // 3 + 2 * (self.BUTTON_HEIGHT + self.BUTTON_MARGIN) <= mouse_y <= self.SCREEN_HEIGHT // 3 + 2 * (self.BUTTON_HEIGHT + self.BUTTON_MARGIN) + self.BUTTON_HEIGHT:
                             self.option = 3
-                            print("chon 3")
-                # Xác định khi nào chuột được nhấn xuống lần đầu tiên
                 clicked = True
 
         if clicked and not pygame.mouse.get_pressed()[0]:
-            # Chờ 0.2s trước khi nhận input tiếp theo
             clicked = False
 
+        if self.option == 1:  # Nút "Join Room"
+            if self.selected_room_code:
+                print(f"Selected Room Code: {self.selected_room_code}")
+                waitingR = WaitingRoom2(self.screen, self.selected_room_code, self.client_socket)
+                while waitingR.running:
+                    waitingR.run()
+            self.option = -1
 
-# Chạy trò chơi
-if __name__ == "__main__":
-    pygame.init()
-    screen = pygame.display.set_mode((1500, 800))
-    pygame.display.set_caption('LOBBY')
-    game = WaitingRoom(screen)
-    while True:
-        game.run()
+        elif self.option == 2:  # Nút "Create Room"
+            self.creating_room = True  # Vẽ form nhập liệu
+            self.option = -1
+
+        if self.creating_room:  # Nếu đang hiển thị form tạo phòng
+            create_room_form = CreateRoomForm(self.screen, self.client_socket)
+            
+            while create_room_form.running:
+                create_room_form.run()  # Vẽ form nhập liệu
+
+            for i in range(len(create_room_form.responStrLs.strings)):
+                new_room = {"name": create_room_form.responStrLs.name[i],
+                            "players": str(create_room_form.responStrLs.player[i]), 
+                            "code": create_room_form.responStrLs.strings[i]}
+                self.room_list.append(new_room)
+
+            self.creating_room= False

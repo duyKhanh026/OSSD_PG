@@ -95,8 +95,8 @@ class Player:
 		# 	py.draw.rect(surface, self.color, py.Rect(self.rect.x - self.hitbox,self.rect.y, 100,100))
 
 		self.redrawGameWindow(surface)
-		py.draw.line(surface, (26, 243, 0), (self.rect.x, 0), (self.rect.x, 800))
-		py.draw.line(surface, (26, 243, 0), (0, self.rect.y), (1500, self.rect.y))
+		# py.draw.line(surface, (26, 243, 0), (self.rect.x, 0), (self.rect.x, 800))
+		# py.draw.line(surface, (26, 243, 0), (0, self.rect.y), (1500, self.rect.y))
 		font = py.font.SysFont(None, 16)
 		text = font.render(' (' + str(self.rect.x) + ',' + str(self.rect.y) + ')', True, (255, 255,255))
 		surface.blit(text, (self.rect.x, 10))
@@ -156,11 +156,13 @@ class Player:
 
 	def move_logic(self, key):
 		# Áp dụng trọng lực
-		if not self.on_ground:
-			self.square_y_speed += self.GRAVITY
-			self.rect.y += self.square_y_speed
+		# if not self.on_ground or self.rect.y >= 600 - self.rect.height:
+		self.square_y_speed += self.GRAVITY
+		self.rect.y += self.square_y_speed
 
-		# Kiểm tra va chạm với mặt đất
+		
+
+		# Kiểm tra va chạm với mặt đất ma
 		if self.rect.x > 150 and self.rect.x < 1250:
 			if self.rect.y >= 600 - self.rect.height:
 				self.rect.y = 600 - self.rect.height
@@ -168,6 +170,27 @@ class Player:
 				self.on_ground = True
 		else:
 			self.on_ground = False
+		player_rect = self.rect
+		
+		for rect_pos_x, rect_pos_y, rect_width, rect_height in [(350, 600, 1500 - 650, 800), 
+																(150, 375, 1500 - 1430, 800 - 750), 
+																(700, 250, 1500 - 1240, 800 - 700), 
+																(1175, 325, 1500 - 1275, 800 - 700)]:
+			rect = py.Rect(rect_pos_x, rect_pos_y, rect_width, rect_height)
+			if player_rect.colliderect(rect):
+				# Xử lý va chạm ở đây
+				# Ví dụ: khi va chạm, bạn có thể đặt vị trí của người chơi để không đi qua hình chữ nhật
+				if self.square_y_speed > 0:  # Nếu đối tượng đang đi xuống
+					self.rect.bottom = rect.top  # Đặt vị trí dưới cùng của đối tượng bằng vị trí trên cùng của hình chữ nhật
+					self.square_y_speed = 0
+					self.on_ground = True
+					  # Đặt vận tốc y về 0 để ngăn đối tượng tiếp tục đi xuống
+				# elif self.square_y_speed < 0:  # Nếu đối tượng đang đi lên
+				# 	self.rect.top = rect.bottom  # Đặt vị trí trên cùng của đối tượng bằng vị trí dưới cùng của hình chữ nhật
+				# 	self.square_y_speed = 0  # Đặt vận tốc y về 0 để ngăn đối tượng tiếp tục đi lên
+
+		
+
 
 		# Giới hạn không cho khối vuông đi quá biên
 		if self.rect.x < 0:

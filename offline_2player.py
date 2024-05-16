@@ -17,11 +17,12 @@ class Offline_2player:
         # py.display.set_caption('Fighting Game')
         self.screen = screen
         self.player1 = Character1(200, 50, 'blue/stickman_blade', 300, 150, RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L')
-        self.player2 = Character2(200, 80, 'purple/stickman', 1200, 150, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_KP1, py.K_KP2, py.K_KP3, py.K_p, 'R')
+        self.player2 = Character2(200, 80, 'purple/stickman', 1100, 150, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_b, py.K_n, py.K_m, py.K_p, 'R')
         self.player1.name = 'player1'
         self.player2.name = 'player2'
         self.clock = py.time.Clock()
-        bg = py.image.load(f'assets/bg2.jpg')
+        bg = py.image.load(f'assets/mapgame.jpg')
+        
         self.settingBtn = py.image.load(f'assets/setting.png')
         self.settingClicked = False
         self.bg1 = py.transform.scale(bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -108,7 +109,26 @@ class Offline_2player:
 
     def _update_ui(self):
         self.screen.fill(BLACK)
-        py.draw.rect(self.screen, (157,157,157), py.Rect(200, 600, SCREEN_WIDTH - 400, SCREEN_HEIGHT))
+        self.screen.blit(self.bg1, (0, 0))
+
+        # Vẽ hình chữ nhật mờ trong suốt
+        bg_rect = py.Surface((SCREEN_WIDTH - 500, SCREEN_HEIGHT), py.SRCALPHA)
+        bg_rect.fill((157, 157, 157, 0))  # Màu với alpha = 128
+        self.screen.blit(bg_rect, (250, 600))  # Vị trí và kích thước của hình chữ nhật
+
+        bg_rect = py.Surface((SCREEN_WIDTH - 1350, SCREEN_HEIGHT-750), py.SRCALPHA)
+        bg_rect.fill((157, 157, 157, 0))  # Màu với alpha = 128
+        self.screen.blit(bg_rect, (100, 400))  # Vị trí và kích thước của hình chữ nhật
+
+        bg_rect = py.Surface((SCREEN_WIDTH - 1200, SCREEN_HEIGHT-700), py.SRCALPHA)
+        bg_rect.fill((157, 157, 157, 0))  # Màu với alpha = 128
+        self.screen.blit(bg_rect, (650, 250))  # Vị trí và kích thước của hình chữ nhật 
+
+        bg_rect = py.Surface((SCREEN_WIDTH - 1250, SCREEN_HEIGHT-700), py.SRCALPHA)
+        bg_rect.fill((157, 157, 157, 0))  # Màu với alpha = 128
+        self.screen.blit(bg_rect, (1150, 350))  # Vị trí và kích thước của hình chữ nhật 
+
+
         # vẽ sọc trắng lên màn hình
         line_spacing = 50
         for y in range(0, SCREEN_HEIGHT, line_spacing):
@@ -138,7 +158,7 @@ class Offline_2player:
                 self.game_over = (1 if player == self.player1 else 2) 
 
         if self.player1.skill_active(self.screen, self.player2):
-            handle_attack(None, self.player2)
+            handle_attack(None, self.player2,1)
             self.pushed_side(self.player1, self.player2)
 
         self.attack_confirmation(self.player1, 10, toadoInfo)
