@@ -17,7 +17,7 @@ class Offline_2player:
         # py.display.set_caption('Fighting Game')
         self.screen = screen
         self.player1 = Character1(200, 50, 'blue/stickman_blade', 300, 150, RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L')
-        self.player2 = Character2(200, 80, 'purple/stickman', 1200, 150, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_b, py.K_n, py.K_m, py.K_p, 'R')
+        self.player2 = Character2(200, 80, 'purple/stickman', 1100, 150, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_b, py.K_n, py.K_m, py.K_p, 'R')
         self.player1.name = 'player1'
         self.player2.name = 'player2'
         self.clock = py.time.Clock()
@@ -113,19 +113,19 @@ class Offline_2player:
 
         # Vẽ hình chữ nhật mờ trong suốt
         bg_rect = py.Surface((SCREEN_WIDTH - 500, SCREEN_HEIGHT), py.SRCALPHA)
-        bg_rect.fill((157, 157, 157, 128))  # Màu với alpha = 128
+        bg_rect.fill((157, 157, 157, 0))  # Màu với alpha = 128
         self.screen.blit(bg_rect, (250, 600))  # Vị trí và kích thước của hình chữ nhật
 
         bg_rect = py.Surface((SCREEN_WIDTH - 1350, SCREEN_HEIGHT-750), py.SRCALPHA)
-        bg_rect.fill((157, 157, 157, 128))  # Màu với alpha = 128
+        bg_rect.fill((157, 157, 157, 0))  # Màu với alpha = 128
         self.screen.blit(bg_rect, (100, 400))  # Vị trí và kích thước của hình chữ nhật
 
         bg_rect = py.Surface((SCREEN_WIDTH - 1200, SCREEN_HEIGHT-700), py.SRCALPHA)
-        bg_rect.fill((157, 157, 157, 128))  # Màu với alpha = 128
+        bg_rect.fill((157, 157, 157, 0))  # Màu với alpha = 128
         self.screen.blit(bg_rect, (650, 250))  # Vị trí và kích thước của hình chữ nhật 
 
         bg_rect = py.Surface((SCREEN_WIDTH - 1250, SCREEN_HEIGHT-700), py.SRCALPHA)
-        bg_rect.fill((157, 157, 157, 128))  # Màu với alpha = 128
+        bg_rect.fill((157, 157, 157, 0))  # Màu với alpha = 128
         self.screen.blit(bg_rect, (1150, 350))  # Vị trí và kích thước của hình chữ nhật 
 
 
