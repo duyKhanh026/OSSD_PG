@@ -58,26 +58,26 @@ class StringList:
     def __str__(self):
         # Tạo một chuỗi đại diện cho đối tượng Player
         user_info = [
-            ','.join(self.strings),  # 0
-            ','.join(self.player),  # 0
-            ','.join(self.coordinates),  # 0
-            ','.join(self.name),  # 1
-            ','.join(self.code)  # 1
+            ';'.join(self.strings),  # 0
+            ';'.join(self.player),  # 0
+            ';'.join(self.coordinates),  # 0
+            ';'.join(self.name),  # 1
+            ';'.join(self.code)  # 1
         ]
         print("user:  " + str(user_info))
-        return ";".join(user_info)
+        return "#".join(user_info)
 
     def from_string(self, user_info):
         # chuyển string lấy từ server thành giá trị cho player
         # values = user_info.split(",")
-        parts = user_info.split(';')
+        parts = user_info.split('#')
 
         # Tách từng phần thành các danh sách tương ứng
-        self.strings = parts[0].split(',')
-        self.player = [str(int(p) + 1) for p in parts[1].split(',')]  # tăng giá trị của player thêm 1
-        self.coordinates = parts[2].split(',')
-        self.name = parts[3].split(',')
-        self.code = parts[4].split(',')
+        self.strings = parts[0].split(';')
+        self.player = parts[1].split(';')
+        self.coordinates = parts[2].split(';')
+        self.name = parts[3].split(';')
+        self.code = parts[4].split(';')
 
        
         print(self.strings)

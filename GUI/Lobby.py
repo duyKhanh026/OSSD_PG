@@ -242,7 +242,7 @@ class WaitingRoom:
                 
                 # Lấy thông tin của phòng được chọn từ danh sách các phòng
                 selected_room_name = next(room for room in self.room_list if room['code'] == self.selected_room_code)
-                sp=int(selected_room_name['players'])
+                sp=int(selected_room_name['players']) + 1
                 print(str(sp)+"......................")
                 # Tăng số lượng người chơi trong phòng lên 1
                 data = {
