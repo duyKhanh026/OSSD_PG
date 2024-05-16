@@ -10,8 +10,10 @@ Firstly, you need to install Python on your computer if you haven't already. You
 ### Step 2: Setup environment
 
 ### Step 3: Install framework and libaries
-- $pip install
--
+- pip install pygame
+- pip install torch
+- pip install numpy
+
 
 ### LIBARIES
 - Pygame
