@@ -4,13 +4,14 @@ import json
 import threading
 
 class WaitingRoom2:
-    def __init__(self, surface, roomCode, client_socket):
+    def __init__(self, surface, roomCode, client_socket, room_name):
 
         # Kích thước màn hình
         self.screen_width, self.screen_height = surface.get_size()
         self.roomCode = roomCode
 
         self.client_socket = client_socket
+        self.room_name = room_name  # Lưu tên phòng chờ
 
         # Màu sắc
         self.WHITE = (255, 255, 255)
@@ -49,8 +50,9 @@ class WaitingRoom2:
         self.chat_messages = []
 
         # Tên phòng
-        self.room_name = "Room name: Solo kill"
-        self.room_name_x = (self.screen_width - self.font_name.size(self.room_name)[0]) // 2
+        self.room_name_display = f"Room name: {self.room_name}"
+        self.room_name_x = (self.screen_width - self.font_name.size(self.room_name_display)[0]) // 2
+
 
         # Biến lưu trữ nội dung tin nhắn đang nhập
         self.input_text = ""
@@ -66,8 +68,8 @@ class WaitingRoom2:
         # Vẽ hình nền
         self.screen.blit(self.background_image, (0, 0))
 
-        # Vẽ tên phòng
-        self.draw_text(self.room_name, self.font_name, self.WHITE, self.screen, self.room_name_x, 20)
+       # Vẽ tên phòng
+        self.draw_text(self.room_name_display, self.font_name, self.WHITE, self.screen, self.room_name_x, 20)
 
         # Vẽ tên người chơi và các ô chọn nhân vật
         for i, player in enumerate(self.players):

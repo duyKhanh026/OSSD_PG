@@ -200,8 +200,9 @@ class WaitingRoom:
 
         if self.option == 1:  # Nút "Join Room"
             if self.selected_room_code:
+                selected_room_name = next(room['name'] for room in self.room_list if room['code'] == self.selected_room_code)
                 print(f"Selected Room Code: {self.selected_room_code}")
-                waitingR = WaitingRoom2(self.screen, self.selected_room_code, self.client_socket)
+                waitingR = WaitingRoom2(self.screen, self.selected_room_code, self.client_socket, selected_room_name)
                 while waitingR.running:
                     waitingR.run()
             self.option = -1
