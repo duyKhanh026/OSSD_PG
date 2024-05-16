@@ -16,7 +16,7 @@ cd OSSD_PG
 ### Step 3: Install framework and libaries
 
 - pip install pygame
-- pip install torch
+- pip install torch torchvision torchaudio
 - pip install numpy
 - pip install mysql-connector-python
 
