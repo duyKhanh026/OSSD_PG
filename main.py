@@ -23,8 +23,8 @@ class Main:
             menu.play_option = -1
 
 if __name__ == "__main__":
-    train()
-    # Main().run()
+    # train()
+    Main().run()
     # Offline_2player().start()
     # offline_2player = Offline_2player()
     # lobby = WaitingRoom(offline_2player.screen)
