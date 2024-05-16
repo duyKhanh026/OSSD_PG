@@ -1,7 +1,7 @@
 import pygame
 import sys
 
-class WaitingRoom:
+class WaitingRoom2:
     def __init__(self, surface):
 
         # Kích thước màn hình
@@ -136,7 +136,7 @@ class WaitingRoom:
                 else:
                     self.input_text += event.unicode
 
-    def main_loop(self):            
+    def run(self):            
         self.handle_events()
         self.draw_interface()
 
