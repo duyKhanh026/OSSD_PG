@@ -59,13 +59,9 @@ def handle_room_client(conn, addr):
 				data = json.loads(msg)
 			   	
 				# Thực hiện xử lý dữ liệu của room
-<<<<<<< HEAD
-				if data != "Lobby connected":
-=======
 				if extract_after_chat(str(data)) != None:
 					conn.send(extract_after_chat(str(data)).encode(FORMAT))
-				elif data != "con cak":
->>>>>>> 1fef378ff8014bb2470ed59d34f65418753114bb
+				elif data != "Lobby connected":
 					handle_room_data(data, addr)
 					conn.send(str(my_string_list).encode(FORMAT))
 				else:
