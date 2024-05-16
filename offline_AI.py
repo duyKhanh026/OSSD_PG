@@ -195,7 +195,7 @@ class Offline_AI:
 					self.player2.do_atk()
 				elif move == 1:
 					self.player2.do_kic()
-				elif move == 2:
+				else:
 					self.player2.do_def()
 			
 
