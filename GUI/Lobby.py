@@ -234,15 +234,19 @@ class WaitingRoom:
                 
                 # Lấy thông tin của phòng được chọn từ danh sách các phòng
                 selected_room_name = next(room for room in self.room_list if room['code'] == self.selected_room_code)
-                
+                sp=int(selected_room_name['players'])+1
+                print(str(sp)+"......................")
                 # Tăng số lượng người chơi trong phòng lên 1
                 data = {
                     'code': self.selected_room_code,
                     'name': selected_room_name['name'],
-                    'player': int(selected_room_name['players']) + 1
+                    'player': str(sp)
                 }
                 self.client_socket.send(json.dumps(data).encode())
-
+                response = self.client_socket.recv(4096).decode()
+                responSrlist = StringList()
+                responSrlist.from_string(response)
+                print(responSrlist.player[0]+"-----------------")
                 # Tăng số lượng người chơi trong phòng lên 1
                 selected_room_name['players'] = str(data['player'])
 
