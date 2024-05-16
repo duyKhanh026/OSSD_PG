@@ -16,18 +16,20 @@ class Character2(Player): # the blue guy
 			self.walkCount = 0
 		if self.kicAcount + 1 >= 42: # 7frame
 			self.kicAcount = 0
-		# if self.sp1count + 1 >= 114: # 19 frame
-		# 	self.skill1 = True
+		if self.sp1count + 1 >= 250: # 19 frame
+			self.skill1 = False
+			self.ulti = False
+		elif self.skill1:
+			self.sp1count += 1 
 		if self.idlecount >= 30:
 			self.idlecount = 0
 
 		if self.state == 'SP1' and self.max_health == 100:
 			self.ulti = True
 			self.max_health = 200
-			print(self.health)
 			self.health = self.health * 2
-			print(self.health)
 			self.state = 'NO'
+			self.skill1 = True
 
 		if self.ulti:
 			if self.state == 'ATK':
@@ -50,6 +52,7 @@ class Character2(Player): # the blue guy
 			else :
 				surface.blit(self.charIdle_sp[self.idlecount//6] if self.side == 'L' else py.transform.flip(self.charIdle_sp[self.idlecount//6], True, False), (self.rect.x - self.rect.width, self.rect.y - self.rect.height + 50))
 				self.idlecount += 1
+
 		else : 
 			return super().redrawGameWindow(surface)
 		
