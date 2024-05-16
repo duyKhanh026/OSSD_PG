@@ -62,7 +62,7 @@ def handle_room_client(conn, addr):
 				if extract_after_chat(str(data)) != None:
 					conn.send(extract_after_chat(str(data)).encode(FORMAT))
 				elif data != "Lobby connected":
-					handle_room_data(data, addr)
+					handle_room_data(data, addr) 
 					conn.send(str(my_string_list).encode(FORMAT))
 				else:
 					conn.send(str(my_string_list).encode(FORMAT))
