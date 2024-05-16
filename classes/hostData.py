@@ -3,12 +3,14 @@ class StringList:
     def __init__(self):
         # lưu pid của client 1101,1102 
         self.strings = []
-        # Lưu thông số room dựa theo pid
+        # Lưu tên phòng
         self.name = []
         #Thông số của nhân vật của client đó (dòng cuối player)
         self.coordinates = []
-        #Nó là chủ phòng hay là khách mời
+        #Phòng đang nhiêu đứa
         self.player = []
+
+        self.code = []
 
     def add_string(self, s, information, roomconnect, pler):
         if s not in self.strings:
