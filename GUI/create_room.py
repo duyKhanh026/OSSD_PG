@@ -58,7 +58,7 @@ class CreateRoomForm:
                 if event.button == 1:
                     mouse_pos = pygame.mouse.get_pos()
                     if self.create_button_rect.collidepoint(mouse_pos):
-                        room= Room(self.generate_room_code(),self.input_text,0)
+                        room= Room(self.generate_room_code(),self.input_text,1)
                         roomclient= RoomClient(self.client)
                         self.responStrLs = roomclient.create_room(room)
 
