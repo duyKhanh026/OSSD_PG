@@ -105,7 +105,7 @@ def handle_room_data(data ,addr):
 	room_name = data.get("name")
 	room_player = data.get("player")
 	print(f"Room Code: {room_code}, Name: {room_name}, Player: {room_player}")
-	my_string_list.add_string(str(get_portt(addr)), str(room_name), str(room_player), 'tao ko bt')
+	my_string_list.add_string(str(get_portt(addr)), str(room_name), str(room_player), 'tao ko bt', str(room_code))
 
 	# Thực hiện các thao tác khác tùy thuộc vào dữ liệu nhận được
 

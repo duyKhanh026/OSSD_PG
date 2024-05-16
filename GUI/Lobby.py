@@ -75,7 +75,7 @@ class WaitingRoom:
                 for i in range(len(responSrlist.strings)):
                     new_room = {"name": responSrlist.name[i],
                                 "players": str(responSrlist.player[i]), 
-                                "code": responSrlist.strings[i]}
+                                "code": responSrlist.code[i]}
                     # Thêm phần tử mới vào danh sách
                     self.room_list.append(new_room)
         except Exception as e:
@@ -234,7 +234,7 @@ class WaitingRoom:
                 
                 # Lấy thông tin của phòng được chọn từ danh sách các phòng
                 selected_room_name = next(room for room in self.room_list if room['code'] == self.selected_room_code)
-                sp=int(selected_room_name['players'])+1
+                sp=int(selected_room_name['players'])
                 print(str(sp)+"......................")
                 # Tăng số lượng người chơi trong phòng lên 1
                 data = {
@@ -246,7 +246,7 @@ class WaitingRoom:
                 response = self.client_socket.recv(4096).decode()
                 responSrlist = StringList()
                 responSrlist.from_string(response)
-                print(responSrlist.player[0]+"-----------------")
+                print(responSrlist.player[0]+" " + responSrlist.code[0] + " " + responSrlist.strings[0]+ " " + responSrlist.name[0])
                 # Tăng số lượng người chơi trong phòng lên 1
                 selected_room_name['players'] = str(data['player'])
 
@@ -271,11 +271,15 @@ class WaitingRoom:
             while create_room_form.running:
                 create_room_form.run()  # Vẽ form nhập liệu
 
-            for i in range(len(create_room_form.responStrLs.strings)):
-                new_room = {"name": create_room_form.responStrLs.name[i],
-                            "players": str(create_room_form.responStrLs.player[i]), 
-                            "code": create_room_form.responStrLs.strings[i]}
-                self.room_list.append(new_room)
+            waitingR = WaitingRoom2(self.screen, self.selected_room_code, self.client_socket, create_room_form.input_text)
+            while waitingR.running:
+                waitingR.run()
+
+            # for i in range(len(create_room_form.responStrLs.strings)):
+            #     new_room = {"name": create_room_form.responStrLs.name[i],
+            #                 "players": str(create_room_form.responStrLs.player[i]), 
+            #                 "code": create_room_form.responStrLs.strings[i]}
+            #     self.room_list.append(new_room)
 
             self.creating_room= False
 
