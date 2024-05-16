@@ -281,7 +281,7 @@ class Offline_2player:
         if self.settingClicked: 
             self._ui_setting()
 
-        print(distance_2d(self.player1.rect.x, self.player1.rect.y, self.player2.rect.x, self.player2.rect.y))
+        # print(distance_2d(self.player1.rect.x, self.player1.rect.y, self.player2.rect.x, self.player2.rect.y))
 
 
         self.clock.tick(60)

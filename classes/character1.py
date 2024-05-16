@@ -52,7 +52,7 @@ class Character1(Player): # the blue guy
 				x = self.startX + i * 50
 			else: 
 				x = (self.startX - self.rect.width - 50) - i * 50
-			y = 600 - 150
+			y = self.rect.y
 			objA = py.Rect(x, y, 50, 150)
 			surface.blit(self.hinh_1_list[i], (x, y))
 			if (objA.colliderect(player2.rect)):

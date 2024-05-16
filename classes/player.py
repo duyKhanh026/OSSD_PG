@@ -144,7 +144,7 @@ class Player:
 		if self.move_left_key == None:
 			return 
 
-		if key[self.sp1_key]:
+		if key[self.sp1_key] and not self.skill1:
 			self.state = 'SP1'
 			self.sp1count = 0
 		elif self.state == 'DEF' or self.state == 'NO':
