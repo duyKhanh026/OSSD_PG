@@ -14,7 +14,7 @@ class Player_client:
         try:
             self.client.sendall(json.dumps("pler/" + msg).encode())
             remessage = self.client.recv(4096).decode()
-            print(remessage)
+            # print(remessage)
             if not remessage == 'NOPLAY':
                 self.game.player2.from_string(remessage)
         except Exception as e:
