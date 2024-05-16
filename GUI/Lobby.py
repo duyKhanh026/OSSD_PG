@@ -76,8 +76,16 @@ class WaitingRoom:
                     new_room = {"name": responSrlist.name[i],
                                 "players": str(responSrlist.player[i]), 
                                 "code": responSrlist.code[i]}
-                    # Thêm phần tử mới vào danh sách
-                    self.room_list.append(new_room)
+                    
+                    existing_room = next((room for room in self.room_list if room['code'] == new_room['code']), None)
+                
+                    if existing_room:
+                        # Nếu mã code đã tồn tại, cập nhật giá trị players
+                        existing_room['players'] = new_room['players']
+                    else:
+                        # Nếu mã code chưa tồn tại, thêm phòng mới vào danh sách
+                        self.room_list.append(new_room)
+
         except Exception as e:
             print("Error:", e)
 
