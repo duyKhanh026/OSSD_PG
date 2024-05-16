@@ -140,7 +140,7 @@ class WaitingRoom2:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     # gửi đoạn chat đén server và server gửi lại chat
-                    self.chat_messages.append(sendChat_message(self.input_text, self.client_socket))
+                    sendChat_message(self.input_text, self.client_socket)
                     # sendChat_message(self.input_text)
                     self.input_text = ""
                 elif event.key == pygame.K_BACKSPACE:
