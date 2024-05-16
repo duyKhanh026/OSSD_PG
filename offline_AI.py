@@ -113,22 +113,22 @@ class Offline_AI:
 		self.screen.fill(BLACK)
 		self.screen.blit(self.bg1, (0, 0))
 
-		# # Vẽ hình chữ nhật mờ trong suốt
-		# bg_rect = py.Surface((SCREEN_WIDTH - 500, SCREEN_HEIGHT), py.SRCALPHA)
-		# bg_rect.fill((157, 157, 157, 0))  # Màu với alpha = 128
-		# self.screen.blit(bg_rect, (250, 600))  # Vị trí và kích thước của hình chữ nhật
+		# Vẽ hình chữ nhật mờ trong suốt
+		bg_rect = py.Surface((SCREEN_WIDTH - 500, SCREEN_HEIGHT), py.SRCALPHA)
+		bg_rect.fill((157, 157, 157, 0))  # Màu với alpha = 128
+		self.screen.blit(bg_rect, (250, 600))  # Vị trí và kích thước của hình chữ nhật
 
-		# bg_rect = py.Surface((SCREEN_WIDTH - 1350, SCREEN_HEIGHT-750), py.SRCALPHA)
-		# bg_rect.fill((157, 157, 157, 0))  # Màu với alpha = 128
-		# self.screen.blit(bg_rect, (100, 400))  # Vị trí và kích thước của hình chữ nhật
+		bg_rect = py.Surface((SCREEN_WIDTH - 1350, SCREEN_HEIGHT-750), py.SRCALPHA)
+		bg_rect.fill((157, 157, 157, 0))  # Màu với alpha = 128
+		self.screen.blit(bg_rect, (100, 400))  # Vị trí và kích thước của hình chữ nhật
 
-		# bg_rect = py.Surface((SCREEN_WIDTH - 1200, SCREEN_HEIGHT-700), py.SRCALPHA)
-		# bg_rect.fill((157, 157, 157, 0))  # Màu với alpha = 128
-		# self.screen.blit(bg_rect, (650, 250))  # Vị trí và kích thước của hình chữ nhật 
+		bg_rect = py.Surface((SCREEN_WIDTH - 1200, SCREEN_HEIGHT-700), py.SRCALPHA)
+		bg_rect.fill((157, 157, 157, 0))  # Màu với alpha = 128
+		self.screen.blit(bg_rect, (650, 250))  # Vị trí và kích thước của hình chữ nhật 
 
-		# bg_rect = py.Surface((SCREEN_WIDTH - 1250, SCREEN_HEIGHT-700), py.SRCALPHA)
-		# bg_rect.fill((157, 157, 157, 0))  # Màu với alpha = 128
-		# self.screen.blit(bg_rect, (1150, 350))  # Vị trí và kích thước của hình chữ nhật 
+		bg_rect = py.Surface((SCREEN_WIDTH - 1250, SCREEN_HEIGHT-700), py.SRCALPHA)
+		bg_rect.fill((157, 157, 157, 0))  # Màu với alpha = 128
+		self.screen.blit(bg_rect, (1150, 350))  # Vị trí và kích thước của hình chữ nhật 
 		
 		
 	
