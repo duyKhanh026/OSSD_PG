@@ -83,8 +83,7 @@ class StringList:
         self.coordinates = parts[2].split(';')
         self.name = parts[3].split(';')
         self.code = parts[4].split(';')
-
-       
+        
         print(self.strings)
         print(self.coordinates)
         print(self.name)
