@@ -18,8 +18,8 @@ class Offline_2player:
         self.screen = screen
         self.player1 = Character1(200, 50, 'blue/stickman_blade', 300, 150, RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L')
         self.player2 = Character2(200, 80, 'purple/stickman', 1100, 150, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_b, py.K_n, py.K_m, py.K_p, 'R')
-        self.player1.name = 'player1'
-        self.player2.name = 'player2'
+        # self.player1.name = 'player1'
+        # self.player2.name = 'player2'
         self.clock = py.time.Clock()
         bg = py.image.load(f'assets/mapgame.jpg')
         
@@ -36,8 +36,8 @@ class Offline_2player:
         py.display.set_caption('Demo')
         self.player1 = Character1(200, 50, 'blue/stickman_blade', 300, 150, RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L')
         self.player2 = Character2(200, 80, 'purple/stickman', 1200, 150, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_KP1, py.K_KP2, py.K_KP3, py.K_KP4, 'R')
-        self.player1.name = 'player1'
-        self.player2.name = 'player2'
+        # self.player1.name = 'player1'
+        # self.player2.name = 'player2'
         self.clock = py.time.Clock()
         bg = py.image.load(f'assets/bg2.jpg')
         self.bg1 = py.transform.scale(bg, (SCREEN_WIDTH, SCREEN_HEIGHT))

@@ -57,9 +57,8 @@ def handle_room_client(conn, addr):
 			data = json.loads(msg)
 			if extract_pler(str(data)) != None:
 				# print(f"[{addr}] {msg}")
-				senback = "NOPLAY"
 				my_string_list.add_pler(str(get_portt(addr)), extract_pler(str(data)))
-				# senback = my_string_list.get_coordinate(str(get_portt(addr)))
+				senback = my_string_list.get_coordinate(str(get_portt(addr)))
 				conn.send(str(senback).encode(FORMAT))
 			else :
 				# Xử lý dữ liệu JSON

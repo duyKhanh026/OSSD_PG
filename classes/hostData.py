@@ -42,8 +42,13 @@ class StringList:
         return s in self.strings
 
     def get_coordinate(self, s):
-        if len(self.strings) < 2:
-            return "NOPLAY"
+        index = self.strings.index(s)
+
+        for i in range(len(self.code)):
+            if self.code[i] == self.code[index] and self.strings[i] != self.strings[index]:
+                additional_index = i
+                return self.coordinates[additional_index]
+
         return "NOPLAY"
 
     def remove_string(self, s):

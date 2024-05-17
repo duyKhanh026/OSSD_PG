@@ -279,7 +279,8 @@ class Player:
 			str(self.idlecount), # 17
 			str(self.right), # 18
 			str(self.left), # 19
-			str(self.key_twice) # 20
+			str(self.key_twice), # 20
+			str(self.name) # 20
 		]
 		return ",".join(player_info)
 
@@ -306,3 +307,4 @@ class Player:
 		self.right = values[18].lower() == 'true'
 		self.left = values[19].lower() == 'true'
 		self.key_twice = values[20].lower() == 'true'
+		self.name = values[21]

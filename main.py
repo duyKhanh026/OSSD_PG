@@ -16,7 +16,7 @@ class Main:
                 offline_2player = Offline_2player(menu.screen)
                 while offline_2player.retrunMenu == -1:
                     offline_2player.run()
-            if menu.play_option == 3: 
+            if menu.play_option == 3:
                 lobby = WaitingRoom(menu.screen)
                 # Player_client().run()
                 while lobby.option != 3:
