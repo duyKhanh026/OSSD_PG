@@ -17,13 +17,13 @@ class Offline_2player:
         # py.display.set_caption('Fighting Game')
         self.screen = screen
         self.player1 = Character1(200, 50, 'blue/stickman_blade', 300, 150, RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L')
-        self.player2 = Character2(200, 80, 'purple/stickman', 1100, 150, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_b, py.K_n, py.K_m, py.K_p, 'R')
+        self.player2 = Character1(200, 80, 'blue/stickman_blade', 1100, 150, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_b, py.K_n, py.K_m, py.K_p, 'R')
         
         if self.player1.name == '' and p1 == "Character 1":
             self.player1 = Character1(200, 50, 'blue/stickman_blade', 300, 150, RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L')
             print(p1)
         if self.player1.name == '' and p1 == 'Character 2':
-            self.player1 = Character2(200, 80, 'purple/stickman', 300, 150, BLUE, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L')
+            self.player1 = Character2(200, 80, 'purple/stickman', 300, 150, RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L')
 
         if self.player2.name == '' and p2 == 'Character 2':
             self.player2 = Character2(200, 80, 'purple/stickman', 1100, 150, BLUE, None,   None,   None,   None,   None,   None, None, 'R')
@@ -198,7 +198,7 @@ class Offline_2player:
 
     def _update_ui_client(self):
         self.backgr()
-        
+
 
         # self.screen.blit(self.bg1, (0,0))
         self.player1.move_logic(py.key.get_pressed())
