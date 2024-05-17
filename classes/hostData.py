@@ -56,6 +56,9 @@ class StringList:
             index = self.strings.index(s)
             del self.strings[index]
             del self.coordinates[index]
+            del self.name[index] 
+            del self.player[index] 
+            del self.code[index]
             print(f"String '{s}' and its coordinates removed from the list.")
         else:
             print(f"String '{s}' not found in the list.")

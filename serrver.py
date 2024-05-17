@@ -59,6 +59,10 @@ def handle_room_client(conn, addr):
 				handle_exit_room(conn, addr)
 				break
 			data = json.loads(msg)
+			if data == DISCONNECT_MESSAGE:
+				my_string_list.remove_string(str(get_portt(addr)))
+				connected = False
+				break
 			if extract_pler(str(data)) != None:
 				# print(f"[{addr}] {msg}")
 				my_string_list.add_pler(str(get_portt(addr)), extract_pler(str(data)))
@@ -74,7 +78,7 @@ def handle_room_client(conn, addr):
 						for connnn in conns:
 							connnn.send(chat.encode(FORMAT))
 					elif data != "Lobby connected":
-						handle_room_data(data, addr) 
+						handle_room_data(data, addr)
 						conn.send(str(my_string_list).encode(FORMAT))
 					else:
 						conn.send(str(my_string_list).encode(FORMAT))

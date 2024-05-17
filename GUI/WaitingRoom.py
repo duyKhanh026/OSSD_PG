@@ -41,8 +41,7 @@ class WaitingRoom2:
 
         # Danh sách người chơi
         self.players = [
-            Player("Yasou", None),
-            Player("Leesin", None)
+            Player("Yasou", None)
         ]
 
         # Danh sách tin nhắn chat
@@ -109,14 +108,13 @@ class WaitingRoom2:
         for i, player in enumerate(self.players):
             if player.name == "Yasou":
                 ready_button_rect = pygame.Rect(150, 450, 100, 40)
-            elif player.name == "Leesin":
-                ready_button_rect = pygame.Rect(1220, 450, 100, 40)
 
             button_color = self.GREEN if player.ready else self.WHITE
             pygame.draw.rect(self.screen, button_color, ready_button_rect, border_radius=20)
             button_text = "All set" if player.ready else "Ready"
             self.draw_text(button_text, self.font, self.BLACK, self.screen, ready_button_rect.x + 10, ready_button_rect.y + 10)
             player.ready_button_rect = ready_button_rect  # Lưu vị trí nút vào đối tượng người chơi
+            break
 
         # Vẽ nút Exit
         pygame.draw.rect(self.screen, self.WHITE, self.exit_button_rect, border_radius=20)
@@ -156,15 +154,17 @@ class WaitingRoom2:
                     self.input_text = self.input_text[:-1]
                 else:
                     self.input_text += event.unicode
-        if self.players[0].ready and self.players[1].ready:
+        if self.players[0].ready:
             self.message_receiver.running = False
             self.client_socket.settimeout(1.0)
-            Player_client(self.client_socket, self.screen).run()
+            Player_client(self.client_socket, self.screen,self.players[0].character.name, '').run()
+            self.running = False
 
     
     def run(self):
         self.handle_events()
-        self.draw_interface()
+        if self.running:
+            self.draw_interface()
 
 #gửi tin nhắn từ client tới server thông qua một client socket đã được kết nối.
 def sendChat_message(chat, client_socket):

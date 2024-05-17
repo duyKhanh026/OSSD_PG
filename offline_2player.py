@@ -9,7 +9,7 @@ from values.color import *
 from values.screen import *
 
 class Offline_2player:
-    def __init__(self, screen):
+    def __init__(self, screen,  p1='', p2=''):
         # py.init()
         self.count_frame = 0
         self.game_over = 0
@@ -17,7 +17,22 @@ class Offline_2player:
         # py.display.set_caption('Fighting Game')
         self.screen = screen
         self.player1 = Character1(200, 50, 'blue/stickman_blade', 300, 150, RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L')
-        self.player2 = Character2(200, 80, 'purple/stickman', 1100, 150, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_b, py.K_n, py.K_m, py.K_p, 'R')
+        self.player2 = Character1(200, 80, 'blue/stickman_blade', 1100, 150, BLUE, py.K_LEFT, py.K_RIGHT, py.K_UP, py.K_b, py.K_n, py.K_m, py.K_p, 'R')
+        
+        if self.player1.name == '' and p1 == "Character 1":
+            self.player1 = Character1(200, 50, 'blue/stickman_blade', 300, 150, RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L')
+            print(p1)
+        if self.player1.name == '' and p1 == 'Character 2':
+            self.player1 = Character2(200, 80, 'purple/stickman', 300, 150, RED, py.K_a, py.K_d, py.K_w, py.K_g, py.K_h, py.K_j, py.K_e, 'L')
+
+        if self.player2.name == '' and p2 == 'Character 2':
+            self.player2 = Character2(200, 80, 'purple/stickman', 1100, 150, BLUE, None,   None,   None,   None,   None,   None, None, 'R')
+        if self.player2.name == '' and p2 == 'Character 1':
+            self.player2 = Character1(200, 80, 'blue/stickman_blade', 1100, 150, BLUE, None,   None,   None,   None,   None,   None, None, 'R')
+
+        self.player2.name = p2
+        self.player1.name = p1
+
         # self.player1.name = 'player1'
         # self.player2.name = 'player2'
         self.clock = py.time.Clock()
@@ -184,6 +199,7 @@ class Offline_2player:
     def _update_ui_client(self):
         self.backgr()
 
+
         # self.screen.blit(self.bg1, (0,0))
         self.player1.move_logic(py.key.get_pressed())
         self.player1.sp_move(py.key.get_pressed())
@@ -197,9 +213,14 @@ class Offline_2player:
         if self.player1.rect.y > SCREEN_HEIGHT or self.player1.health <= 0:
             self.game_over = 1
 
-        if self.player1.skill_active(self.screen, self.player2):
+
+        if self.player1.name == "Character 1" and self.player1.skill_active(self.screen, self.player2):
             handle_attack(None, self.player2)
             self.pushed_side(self.player1, self.player2)
+
+        if self.player2.name == "Character 1" and self.player2.skill_active(self.screen, self.player1):
+            handle_attack(None, self.player1)
+            self.pushed_side(self.player2, self.player1)
 
         self.attack_confirmation(self.player1, 10, 30)
         self.attack_confirmation(self.player2, SCREEN_WIDTH - 110, 30)
@@ -245,19 +266,6 @@ class Offline_2player:
         self.screen.blit(text_surface, text_rect)
 
     def run(self, action=None , online=False):
-        for event in py.event.get():
-            if event.type == py.QUIT:
-                py.quit()
-                quit()
-            elif event.type == py.MOUSEBUTTONDOWN:
-                mouse_x, mouse_y = py.mouse.get_pos()
-                if 10 <= mouse_x <= (10 + 64):
-                    if 10 <= mouse_y <= (10 + 64):
-                        self.settingClicked = not self.settingClicked
-                if self.settingClicked:
-                    if 600 <= mouse_x <= (600 + 200):
-                        if 150 <= mouse_y <= (150 + 40):
-                            self.retrunMenu = 1
 
         if self.game_over == 0:
             if online:
@@ -281,6 +289,21 @@ class Offline_2player:
 
         self.clock.tick(60)
         py.display.update()
+
+        for event in py.event.get():
+            if event.type == py.QUIT:
+                #py.quit()
+                self.game_over = 1
+            elif event.type == py.MOUSEBUTTONDOWN:
+                mouse_x, mouse_y = py.mouse.get_pos()
+                if 10 <= mouse_x <= (10 + 64):
+                    if 10 <= mouse_y <= (10 + 64):
+                        self.settingClicked = not self.settingClicked
+                if self.settingClicked:
+                    if 600 <= mouse_x <= (600 + 200):
+                        if 150 <= mouse_y <= (150 + 40):
+                            self.retrunMenu = 1
+
 
     def start(self):
         while True:
