@@ -158,12 +158,14 @@ class WaitingRoom2:
             self.message_receiver.running = False
             self.client_socket.settimeout(1.0)
             Player_client(self.client_socket, self.screen,self.players[0].character.name, '').run()
+            self.running = False
 
 
     # Bạn có thể gọi hàm này trong vòng lặp chính của ứng dụng của bạn, ví dụ:
     def run(self):
         self.handle_events()
-        self.draw_interface()
+        if self.running:
+            self.draw_interface()
 
 def sendChat_message(chat, client_socket):
     response = ""

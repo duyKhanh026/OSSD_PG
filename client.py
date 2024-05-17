@@ -13,7 +13,10 @@ class Player_client:
 
     def send(self, msg):
         try:
-            self.client.sendall(json.dumps("pler/" + msg).encode())
+            if msg == self.DISCONNECT_MESSAGE:
+                self.client.sendall(json.dumps(self.DISCONNECT_MESSAGE).encode())
+            else:
+                self.client.sendall(json.dumps("pler/" + msg).encode())
             remessage = self.client.recv(4096).decode()
             print(remessage)
             if not remessage == 'NOPLAY':
@@ -30,7 +33,7 @@ class Player_client:
             print("Error:", e)
 
     def run(self):
-        while True:
+        while self.game.game_over == 0:
             self.game.run(None, True)
             self.send(str(self.game.player1))
 

@@ -266,20 +266,6 @@ class Offline_2player:
         self.screen.blit(text_surface, text_rect)
 
     def run(self, action=None , online=False):
-        
-        for event in py.event.get():
-            if event.type == py.QUIT:
-                py.quit()
-                quit()
-            elif event.type == py.MOUSEBUTTONDOWN:
-                mouse_x, mouse_y = py.mouse.get_pos()
-                if 10 <= mouse_x <= (10 + 64):
-                    if 10 <= mouse_y <= (10 + 64):
-                        self.settingClicked = not self.settingClicked
-                if self.settingClicked:
-                    if 600 <= mouse_x <= (600 + 200):
-                        if 150 <= mouse_y <= (150 + 40):
-                            self.retrunMenu = 1
 
         if self.game_over == 0:
             if online:
@@ -303,6 +289,21 @@ class Offline_2player:
 
         self.clock.tick(60)
         py.display.update()
+
+        for event in py.event.get():
+            if event.type == py.QUIT:
+                #py.quit()
+                self.game_over = 1
+            elif event.type == py.MOUSEBUTTONDOWN:
+                mouse_x, mouse_y = py.mouse.get_pos()
+                if 10 <= mouse_x <= (10 + 64):
+                    if 10 <= mouse_y <= (10 + 64):
+                        self.settingClicked = not self.settingClicked
+                if self.settingClicked:
+                    if 600 <= mouse_x <= (600 + 200):
+                        if 150 <= mouse_y <= (150 + 40):
+                            self.retrunMenu = 1
+
 
     def start(self):
         while True:

@@ -9,6 +9,7 @@ import json
 class Main: 
     def run(self):
         menu = Menu()
+        lobby = None
         while True:
             menu.run()
             if menu.play_option == 1:
