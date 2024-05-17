@@ -4,6 +4,7 @@ from client import Player_client
 from AI_OSSD.agent import train
 from GUI.Menu import Menu
 from GUI.Lobby import WaitingRoom
+import json
 
 class Main: 
     def run(self):
@@ -21,7 +22,7 @@ class Main:
                 # Player_client().run()
                 while lobby.option != 3:
                     lobby.run()
-                lobby.client_socket.close()
+                lobby.client_socket.sendall(json.dumps("!DISCONNECT").encode())
                 lobby.option = -1
             menu.play_option = -1
 

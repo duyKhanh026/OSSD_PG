@@ -55,6 +55,10 @@ def handle_room_client(conn, addr):
 			# Hiển thị dữ liệu nhận được từ client room
 			print(f"[{addr}] Sent message: {msg}")
 			data = json.loads(msg)
+			if data == DISCONNECT_MESSAGE:
+				my_string_list.remove_string(str(get_portt(addr)))
+				connected = False
+				break
 			if extract_pler(str(data)) != None:
 				# print(f"[{addr}] {msg}")
 				my_string_list.add_pler(str(get_portt(addr)), extract_pler(str(data)))
