@@ -31,14 +31,13 @@ class WaitingRoom2:
         self.background_image = pygame.image.load("GUI/background_waitingroom.png")
         self.background_image = pygame.transform.scale(self.background_image, (self.screen_width, self.screen_height))
         self.char1show = pygame.transform.scale(pygame.image.load("assets/blue/stickman_blade_idle.png"), (640, 320))
-        self.char2show = pygame.transform.scale(pygame.image.load("assets/purple_sp/stickman_idle1.png"), (640, 320))
-        self.char3show = pygame.transform.scale(pygame.image.load("assets/black/stickman_blade_defense.png"), (640, 320))
+        self.char2show = pygame.transform.scale(pygame.image.load("assets/purple/stickman_idle1wr.png"), (640, 320))
+        
 
         # Khởi tạo danh sách các nhân vật
         self.characters = [
             Character("Character 1", self.char1show),
-            Character("Character 2", self.char2show),
-            Character("Character 3", self.char3show),
+            Character("Character 2", self.char2show)
         ]
 
         # Danh sách người chơi
