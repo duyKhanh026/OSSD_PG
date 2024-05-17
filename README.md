@@ -46,6 +46,14 @@ UI Login
 
 ![image](https://github.com/duyKhanh026/OSSD_PG/assets/100947959/421b0924-5d6a-40e3-8ddc-a82696848006)
 
+UI Menu
+![image](https://github.com/duyKhanh026/OSSD_PG/assets/100947959/57a882a9-83c4-47cc-a3ae-dcd40388a791)
+
+UI Play
+![image](https://github.com/duyKhanh026/OSSD_PG/assets/100947959/551c9991-be87-4407-aba2-7263d5747ca8)
+
+
+
 
 ## Advantages of the project
 
