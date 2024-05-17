@@ -133,7 +133,7 @@ class WaitingRoom2:
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self.leave_room()
+                
                 self.running = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = event.pos
@@ -145,7 +145,7 @@ class WaitingRoom2:
                         player.ready = not player.ready
                 # Xử lý sự kiện nhấn nút Exit
                 if self.exit_button_rect.collidepoint(mouse_pos):
-                    self.leave_room()
+                    
                     self.running = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
@@ -161,11 +161,6 @@ class WaitingRoom2:
             self.client_socket.settimeout(1.0)
             Player_client(self.client_socket, self.screen).run()
 
-    def leave_room(self):
-        try:
-            self.client_socket.sendall(json.dumps(f"leave/{self.roomCode}").encode())
-        except Exception as e:
-            print("Error:", e)
 
     # Bạn có thể gọi hàm này trong vòng lặp chính của ứng dụng của bạn, ví dụ:
     def run(self):
