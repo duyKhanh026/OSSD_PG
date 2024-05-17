@@ -31,11 +31,17 @@ cd OSSD_PG
 - MySQL is one of the most popular open-source relational database management systems. It is widely used for managing and organizing structured data. In Python, you can interact with MySQL databases
 
 ### Step 4: Run the game
+
+Firstly, you have to run the server 
+
+python server.py
+
 Once you have installed all the dependencies, you can run the game using the following command in terminal:
 
-python main.py
+python SignIn.py
 
-  
+i don't have lataex
+
 ## Demo of the project
 
 
