@@ -21,6 +21,7 @@ class Main:
                 # Player_client().run()
                 while lobby.option != 3:
                     lobby.run()
+                lobby.client_socket.close()
                 lobby.option = -1
             menu.play_option = -1
 

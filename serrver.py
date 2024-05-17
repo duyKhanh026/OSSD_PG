@@ -85,7 +85,7 @@ def handle_room_client(conn, addr):
 	# 	my_string_list.remove_string(str(get_portt(addr)))
 	# 	my_string_list.update_room_code_count(room_code, -1)
 
-	# conn.close()
+	conn.close()
 
 def extract_after_chat(string):
 	keyword = "chat/"
