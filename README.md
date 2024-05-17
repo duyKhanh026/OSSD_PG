@@ -40,11 +40,11 @@ Once you have installed all the dependencies, you can run the game using the fol
 
 python SignIn.py
 
-i don't have lataex
-
 ## Demo of the project
 
+UI Login 
 
+![image](https://github.com/duyKhanh026/OSSD_PG/assets/100947959/421b0924-5d6a-40e3-8ddc-a82696848006)
 
 
 ## Advantages of the project
