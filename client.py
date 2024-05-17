@@ -3,12 +3,12 @@ import socket
 import json
 
 class Player_client:
-    def __init__(self, client, screen):
+    def __init__(self, client, screen,  p1='', p2=''):
         self.FORMAT = 'utf-8'
         self.DISCONNECT_MESSAGE = "!DISCONNECT"
         self.HEADER = 4096
         self.client = client
-        self.game = Offline_2player(screen)
+        self.game = Offline_2player(screen, p1, p2)
 
     def send(self, msg):
         try:
