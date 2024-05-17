@@ -282,12 +282,7 @@ class WaitingRoom:
             waitingR = WaitingRoom2(self.screen, self.selected_room_code, self.client_socket, create_room_form.input_text)
             while waitingR.running:
                 waitingR.run()
-<<<<<<< HEAD
-            
-=======
             self.option=3
-
->>>>>>> 2b70f030a24362aa1c578fd524141e6fe1bcee15
             # for i in range(len(create_room_form.responStrLs.strings)):
             #     new_room = {"name": create_room_form.responStrLs.name[i],
             #                 "players": str(create_room_form.responStrLs.player[i]), 
