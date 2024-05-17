@@ -283,6 +283,8 @@ class WaitingRoom:
             while waitingR.running:
                 waitingR.run()
             self.option=3
+
+
             # for i in range(len(create_room_form.responStrLs.strings)):
             #     new_room = {"name": create_room_form.responStrLs.name[i],
             #                 "players": str(create_room_form.responStrLs.player[i]), 
