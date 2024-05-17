@@ -81,22 +81,23 @@ def check_List(name, password):
     for account in ListTaiKhoan:
         print(account[0])
         if(account[1] == name and account[2] == password): 
-            return True
+            return account[3]
     
-    return False
+    return None
 
 def LogIn():
     userName = entry_UserName.get()
     passwd = entry_Passwd.get()
-    print(ListTaiKhoan)
-    if(userName == "" or passwd == ""):
-        tkinter.messagebox.showerror(title= "Error", message= "Khong duoc de trong thong tin")
-    elif(check_List(userName, passwd) == False):
-        tkinter.messagebox.showerror(title= "Error", message= "Sai thong tin dang nhap hoac tai khoan dang bi khoa")
+    if userName == "" or passwd == "":
+        tkinter.messagebox.showerror(title="Error", message="Không được để trống thông tin")
     else:
-        tkinter.messagebox.showinfo(title= "Welcome", message = "Welcome " + userName)
-        main_app = Main()  # Tạo đối tượng Main
-        main_app.run()
+        name_character = check_List(userName, passwd)
+        if name_character is None:
+            tkinter.messagebox.showerror(title="Error", message="Sai thông tin đăng nhập hoặc tài khoản đang bị khóa")
+        else:
+            tkinter.messagebox.showinfo(title="Welcome", message=f"Welcome {userName}")
+            main_app = Main(name_character)  # Truyền NameCharacter vào đối tượng Main
+            main_app.run()
         
 # Tao nut an de dang nhap
 

@@ -132,13 +132,13 @@ class Offline_2player:
         self.backgr()
 
 
-        # vẽ sọc trắng lên màn hình
-        line_spacing = 50
-        for y in range(0, SCREEN_HEIGHT, line_spacing):
-            py.draw.line(self.screen, WHITE, (0, y), (SCREEN_WIDTH, y))
-        line_spacing_vertical = 50
-        for x in range(0, SCREEN_WIDTH, line_spacing_vertical):
-            py.draw.line(self.screen, WHITE, (x, 0), (x, SCREEN_HEIGHT))
+        # # vẽ sọc trắng lên màn hình
+        # line_spacing = 50
+        # for y in range(0, SCREEN_HEIGHT, line_spacing):
+        #     py.draw.line(self.screen, WHITE, (0, y), (SCREEN_WIDTH, y))
+        # line_spacing_vertical = 50
+        # for x in range(0, SCREEN_WIDTH, line_spacing_vertical):
+        #     py.draw.line(self.screen, WHITE, (x, 0), (x, SCREEN_HEIGHT))
 
         toadoInfo = 80
 

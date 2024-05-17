@@ -4,10 +4,10 @@ import os
 from values.screen import *
 
 class Menu:
-    def __init__(self):
+    def __init__(self,name_character):
         # Khởi tạo Pygame
         self.play_option = -1
-
+        self.name_Character = name_character
         pygame.init()
         # Khởi tạo cửa sổ
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -38,7 +38,7 @@ class Menu:
         # self.y_pos = (pygame.display.Info().current_h - self.window_height) // 2
 
         # Default player name
-        self.player_name = "Player 1"
+        self.player_name = self.name_Character
 
     # Function to draw a button
     def draw_button(self, text, x, y):

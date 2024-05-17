@@ -133,7 +133,7 @@ class WaitingRoom2:
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                
+                # self.leave_room()
                 self.running = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = event.pos
@@ -145,7 +145,7 @@ class WaitingRoom2:
                         player.ready = not player.ready
                 # Xử lý sự kiện nhấn nút Exit
                 if self.exit_button_rect.collidepoint(mouse_pos):
-                    
+                    # self.leave_room()
                     self.running = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
@@ -161,12 +161,12 @@ class WaitingRoom2:
             self.client_socket.settimeout(1.0)
             Player_client(self.client_socket, self.screen).run()
 
-
-    # Bạn có thể gọi hàm này trong vòng lặp chính của ứng dụng của bạn, ví dụ:
+    
     def run(self):
         self.handle_events()
         self.draw_interface()
 
+#gửi tin nhắn từ client tới server thông qua một client socket đã được kết nối.
 def sendChat_message(chat, client_socket):
     response = ""
     try:
@@ -175,6 +175,7 @@ def sendChat_message(chat, client_socket):
         print("Error:", e)
     return response
 
+#nhận tin nhắn từ một client socket.
 def receive_chat_message(client_socket):
     try:
         message = client_socket.recv(4096).decode()
@@ -184,6 +185,9 @@ def receive_chat_message(client_socket):
     except Exception as e:
         return None
 
+# tạo một luồng riêng biệt để nhận các tin nhắn từ một socket kết nối tới máy chủ. Bằng cách này, 
+# việc nhận tin nhắn không cản trở luồng chính của ứng dụng, cho phép nó tiếp tục thực hiện các tác vụ khác 
+# mà không bị chặn lại khi đang chờ đợi tin nhắn.
 class MessageReceiver(threading.Thread):
     def __init__(self, client_socket, chat_messages):
         threading.Thread.__init__(self)

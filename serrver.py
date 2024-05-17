@@ -54,6 +54,10 @@ def handle_room_client(conn, addr):
 		if msg:
 			# Hiển thị dữ liệu nhận được từ client room
 			print(f"[{addr}] Sent message: {msg}")
+			if msg == "EXIT_ROOM":
+				print("Exit nè")
+				handle_exit_room(conn, addr)
+				break
 			data = json.loads(msg)
 			if extract_pler(str(data)) != None:
 				# print(f"[{addr}] {msg}")
@@ -63,7 +67,6 @@ def handle_room_client(conn, addr):
 			else :
 				# Xử lý dữ liệu JSON
 				try:
-				   	
 					# Thực hiện xử lý dữ liệu của room
 					if extract_after_chat(str(data)) != None:
 						chat = extract_after_chat(str(data))
@@ -78,6 +81,8 @@ def handle_room_client(conn, addr):
 
 				except json.JSONDecodeError as e:
 					print(f"[ERROR] Invalid JSON format: {e}")
+
+		
 
 		# Sau khi người chơi rời khỏi phòng, cập nhật lại số lượng phòng
 	# room_code = my_string_list.get_roomcode_by_port(str(get_portt(addr)))
@@ -102,6 +107,11 @@ def extract_pler(string):
 		return string[index + len(keyword):]
 	else:
 		return None
+def handle_exit_room(conn, addr):
+	# Xử lý khi client muốn rời phòng
+	# Ví dụ: thông báo trạng thái và loại bỏ client khỏi danh sách kết nối
+	print(f"Client at {addr} left the room.")
+	conns.remove(conn)  # Loại bỏ kết nối của client khỏi danh sách
 
 def handle_room_data(data ,addr):
 	# Xử lý dữ liệu của room ở đây

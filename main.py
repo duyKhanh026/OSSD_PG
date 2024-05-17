@@ -6,8 +6,11 @@ from GUI.Menu import Menu
 from GUI.Lobby import WaitingRoom
 
 class Main: 
+    def __init__(self, name_character):
+        self.name_character = name_character
+
     def run(self):
-        menu = Menu()
+        menu = Menu(self.name_character)
         while True:
             menu.run()
             if menu.play_option == 1:
