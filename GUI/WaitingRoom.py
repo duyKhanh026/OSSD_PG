@@ -32,7 +32,6 @@ class WaitingRoom2:
         self.background_image = pygame.transform.scale(self.background_image, (self.screen_width, self.screen_height))
         self.char1show = pygame.transform.scale(pygame.image.load("assets/blue/stickman_blade_idle.png"), (640, 320))
         self.char2show = pygame.transform.scale(pygame.image.load("assets/purple/stickman_idle1wr.png"), (640, 320))
-        
 
         # Khởi tạo danh sách các nhân vật
         self.characters = [
@@ -53,22 +52,24 @@ class WaitingRoom2:
         self.room_name_display = f"Room name: {self.room_name}"
         self.room_name_x = (self.screen_width - self.font_name.size(self.room_name_display)[0]) // 2
 
-
         # Biến lưu trữ nội dung tin nhắn đang nhập
         self.input_text = ""
 
         # Chạy vòng lặp chính
         self.running = True
-        
+
         # Khởi tạo và bắt đầu luồng nhận tin nhắn
         self.message_receiver = MessageReceiver(self.client_socket, self.chat_messages)
         self.message_receiver.start()
+
+        # Nút Exit
+        self.exit_button_rect = pygame.Rect(20, 20, 100, 40)
 
     def draw_interface(self):
         # Vẽ hình nền
         self.screen.blit(self.background_image, (0, 0))
 
-       # Vẽ tên phòng
+        # Vẽ tên phòng
         self.draw_text(self.room_name_display, self.font_name, self.WHITE, self.screen, self.room_name_x, 20)
 
         # Vẽ tên người chơi và các ô chọn nhân vật
@@ -110,14 +111,18 @@ class WaitingRoom2:
                 ready_button_rect = pygame.Rect(150, 450, 100, 40)
             elif player.name == "Leesin":
                 ready_button_rect = pygame.Rect(1220, 450, 100, 40)
-            
+
             button_color = self.GREEN if player.ready else self.WHITE
             pygame.draw.rect(self.screen, button_color, ready_button_rect, border_radius=20)
             button_text = "All set" if player.ready else "Ready"
             self.draw_text(button_text, self.font, self.BLACK, self.screen, ready_button_rect.x + 10, ready_button_rect.y + 10)
             player.ready_button_rect = ready_button_rect  # Lưu vị trí nút vào đối tượng người chơi
 
-        pygame.display.flip()   
+        # Vẽ nút Exit
+        pygame.draw.rect(self.screen, self.WHITE, self.exit_button_rect, border_radius=20)
+        self.draw_text("Exit", self.font, self.BLACK, self.screen, self.exit_button_rect.x + 25, self.exit_button_rect.y + 10)
+
+        pygame.display.flip()
 
     def draw_text(self, text, font, color, surface, x, y):
         text_obj = font.render(text, True, color)
@@ -128,6 +133,7 @@ class WaitingRoom2:
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                self.leave_room()
                 self.running = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = event.pos
@@ -137,11 +143,14 @@ class WaitingRoom2:
                 for player in self.players:
                     if player.ready_button_rect.collidepoint(mouse_pos):
                         player.ready = not player.ready
+                # Xử lý sự kiện nhấn nút Exit
+                if self.exit_button_rect.collidepoint(mouse_pos):
+                    self.leave_room()
+                    self.running = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
-                    # gửi đoạn chat đén server và server gửi lại chat
+                    # gửi đoạn chat đến server và server gửi lại chat
                     sendChat_message(self.input_text, self.client_socket)
-                    # sendChat_message(self.input_text)
                     self.input_text = ""
                 elif event.key == pygame.K_BACKSPACE:
                     self.input_text = self.input_text[:-1]
@@ -152,25 +161,23 @@ class WaitingRoom2:
             self.client_socket.settimeout(1.0)
             Player_client(self.client_socket, self.screen).run()
 
+    def leave_room(self):
+        try:
+            self.client_socket.sendall(json.dumps(f"leave/{self.roomCode}").encode())
+        except Exception as e:
+            print("Error:", e)
 
     # Bạn có thể gọi hàm này trong vòng lặp chính của ứng dụng của bạn, ví dụ:
     def run(self):
         self.handle_events()
         self.draw_interface()
-        
-
 
 def sendChat_message(chat, client_socket):
-    # server_address=('127.0.0.1', 5050)
-    # server_address = server_address
-    # client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    # client_socket.connect(server_address)
     response = ""
     try:
         client_socket.sendall(json.dumps("chat/" + chat).encode())
     except Exception as e:
         print("Error:", e)
-    # client_socket.close()
     return response
 
 def receive_chat_message(client_socket):
@@ -180,7 +187,6 @@ def receive_chat_message(client_socket):
     except client_socket.timeout:
         return None
     except Exception as e:
-        # print("Error receiving message from server:", e)
         return None
 
 class MessageReceiver(threading.Thread):
@@ -206,4 +212,3 @@ class Character:
     def __init__(self, name, image):
         self.name = name
         self.image = image
-

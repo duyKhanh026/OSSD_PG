@@ -261,7 +261,7 @@ class WaitingRoom:
                 waitingR = WaitingRoom2(self.screen, self.selected_room_code, self.client_socket, selected_room_name['name'])
                 while waitingR.running:
                     waitingR.run()
-            self.option = -1
+            self.option = 3
 
         elif self.option == 2:  # Nút "Create Room"
             if not self.room_created:
@@ -282,6 +282,7 @@ class WaitingRoom:
             waitingR = WaitingRoom2(self.screen, self.selected_room_code, self.client_socket, create_room_form.input_text)
             while waitingR.running:
                 waitingR.run()
+            self.option=3
 
             # for i in range(len(create_room_form.responStrLs.strings)):
             #     new_room = {"name": create_room_form.responStrLs.name[i],

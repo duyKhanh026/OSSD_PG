@@ -80,23 +80,29 @@ def handle_room_client(conn, addr):
 				except json.JSONDecodeError as e:
 					print(f"[ERROR] Invalid JSON format: {e}")
 
-	conn.close()
+		# Sau khi người chơi rời khỏi phòng, cập nhật lại số lượng phòng
+	# room_code = my_string_list.get_roomcode_by_port(str(get_portt(addr)))
+	# if room_code:
+	# 	my_string_list.remove_string(str(get_portt(addr)))
+	# 	my_string_list.update_room_code_count(room_code, -1)
+
+	# conn.close()
 
 def extract_after_chat(string):
-    keyword = "chat/"
-    index = string.find(keyword)
-    if index != -1:
-        return string[index + len(keyword):]
-    else:
-        return None
+	keyword = "chat/"
+	index = string.find(keyword)
+	if index != -1:
+		return string[index + len(keyword):]
+	else:
+		return None
 
 def extract_pler(string):
-    keyword = "pler/"
-    index = string.find(keyword)
-    if index != -1:
-        return string[index + len(keyword):]
-    else:
-        return None
+	keyword = "pler/"
+	index = string.find(keyword)
+	if index != -1:
+		return string[index + len(keyword):]
+	else:
+		return None
 
 def handle_room_data(data ,addr):
 	# Xử lý dữ liệu của room ở đây
