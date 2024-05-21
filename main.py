@@ -11,12 +11,8 @@ class Main:
         self.name_character = name_character
 
     def run(self):
-<<<<<<< HEAD
         menu = Menu(self.name_character)
-=======
-        menu = Menu()
         lobby = None
->>>>>>> 4de311d66f4c0e8b56a562fd3383c28d1c0c0a44
         while True:
             menu.run()
             if menu.play_option == 1:

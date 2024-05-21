@@ -244,7 +244,7 @@ class WaitingRoom:
                 selected_room_name = next(room for room in self.room_list if room['code'] == self.selected_room_code)
                 sp=int(selected_room_name['players']) + 1
                 print(str(sp)+"......................")
-                # Tăng số lượng người chơi trong phòng lên 1
+                
                 data = {
                     'code': self.selected_room_code,
                     'name': selected_room_name['name'],
@@ -255,7 +255,7 @@ class WaitingRoom:
                 responSrlist = StringList()
                 responSrlist.from_string(response)
                 print(responSrlist.player[0]+" " + responSrlist.code[0] + " " + responSrlist.strings[0]+ " " + responSrlist.name[0])
-                # Tăng số lượng người chơi trong phòng lên 1
+                
                 selected_room_name['players'] = str(data['player'])
 
                 waitingR = WaitingRoom2(self.screen, self.selected_room_code, self.client_socket, selected_room_name['name'])

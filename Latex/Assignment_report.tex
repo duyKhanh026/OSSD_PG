@@ -1,0 +1,1503 @@
+\documentclass[a4paper]{article}
+\usepackage{vntex}
+%\usepackage[english,vietnam]{babel}
+%\usepackage[utf8]{inputenc}
+
+%\usepackage[utf8]{inputenc}
+%\usepackage[francais]{babel}
+\usepackage{a4wide,amssymb,epsfig,latexsym,multicol,array,hhline,fancyhdr}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{lastpage}
+\usepackage[lined,boxed,commentsnumbered]{algorithm2e}
+\usepackage{enumerate}
+\usepackage{color}
+\usepackage{graphicx}							% Standard graphics package
+\usepackage{array}
+\usepackage{tabularx, caption}
+\usepackage{multirow}
+\usepackage[framemethod=tikz]{mdframed}% For highlighting paragraph backgrounds
+\usepackage{multicol}
+\usepackage{rotating}
+\usepackage{graphics}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{epsfig}
+\usepackage{tikz}
+\usepackage{listings}
+\usetikzlibrary{arrows,snakes,backgrounds}
+\usepackage{hyperref}
+\hypersetup{urlcolor=blue,linkcolor=black,citecolor=black,colorlinks=true} 
+%\usepackage{pstcol} 								% PSTricks with the standard color package
+
+\newtheorem{theorem}{{\bf Định lý}}
+\newtheorem{property}{{\bf Tính chất}}
+\newtheorem{proposition}{{\bf Mệnh đề}}
+\newtheorem{corollary}[proposition]{{\bf Hệ quả}}
+\newtheorem{lemma}[proposition]{{\bf Bổ đề}}
+
+\everymath{\color{blue}}
+%\usepackage{fancyhdr}
+\setlength{\headheight}{40pt}
+\pagestyle{fancy}
+\fancyhead{} % clear all header fields
+\fancyhead[L]{
+ \begin{tabular}{rl}
+    \begin{picture}(25,15)(0,0)
+    \put(0,-8){\includegraphics[width=8mm, height=8mm]{logoITSGUsmall.png}}
+    %\put(0,-8){\epsfig{width=10mm,figure=hcmut.eps}}
+   \end{picture}&
+	%\includegraphics[width=8mm, height=8mm]{hcmut.png} & %
+	\begin{tabular}{l}
+		\textbf{\bf \ttfamily Trường Đại học Sài Gòn}\\
+		\textbf{\bf \ttfamily Khoa Công Nghệ Thông Tin}
+	\end{tabular} 	
+ \end{tabular}
+}
+\fancyhead[R]{
+	\begin{tabular}{l}
+		\tiny \bf \\
+		\tiny \bf 
+	\end{tabular}  }
+\fancyfoot{} % clear all footer fields
+\fancyfoot[L]{\scriptsize \ttfamily Bài tập lớn môn Phát triển phần mềm mã nguồn mở - Niên khóa 2023-2024}
+\fancyfoot[R]{\scriptsize \ttfamily Trang {\thepage}/\pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0.3pt}
+
+
+%%%
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{3}
+\makeatletter
+\newcounter {subsubsubsection}[subsubsection]
+\renewcommand\thesubsubsubsection{\thesubsubsection .\@alph\c@subsubsubsection}
+\newcommand\subsubsubsection{\@startsection{subsubsubsection}{4}{\z@}%
+                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
+                                     {1.5ex \@plus .2ex}%
+                                     {\normalfont\normalsize\bfseries}}
+\newcommand*\l@subsubsubsection{\@dottedtocline{3}{10.0em}{4.1em}}
+\newcommand*{\subsubsubsectionmark}[1]{}
+\makeatother
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+	language=Matlab,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3,
+	numbers=left,
+	stepnumber=1,
+	numbersep=1pt,    
+	firstnumber=1,
+	numberfirstline=true
+}
+
+\begin{document}
+
+\begin{titlepage}
+\begin{center}
+TRƯỜNG ĐẠI HỌC SÀI GÒN \\
+KHOA CÔNG NGHỆ THÔNG TIN
+\end{center}
+\vspace{1cm}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=3cm]{logoITSGU.png}
+\end{center}
+\end{figure}
+
+\vspace{1cm}
+
+
+\begin{center}
+\begin{tabular}{c}
+	\multicolumn{1}{l}{\textbf{{\Large PHÁT TRIỂN PHẦN MỀM MÃ NGUỒN MỞ}}}\\
+	~~\\
+	\hline
+
+	\\
+	
+	\textbf{{\large Xây dựng ứng dụng game “Đối kháng 2 người”}}\\
+        \textbf{{\Big với thư viện Socket bằng ngôn ngữ lập trình Python}}\\
+	\\
+	\hline
+\end{tabular}
+\end{center}
+
+\vspace{3cm}
+
+\begin{table}[h]
+\begin{tabular}{rrl}
+\hspace{5 cm} & GVHD: &Từ Lãng Phiêu\\
+& SV:
+& Nguyễn Chí Tài - 3121410433 \\
+& & Lương Ngọc Tâm - 3121410437 \\
+% & & SV3 - MSSV \\
+% & & SV4 - MSSV\\
+\end{tabular}
+\vspace{1.5 cm}
+\end{table}
+
+\begin{center}
+
+{\footnotesize TP. HỒ CHÍ MINH, THÁNG 5/2024}
+\end{center}
+\end{titlepage}
+
+\clearpage
+\textbf{NHẬN XÉT, ĐÁNH GIÁ CỦA GIẢNG VIÊN}
+
+\clearpage
+\textbf{LỜI CẢM ƠN}
+
+Chúng em xin bày tỏ lòng biết ơn và sự tri ân chân thành đến toàn thể
+thầy cô tại Trường Đại học Sài Gòn, đặc biệt là các thầy cô tại Khoa
+Công Nghệ Thông Tin, vì đã tạo điều kiện cho chúng em được tiếp cận và
+nghiên cứu để hoàn thành đồ án môn học này. Đồng thời, chúng em cũng
+muốn bày tỏ lòng biết ơn đến thầy Từ Lăng Phiêu đã truyền đạt những kiến
+thức quan trọng làm nền tảng cho em hoàn thành đồ án này.
+
+Trong quá trình nghiên cứu và viết báo cáo đồ án, chúng em nhận thấy
+rằng còn tồn tại nhiều hạn chế về kiến thức và kinh nghiệm thực tế, dẫn
+đến sự xuất hiện một số thiếu sót trong bài báo cáo của chúng em. Do đó,
+chúng em rất mong nhận được ý kiến đóng góp từ các thầy cô để chúng em
+có thể học hỏi thêm nhiều kỹ năng và kinh nghiệm, từ đó hoàn thiện hơn
+trong các báo cáo sắp tới.
+
+Một lần nữa, chúng em xin chân thành cảm ơn toàn thể thầy cô đã dành
+thời gian và tâm huyết để hướng dẫn và giúp đỡ chúng em trong quá trình
+thực hiện đồ án.
+
+\clearpage
+\tableofcontents
+
+\clearpage
+
+\hypertarget{phux1ea7n-i.-mux1edf-ux111ux1ea7u}{%
+\section{MỞ ĐẦU}\label{phux1ea7n-i.-mux1edf-ux111ux1ea7u}}
+
+\hypertarget{giux1edbi-thiux1ec7u-ux111ux1ec1-tuxe0i}{%
+\subsection{\texorpdfstring{Giới thiệu đề tài
+}{Giới thiệu đề tài }}\label{giux1edbi-thiux1ec7u-ux111ux1ec1-tuxe0i}}
+
+Tên đề tài:
+
+Xây dựng ứng dụng trò chơi ``đối kháng 2 người'' với thư viện Socket bằng ngôn ngữ lập trình Python.
+
+\hypertarget{luxfd-do-chux1ecdn-ux111ux1ec1-tuxe0i.}{%
+\subsection{\texorpdfstring{Lý do chọn đề tài.
+}{Lý do chọn đề tài. }}\label{luxfd-do-chux1ecdn-ux111ux1ec1-tuxe0i.}}
+
+Việc lựa chọn đề tài xây dựng ứng dụng trò chơi "Đối Kháng 2 Người" sử dụng thư viện Socket trong ngôn ngữ lập trình Python được chúng em xem là một sự kết hợp hoàn hảo giữa tính gay cấn của trò chơi và tính ứng dụng của công nghệ hiện đại. Dưới đây là những lý do mà chúng em tin rằng đề tài này đáng được lựa chọn:Sự hấp dẫn của trò chơi đối kháng: 
+
+Trò chơi đối kháng luôn thu hút người chơi bởi sự kịch tính và cạnh tranh gay cấn. Xây dựng một phiên bản trực tuyến của trò chơi này không chỉ giúp chúng em thỏa mãn niềm đam mê trong lập trình mà còn mang lại cho người chơi một trải nghiệm giải trí đầy hứng khởi.Áp dụng công nghệ Socket: Thư viện Socket trong Python cung cấp các công cụ mạnh mẽ để xây dựng ứng dụng mạng. 
+
+Việc áp dụng Socket trong việc tạo ra một trò chơi trực tuyến không chỉ giúp chúng em hiểu rõ hơn về cách thức hoạt động của mạng mà còn mở ra cơ hội để nắm bắt các kiến thức và kỹ năng mới trong lập trình mạng.
+
+Khả năng tương tác và kết nối cộng đồng: Bằng cách xây dựng một phiên bản trò chơi đối kháng trực tuyến, chúng em có thể tạo ra một môi trường tương tác, kết nối giữa các người chơi từ khắp nơi trên thế giới. Điều này không chỉ giúp chúng em rèn luyện kỹ năng lập trình mà còn tạo ra một cơ hội để giao lưu, học hỏi và chia sẻ kiến thức với cộng đồng lập trình viên và người chơi khác.
+
+Thách thức và cơ hội phát triển: Việc xây dựng một ứng dụng trò chơi trực tuyến không phải là một nhiệm vụ dễ dàng, nhưng cũng là một cơ hội tuyệt vời để thử thách và phát triển kỹ năng lập trình của chúng em. 
+Qua quá trình nghiên cứu, thiết kế và triển khai, chúng em có thể đối mặt với nhiều thách thức thú vị và học hỏi được nhiều kỹ năng mới trong quá trình phát triển phần mềm.
+
+Tóm lại, việc lựa chọn đề tài xây dựng ứng dụng trò chơi "Đối Kháng 2 Người" với thư viện Socket trong ngôn ngữ lập trình Python không chỉ là một cơ hội để thỏa mãn niềm đam mê trong lập trình mà còn là một hành trình học hỏi và phát triển kỹ năng đầy thú vị và ý nghĩa. Chúng em tin rằng đề tài này sẽ mang lại nhiều giá trị và trải nghiệm mới cho chúng em cũng như cho cộng đồng.4o
+
+\hypertarget{mux1ee5c-ux111uxedch-mux1ee5c-tiuxeau-cux1ee7a-ux111ux1ec1-tuxe0i}{%
+\subsection{Mục đích, mục tiêu của đề
+tài}\label{mux1ee5c-ux111uxedch-mux1ee5c-tiuxeau-cux1ee7a-ux111ux1ec1-tuxe0i}}
+
+\begin{itemize}
+\item
+  Mục đích:
+\end{itemize}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Nắm chắc được được kỹ năng và kiến thức về lập trình.
+  \end{quote}
+\item
+  \begin{quote}
+  Tìm hiểu về thư viện Socket trong ngôn ngữ lập trình Python.
+  \end{quote}
+\item
+  \begin{quote}
+  Củng cố, áp dụng, nâng cao kiến thức đã được học.
+  \end{quote}
+\item
+  \begin{quote}
+  Nắm bắt được quy trình làm game online cơ bản.
+  \end{quote}
+\end{itemize}
+
+\begin{itemize}
+\item
+  Mục tiêu:
+\end{itemize}
+
+\begin{itemize}
+\item
+  Vận dụng được tính chất của lập trình hướng đối tượng.
+\item
+  Sử dụng thư viện Socket vào việc xây dựng game ``Caro Online''.
+\end{itemize}
+
+\clearpage
+
+\hypertarget{phux1ea7n-ii.-nux1ed9i-dung}{%
+\section{NỘI DUNG}\label{phux1ea7n-ii.-nux1ed9i-dung}}
+
+\hypertarget{ux111uxf4i-nuxe9t-vux1ec1-game-caro-online}{%
+\subsection{\texorpdfstring{Đôi nét về game ``Đối kháng 2 người''
+}{Đôi nét về game ``Caro Online'' }}\label{ux111uxf4i-nuxe9t-vux1ec1-game-caro-online}}
+
+\hypertarget{giux1edbi-thiux1ec7u-vux1ec1-game-caro-online}{%
+\subsubsection{Giới thiệu về game ``Đối kháng 2 người''}\label{giux1edbi-thiux1ec7u-vux1ec1-game-caro-online}}
+
+Trò chơi "Đối Kháng 2 Người Online" là một phiên bản trực tuyến của trò chơi đối kháng, nơi hai người chơi có thể đối đầu trực tiếp với nhau trong một môi trường mạng. Trò chơi này mang đến những trận đấu căng thẳng, nơi người chơi sử dụng các kỹ năng và chiến thuật để đánh bại đối thủ. Mỗi người chơi sẽ điều khiển một nhân vật với các chiêu thức và kỹ năng riêng biệt, tạo nên những trận đấu đa dạng và không kém phần hấp dẫn.
+
+Trò chơi Đối Kháng 2 Người Online giúp mang trải nghiệm chơi game đối kháng truyền thống lên một tầm cao mới bằng cách kết nối người chơi từ khắp nơi trên thế giới thông qua Internet. Trong đồ án của chúng em đã phát triển được những tính năng bao gồm:
+
+Tạo host và kết nối: Chơi được online theo mô hình mạng LAN.
+
+Nhắn tin: có thể nhắn tin, trò truyện với nhau thông qua mạng LAN
+
+Cài đặt: Điều chỉnh tiếng âm thanh, hiệu ứng trong trò chơi
+
+\hypertarget{mux1ee5c-tiuxeau-cux1ee7a-game-caro-online}{%
+\subsubsection{Mục tiêu của game ``Caro
+Online''}\label{mux1ee5c-tiuxeau-cux1ee7a-game-caro-online}}
+
+Mục tiêu của trò chơi "Caro Online" là:
+
+\textbf{Giải trí và thư giãn:}Đối Kháng 2 Người Online" cung cấp một nền tảng giải trí thú vị cho người chơi, cho phép họ tham gia vào các trận đấu gay cấn và đầy kích thích với bạn bè hoặc người chơi khác trên toàn thế giới.
+
+\textbf{Kết nối cộng đồng:} Trò chơi "Đối Kháng 2 Người Online" tạo ra một môi trường trực tuyến để các người chơi có thể giao lưu, kết nối và chia sẻ niềm đam mê với nhau. Điều này giúp mở rộng cộng đồng người chơi và tạo ra một không gian thú vị cho sự tương tác xã hội.
+
+\textbf{Thử thách kỹ năng:} Trò chơi "Đối Kháng 2 Người Online" không chỉ đòi hỏi phản xạ nhanh nhạy mà còn cần sự tư duy chiến lược và kỹ năng điều khiển nhân vật của người chơi. Việc phải suy nghĩ và dự đoán hành động của đối thủ là một phần quan trọng của trải nghiệm chơi game này.
+
+\textbf{Phát triển kỹ năng:} Chơi "Đối Kháng 2 Người Online" không chỉ mang lại niềm vui mà còn giúp người chơi phát triển các kỹ năng như phản xạ nhanh, tư duy chiến lược và khả năng tương tác xã hội thông qua việc tham gia vào các trận đấu và trò chuyện với đối thủ.
+
+\hypertarget{yuxeau-cux1ea7u-ux111ux1ed1i-vux1edbi-ux111ux1ed3-uxe1n}{%
+\subsection{\texorpdfstring{Yêu cầu đối với đồ án
+}{Yêu cầu đối với đồ án }}\label{yuxeau-cux1ea7u-ux111ux1ed1i-vux1edbi-ux111ux1ed3-uxe1n}}
+
+Xây dựng 1 ứng dụng game ``Đối kháng 2 người'' dựa vào những kiến thức đã học
+về ngôn ngữ lập trình Python. Ứng dụng được thư viện Socket trong ngôn
+ngữ Python.
+
+\hypertarget{tiux1ebfn-huxe0nh-xuxe2y-dux1ef1ng-ux1ee9ng-dux1ee5ng}{%
+\subsection{\texorpdfstring{Tiến hành xây dựng ứng dụng
+}{Tiến hành xây dựng ứng dụng }}\label{tiux1ebfn-huxe0nh-xuxe2y-dux1ef1ng-ux1ee9ng-dux1ee5ng}}
+
+\hypertarget{nhux1eefng-thux1ee9-cux1ea7n-chuux1ea9n-bux1ecb.}{%
+\subsubsection{Những thứ cần chuẩn
+bị.}\label{nhux1eefng-thux1ee9-cux1ea7n-chuux1ea9n-bux1ecb.}}
+
+\hypertarget{cuxe1c-huxecnh-ux1ea3nh-cux1ee7a-game}{%
+\paragraph{Các hình ảnh của
+game}\label{cuxe1c-huxecnh-ux1ea3nh-cux1ee7a-game}}
+\vspace{0.5cm}
+
+
+\begin{wrapfigure}{}{\textwidth}
+
+    \centering
+            \includegraphics[width=4.33264in,height=4.33264in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image80.png}
+            \\
+    \emph{Hình 3.1: Logo game}
+
+\end{wrapfigure}
+
+
+\begin{wrapfigure}{}{\textwidth}
+    \centering
+
+\includegraphics[width=2.22986in,height=2.22986in]{template_SGU/setting.jpg}
+\\
+    \centering \emph{Hình 3.2: Biểu tượng setting}
+\end{wrapfigure}
+
+
+\begin{wrapfigure}{}{\textwidth}
+    \centering
+
+\includegraphics[width=2.22986in,height=2.22986in]
+{template_SGU/message.jpg}
+\\
+    \centering \emph{Hình 3.3: Biểu tượng gửi tin nhắn}
+\end{wrapfigure}
+\\
+\paragraph{Các file âm thanh của game}\label{cuxe1c-file-uxe2m-thanh-cux1ee7a-game}
+\vspace{0.5cm}
+\begin{wrapfigure}{}{\textwidth}
+\\
+    \centering
+\includegraphics[width=2.07321in,height=1.23976in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image79.png}
+
+\end{wrapfigure}
+
+
+\hypertarget{cuxe1c-thux1b0-viux1ec7n-sux1eed-dux1ee5ng}{%
+\paragraph{Các thư viện sử
+dụng}\label{cuxe1c-thux1b0-viux1ec7n-sux1eed-dux1ee5ng}}
+\\
+\textbf{(Tkinter, Socket, Threading, PIL, Pygame)}
+\newline
+\textbf{Tkinter}
+\\
+Tkinter là một thư viện được tích hợp sẵn trong Python, được sử dụng để
+tạo giao diện người dùng đồ họa (GUI). Nó cung cấp các widget và phương
+thức để tạo và quản lý các cửa sổ, nút, nhãn, v.v. Trong trò chơi ``Caro
+Online'' của chúng em thì Tkinter được sử dụng để tạo giao diện người
+dùng cho trò chơi Caro.
+
+\textbf{Ưu điểm:} Được tích hợp sẵn trong Python, dễ sử dụng cho các ứng
+dụng GUI đơn giản, tương thích tốt trên nhiều hệ điều hành.
+
+\textbf{Nhược điểm:} Giao diện không đẹp mắt và linh hoạt như các thư
+viện GUI phức tạp hơn như PyQt hoặc wxPython.
+
+\textbf{Socket}
+
+Thư viện Socket là một phần của Python cung cấp các giao diện lập trình
+ứng dụng mạng. Nó cho phép lập trình viên tạo và quản lý các kết nối
+mạng, truyền gửi dữ liệu qua mạng. Trong trò chơi ``Caro Online'' của
+chúng em thì Socket được sử dụng để xây dựng kết nối mạng giữa các
+client và server trong trò chơi Caro.
+
+\textbf{Ưu điểm:} Cho phép truyền gửi dữ liệu qua mạng một cách linh
+hoạt, phù hợp cho việc xây dựng các ứng dụng mạng.
+
+\textbf{Nhược điểm:} Yêu cầu hiểu biết sâu về các giao thức mạng, cần
+quản lý kết nối và xử lý lỗi mạng.
+
+\textbf{Threading}
+
+Thư viện Threading được sử dụng để tạo và quản lý các luồng riêng biệt
+(threads) trong Python. Trong trò chơi ``Caro Online'' của chúng em thì
+Threading được sử dụng để tạo các luồng riêng biệt để xử lý kết nối mạng
+đến server hoặc client.
+
+\textbf{Ưu điểm:} Cho phép xử lý đồng thời nhiều tác vụ, tăng hiệu suất
+của ứng dụng khi có nhiều hoạt động cần xử lý cùng một lúc.
+
+\textbf{Nhược điểm:} Cần quản lý các vấn đề liên quan đến đồng bộ hóa và
+tương tác giữa các luồng.
+
+\textbf{PIL (Python Imaging Library)}
+
+PIL là một thư viện Python để xử lý hình ảnh. Trong trò chơi ``Caro
+Online'' của chúng em thì PIL được sử dụng để tải và xử lý các hình ảnh
+như biểu tượng, logo cho giao diện người dùng.
+
+\textbf{Ưu điểm:} Dễ sử dụng cho các nhiệm vụ xử lý hình ảnh cơ bản, hỗ
+trợ nhiều định dạng hình ảnh.
+
+\textbf{Nhược điểm:} Thư viện này không được phát triển tích cực, được
+thay thế bởi Pillow (fork của PIL).
+
+\textbf{Pygame}
+
+Pygame là một thư viện Python để phát triển trò chơi. Nó cung cấp các
+chức năng để xử lý âm thanh, đồ họa, cũng như các sự kiện trong trò
+chơi. Trong trò chơi ``Caro Online'' của chúng em thì Pygame được sử
+dụng để phát âm thanh khi người dùng thực hiện các hành động trong trò
+chơi.
+
+\textbf{Ưu điểm:} Mạnh mẽ cho việc phát triển trò chơi, cung cấp nhiều
+chức năng xử lý âm thanh, đồ họa, sự kiện.
+
+\textbf{Nhược điểm:} Không phù hợp cho các ứng dụng GUI phức tạp, tốn
+nhiều tài nguyên hơn so với các thư viện GUI khác.
+
+\hypertarget{khai-buxe1o-thux1b0-viux1ec7n-cuxe1c-biux1ebfn-cho-truxf2-chux1a1i}{%
+\subsubsection{\texorpdfstring{Khai báo thư viện các biến cho trò
+chơi
+}{Khai báo thư viện các biến cho trò chơi }}\label{khai-buxe1o-thux1b0-viux1ec7n-cuxe1c-biux1ebfn-cho-truxf2-chux1a1i}}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Khai báo các thư viện cần thiết:
+  \end{quote}
+\end{itemize}
+
+\includegraphics[width=5.5216in,height=1.58355in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image83.png}
+
+Những dòng trên dùng để khai báo các thư viện cần thiết:
+
+\begin{itemize}
+\item
+  \begin{quote}
+  tkinter: thư viện tạo giao diện đồ họa.
+  \end{quote}
+\item
+  \begin{quote}
+  functools.partial: giúp tạo các hàm với đối số mặc định.
+  \end{quote}
+\item
+  \begin{quote}
+  threading: hỗ trợ đa luồng, để xử lý socket mà không bị chặn.
+  \end{quote}
+\item
+  \begin{quote}
+  socket: thư viện để làm việc với kết nối mạng.
+  \end{quote}
+\item
+  \begin{quote}
+  PIL (Pillow): thư viện để xử lý hình ảnh
+  \end{quote}
+\item
+  \begin{quote}
+  pygame: thư viện để phát nhạc và âm thanh.
+  \end{quote}
+\end{itemize}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  \emph{\textbf{Biến toàn cục}}
+  \end{quote}
+\end{itemize}
+
+\includegraphics[width=4.75in,height=0.86458in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image31.png}
+
+Đặt ở cuối đoạn mã chính, quy định số lượng ô theo trục hoành (X) và
+trục tung (Y) trong bàn cờ caro.
+
+\begin{itemize}
+\item
+  \begin{quote}
+  \emph{\textbf{Biến của lớp Window()}}
+  \end{quote}
+\end{itemize}
+
+\includegraphics[width=3.05208in,height=0.27083in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image49.png}
+
+`self.Buts': dictionary (từ điển) dùng để lưu các nút trên bàn cờ.
+
+\includegraphics[width=3.19792in,height=0.32292in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image72.png}
+
+`self.memory': lưu trữ các bước đi để thực hiện chức năng undo.
+
+\includegraphics[width=6.13542in,height=0.30208in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image20.png}
+
+`self.Threading\_socket': đối tượng của lớp Threading\_socket dùng để
+quản lý kết nối mạng của trò chơi.
+
+\includegraphics[width=6.29897in,height=0.52778in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image17.png}
+
+`self.effect\_volume': lưu trữ âm lượng âm thanh hiệu ứng.
+
+`selt.music\_volume': lưu trữ âm lượng nhạc nền.
+
+\includegraphics[width=6.29897in,height=0.79167in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image12.png}
+
+`self.settings\_icon': chứa hình ảnh của nút cài đặt.
+
+`self.send\_icon': chứa hình ảnh biểu tượng chức năng chat.
+
+\includegraphics[width=6.29897in,height=0.23611in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image63.png}
+
+\includegraphics[width=5.57292in,height=0.29167in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image54.png}
+
+`self.logo': chứa hình ảnh logo của trò chơi.
+
+\includegraphics[width=6.29897in,height=0.38889in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image56.png}
+
+`self.chat\_display': widget hiển thị khung chat.
+
+\includegraphics[width=6.29897in,height=0.25in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image67.png}
+
+`self.chat\_entry': widget hiển thị khung nhập tin nhắn.
+
+\includegraphics[width=3.72917in,height=0.3125in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image55.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  \emph{\textbf{Biến của lớp Threading\_socket()}}
+  \end{quote}
+\end{itemize}
+
+`self.dataReceive': lưu trữ dữ liệu nhận được từ kết nối mạng.
+
+\includegraphics[width=3.32292in,height=0.20833in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image73.png}
+
+`self.conn': lưu trữ đối tượng kết nối socket.
+
+\includegraphics[width=3.28125in,height=0.27083in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image51.png}
+
+`self.gui': tham chiếu tới đối tượng GUI - lớp Window() để tương tác với
+giao diện.
+
+\includegraphics[width=3.1875in,height=0.3125in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image14.png}
+
+`self.name': biến lưu trữ tên của người chơi (client hoặc server).
+
+\begin{itemize}
+\item
+  \begin{quote}
+  \emph{Cài đặt giao diện}
+  \end{quote}
+\end{itemize}
+
+\emph{Các thành phần giao diện được cài đặt trong phương thức
+showFrame()}
+
+\includegraphics[width=6.09375in,height=2.03125in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image37.png}
+
+Frame: các khung chứa - `frame1', `frame2', `frame3' được tạo để sắp xếp
+các thành phần giao diện khác nhau.
+
+\includegraphics[width=6.29897in,height=0.125in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image52.png}
+
+\includegraphics[width=3.20833in,height=0.28125in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image36.png}
+
+`setting\_button': nút setting để mở giao diện thay đổi âm lượng của
+hiệu ứng và nhạc nền.
+
+\includegraphics[width=6.29897in,height=0.26389in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image13.png}
+
+\includegraphics[width=3.3125in,height=0.26042in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image47.png}
+
+`Undo': nút undo để xóa các bước vừa đi.
+
+\includegraphics[width=6.29897in,height=0.20833in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image23.png}
+
+\includegraphics[width=2.91667in,height=0.28125in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image75.png}
+
+`connectBT': nút để kết nối với host thông qua địa chỉ IP.
+
+\includegraphics[width=6.29897in,height=0.26389in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image53.png}
+
+\includegraphics[width=3.125in,height=0.29167in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image65.png}
+
+`makeHostBT': nút để thiết lập host.
+
+\includegraphics[width=6.29897in,height=0.875in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image16.png}
+
+Khởi tạo bàn cờ caro trong frame2 là một ma trận gồm số dòng là Ox và số
+cột và Oy.
+
+\includegraphics[width=6.29897in,height=0.75in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image22.png}
+
+Âm thanh nền: được khởi tạo và phát lại liên tục bằng pygame.
+
+\includegraphics[width=6.29897in,height=0.79167in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image66.png}
+
+Âm thanh hiệu ứng: được phát khi người dùng ấn vào nút trên bàn cờ.
+
+\begin{itemize}
+\item
+  \begin{quote}
+  \emph{Kết nối mạng}
+  \end{quote}
+\end{itemize}
+
+Các phương thức và biến trong Threading\_socket() quản lý việc kết nối
+mạng giữa các người chơi, bao gồm:
+
+\includegraphics[width=4.41667in,height=0.30208in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image15.png}
+
+\includegraphics[width=3.4375in,height=0.36458in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image27.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  `clientAction' và `serverAction': Phương thức để khởi tạo kết nối
+  client và server.
+  \end{quote}
+\end{itemize}
+
+\includegraphics[width=2.90625in,height=0.25in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image18.png}
+
+\includegraphics[width=3.90625in,height=0.3125in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image32.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  `client' và `server': Phương thức để xử lý dữ liệu nhận được từ kết
+  nối mạng.
+  \end{quote}
+\end{itemize}
+
+\includegraphics[width=3.66667in,height=0.33333in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image3.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  `sendData': Phương thức để gửi dữ liệu qua mạng.
+  \end{quote}
+\end{itemize}
+
+\hypertarget{cuxe1c-phux1b0ux1a1ng-thux1ee9c-trong-class-window}{%
+\subsubsection{Các phương thức trong class
+Window()}\label{cuxe1c-phux1b0ux1a1ng-thux1ee9c-trong-class-window}}
+
+Lớp Window() trong đoạn mã trên được thiết kế để tạo giao diện đồ họa
+cho trò chơi cờ caro với nhiều tính năng như phát âm thanh, kết nối mạng
+và trò chuyện trong trò chơi. Những phương thức này giúp quản lý toàn bộ
+giao diện và các tính năng của trò chơi cờ caro, bao gồm giao diện người
+dùng, âm thanh, kết nối mạng, và các thao tác trong trò chơi.
+
+\includegraphics[width=2.65625in,height=0.36458in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image84.png}
+\\
+
+\hypertarget{phux1b0ux1a1ng-thux1ee9c-__initself__}{%
+\paragraph{\texorpdfstring{\emph{Phương thức
+\_\_init(self)\_\_}}{Phương thức \_\_init(self)\_\_}}\label{phux1b0ux1a1ng-thux1ee9c-__initself__}}
+\\
+\\
+\\
+\begin{wrapfigure}{}{\textwidth}
+    \centering
+\includegraphics[width=6.29897in,height=3.125in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image70.png}
+
+\end{wrapfigure}
+
+
+\\
+\\
+Phương thức khởi tạo của lớp Window, thiết lập giao diện ban đầu và các
+thành phần của cửa sổ:
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Thiết lập tiêu đề cửa sổ, màu nền và khởi tạo các biến lưu trữ.
+  \end{quote}
+\item
+  \begin{quote}
+  Khởi tạo đối tượng Threading\_socket để quản lý kết nối mạng.
+  \end{quote}
+\item
+  \begin{quote}
+  Khởi tạo Pygame để phát nhạc nền và âm thanh.
+  \end{quote}
+\item
+  \begin{quote}
+  Tải các hình ảnh biểu tượng cho nút cài đặt và nút gửi tin nhắn.
+  \end{quote}
+\end{itemize}
+
+\hypertarget{phux1b0ux1a1ng-thux1ee9c-showframeself}{%
+\paragraph{\texorpdfstring{\emph{Phương thức
+showFrame(self)}}{Phương thức showFrame(self)}}\label{phux1b0ux1a1ng-thux1ee9c-showframeself}}
+
+Thiết lập các khung (frame) và widget trong giao diện chính của trò
+chơi, bao gồm bảng cờ, các nút chức năng và khung trò chuyện:
+
+\includegraphics[width=6.25in,height=3.53125in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image59.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Tạo và sắp xếp các khung chứa.
+  \end{quote}
+\end{itemize}
+
+\includegraphics[width=6.29897in,height=0.58333in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image57.png}
+
+\includegraphics[width=6.29897in,height=0.48611in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image4.png}
+
+\includegraphics[width=6.29897in,height=0.45833in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image74.png}
+
+\includegraphics[width=6.29897in,height=0.48611in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image33.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Tạo và sắp xếp các nút chức năng (Setting, Undo, Connect, MakeHost).
+  \end{quote}
+\end{itemize}
+
+\includegraphics[width=6.29897in,height=1in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image28.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Tạo bảng cờ với ma trận các nút.
+  \end{quote}
+\end{itemize}
+
+\includegraphics[width=6.29897in,height=0.70833in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image60.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Tải và hiển thị logo trò chơi.
+  \end{quote}
+\end{itemize}
+
+\includegraphics[width=6.29897in,height=1.72222in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image5.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Tạo khung chat và các nút gửi tin nhắn.
+  \end{quote}
+\end{itemize}
+
+\hypertarget{phux1b0ux1a1ng-thux1ee9c-onkeypressself-event}{%
+\paragraph{\texorpdfstring{\emph{Phương thức onKeyPress(self,
+event)}}{Phương thức onKeyPress(self, event)}}\label{phux1b0ux1a1ng-thux1ee9c-onkeypressself-event}}
+
+Xử lý sự kiện khi người dùng nhấn phím, cụ thể là phím "Enter" để gửi
+tin nhắn.
+
+\includegraphics[width=4.32292in,height=0.83333in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image46.png}
+
+\hypertarget{phux1b0ux1a1ng-thux1ee9c-sendmessageself}{%
+\paragraph{\texorpdfstring{\emph{\textbf{} Phương thức
+sendMessage(self)}}{Phương thức sendMessage(self)}}\label{phux1b0ux1a1ng-thux1ee9c-sendmessageself}}
+
+Gửi tin nhắn từ khung nhập liệu tới khung trò chuyện và gửi dữ liệu qua
+kết nối mạng.
+
+\includegraphics[width=6.29897in,height=1.375in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image7.png}
+
+\hypertarget{phux1b0ux1a1ng-thux1ee9c-displaymessageself-message}{%
+\paragraph{\texorpdfstring{\emph{Phương thức displayMessage(self,
+message)}}{Phương thức displayMessage(self, message)}}\label{phux1b0ux1a1ng-thux1ee9c-displaymessageself-message}}
+
+Hiển thị tin nhắn trong khung trò chuyện.
+
+\includegraphics[width=6.29167in,height=1.35417in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image39.png}
+
+\hypertarget{phux1b0ux1a1ng-thux1ee9c-handlebuttonself-x-y}{%
+\paragraph{\texorpdfstring{\emph{\textbf{} Phương thức
+handleButton(self, x,
+y)}}{Phương thức handleButton(self, x, y)}}\label{phux1b0ux1a1ng-thux1ee9c-handlebuttonself-x-y}}
+
+Xử lý sự kiện khi người dùng nhấn vào nút trong bảng cờ, cập nhật trạng
+thái nút và gửi dữ liệu qua kết nối mạng.
+
+\includegraphics[width=6.29897in,height=4.16667in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image8.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Phát hiệu ứng âm thanh khi người chơi thực hiện các nước đi trên bàn
+  cờ.
+  \end{quote}
+\end{itemize}
+
+\includegraphics[width=6.29897in,height=0.86111in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image2.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Xử lý sự kiện khi người chơi thực hiện các nước đi
+  \end{quote}
+\end{itemize}
+
+\includegraphics[width=6.29897in,height=3.30556in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image9.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Kiểm tra tính hợp lệ của một ô khi người chơi thực hiện nước đi. Ô chỉ
+  có thể được đánh dấu khi rỗng.
+  \end{quote}
+\end{itemize}
+
+\includegraphics[width=6.29897in,height=0.58333in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image64.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Xử lý sự kiện và cài đặt cho `O'.
+  \end{quote}
+\end{itemize}
+
+\includegraphics[width=6.29897in,height=1.33333in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image43.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Xử lý khi người chơi `O' thắng
+  \end{quote}
+\end{itemize}
+
+\includegraphics[width=5.35417in,height=0.70833in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image21.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Xử lý sự kiện và cài đặt cho `X'.
+  \end{quote}
+\end{itemize}
+
+\includegraphics[width=6.29897in,height=1.66667in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image62.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Xử lý khi người chơi `X' thắng.
+  \end{quote}
+\end{itemize}
+
+\includegraphics[width=5.39583in,height=0.8125in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image34.png}
+
+\hypertarget{phux1b0ux1a1ng-thux1ee9c-opensettingsself}{%
+\paragraph{\texorpdfstring{\emph{\textbf{} Phương thức
+openSettings(self)}
+}{Phương thức openSettings(self) }}\label{phux1b0ux1a1ng-thux1ee9c-opensettingsself}}
+
+Mở cửa sổ cài đặt âm lượng cho nhạc nền và hiệu ứng âm thanh.
+
+\includegraphics[width=6.29897in,height=2.69444in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image10.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Mở cửa sổ cài đặt.
+  \end{quote}
+\end{itemize}
+
+\includegraphics[width=5.8125in,height=0.80208in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image40.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Tạo tiêu đề và thanh điều chỉnh âm lượng cho nhạc nền.
+  \end{quote}
+\end{itemize}
+
+\includegraphics[width=6.29897in,height=1.04167in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image85.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Tạo tiêu đề và thanh điều chỉnh âm lượng cho hiệu ứng âm thanh.
+  \end{quote}
+\end{itemize}
+
+\includegraphics[width=6.29897in,height=0.94444in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image29.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Tạo nút đóng cửa sổ setting.
+  \end{quote}
+\end{itemize}
+
+\includegraphics[width=6.29897in,height=0.33333in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image76.png}
+
+\hypertarget{phux1b0ux1a1ng-thux1ee9c-setmusicvolumeself-volume}{%
+\paragraph{\texorpdfstring{\emph{Phương thức setMusicVolume(self,
+volume)}}{Phương thức setMusicVolume(self, volume)}}\label{phux1b0ux1a1ng-thux1ee9c-setmusicvolumeself-volume}}
+
+Thiết lập âm lượng của nhạc nền.
+
+\includegraphics[width=6.28125in,height=1.02083in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image1.png}
+
+\hypertarget{phux1b0ux1a1ng-thux1ee9c-seteffectvolumeself-volume}{%
+\paragraph{\texorpdfstring{\emph{Phương thức setEffectVolume(self,
+volume)}}{Phương thức setEffectVolume(self, volume)}}\label{phux1b0ux1a1ng-thux1ee9c-seteffectvolumeself-volume}}
+
+Thiết lập âm lượng của hiệu ứng âm thanh.
+
+\includegraphics[width=4.75in,height=0.52083in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image42.png}
+
+\hypertarget{phux1b0ux1a1ng-thux1ee9c-undoself-synchronizedfalse}{%
+\paragraph{\texorpdfstring{\emph{Phương thức Undo(self,
+synchronized=False)}}{Phương thức Undo(self, synchronized=False)}}\label{phux1b0ux1a1ng-thux1ee9c-undoself-synchronizedfalse}}
+
+Xử lý chức năng Undo, quay lại bước đi trước đó.
+
+\includegraphics[width=6.29897in,height=2.66667in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image61.png}
+
+\hypertarget{phux1b0ux1a1ng-thux1ee9c-checkwinself-x-y-player}{%
+\paragraph{\texorpdfstring{\emph{Phương thức checkWin(self, x, y,
+player)}}{Phương thức checkWin(self, x, y, player)}}\label{phux1b0ux1a1ng-thux1ee9c-checkwinself-x-y-player}}
+
+Kiểm tra xem người chơi có thắng không sau khi thực hiện bước đi.
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Kiểm tra theo dòng:
+  \end{quote}
+\end{itemize}
+
+\includegraphics[width=6.03125in,height=2.79167in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image35.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Kiểm tra theo cột:
+  \end{quote}
+\end{itemize}
+
+\includegraphics[width=6.03125in,height=3.05208in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image30.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Kiểm tra trên đường chéo phải:
+  \end{quote}
+\end{itemize}
+
+\includegraphics[width=6.29897in,height=3.02778in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image77.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Kiểm tra trên đường chéo trái:
+  \end{quote}
+\end{itemize}
+
+\includegraphics[width=6.29897in,height=3.36111in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image11.png}
+
+\hypertarget{phux1b0ux1a1ng-thux1ee9c-notificationself-title-message}{%
+\paragraph{\texorpdfstring{\emph{Phương thức notification(self,
+title,
+message)}}{Phương thức notification(self, title, message)}}\label{phux1b0ux1a1ng-thux1ee9c-notificationself-title-message}}
+
+Hiển thị thông báo người chơi giành được chiến thắng.
+
+\includegraphics[width=5.53125in,height=0.63542in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image71.png}
+
+\hypertarget{phux1b0ux1a1ng-thux1ee9c-newgameself}{%
+\paragraph{\texorpdfstring{\emph{Phương thức
+newGame(self)}}{Phương thức newGame(self)}}\label{phux1b0ux1a1ng-thux1ee9c-newgameself}}
+
+Phương thức này khởi tạo lại trò chơi và xóa hết các ô đã đi.
+
+\includegraphics[width=5.33333in,height=1.15625in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image50.png}
+
+\hypertarget{cuxe1c-phux1b0ux1a1ng-thux1ee9c-trong-class-threading_socket}{%
+\subsubsection{\texorpdfstring{Các phương thức trong class
+Threading\_socket()
+}{Các phương thức trong class Threading\_socket() }}\label{cuxe1c-phux1b0ux1a1ng-thux1ee9c-trong-class-threading_socket}}
+
+\includegraphics[width=3.35417in,height=0.36458in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image68.png}
+
+Lớp Threading\_socket được thiết kế để quản lý kết nối mạng trong trò
+chơi cờ caro. Nó cho phép tạo kết nối giữa máy chủ và máy khách, gửi và
+nhận dữ liệu qua mạng để đồng bộ hóa trạng thái trò chơi giữa hai bên.
+
+\hypertarget{phux1b0ux1a1ng-thux1ee9c-__init__}{%
+\paragraph{\texorpdfstring{\emph{Phương thức
+\_\_init()\_\_}}{Phương thức \_\_init()\_\_}}\label{phux1b0ux1a1ng-thux1ee9c-__init__}}
+
+Khởi tạo các thuộc tính của đối tượng Threading\_socket().
+
+\includegraphics[width=3.85417in,height=1.57292in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image41.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  `self.dataReceive': Biến này lưu trữ dữ liệu nhận được từ kết nối
+  mạng.
+  \end{quote}
+\item
+  \begin{quote}
+  `self.conn': Biến này đại diện cho kết nối mạng.
+  \end{quote}
+\item
+  \begin{quote}
+  `self.gui': Biến này lưu trữ tham chiếu đến giao diện đồ họa người
+  dùng (GUI), để có thể tương tác với các thành phần GUI từ lớp
+  Threading\_socket.
+  \end{quote}
+\item
+  \begin{quote}
+  `self.name': Biến này lưu trữ tên của kết nối (client hoặc server).
+  \end{quote}
+\end{itemize}
+
+\hypertarget{phux1b0ux1a1ng-thux1ee9c-serveractionself}{%
+\paragraph{\texorpdfstring{\emph{Phương thức
+serverAction(self)}}{Phương thức serverAction(self)}}\label{phux1b0ux1a1ng-thux1ee9c-serveractionself}}
+
+Thiết lập máy chủ, chấp nhận kết nối từ máy khách và khởi động luồng để
+nhận dữ liệu.
+
+\includegraphics[width=6.29897in,height=2.44444in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image45.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  `self.name': Gán giá trị "server" cho biến này để xác định loại kết
+  nối.
+  \end{quote}
+\item
+  \begin{quote}
+  `HOST': Địa chỉ IP của máy chủ (được lấy tự động).
+  \end{quote}
+\item
+  \begin{quote}
+  `PORT': Cổng lắng nghe của máy chủ.
+  \end{quote}
+\item
+  \begin{quote}
+  `s': Tạo và cấu hình socket.
+  \end{quote}
+\item
+  \begin{quote}
+  `self.conn' và `addr': Chấp nhận kết nối từ client.
+  \end{quote}
+\item
+  \begin{quote}
+  `t2': Tạo một luồng để chạy phương thức server.
+  \end{quote}
+\end{itemize}
+
+\hypertarget{phux1b0ux1a1ng-thux1ee9c-serverself-addr-s}{%
+\paragraph{\texorpdfstring{\emph{Phương thức server(self, addr,
+s)}}{Phương thức server(self, addr, s)}}\label{phux1b0ux1a1ng-thux1ee9c-serverself-addr-s}}
+
+Phương thức này chịu trách nhiệm nhận dữ liệu từ server khi đối tượng
+đang hoạt động dưới dạng client.
+
+\includegraphics[width=6.29897in,height=4.65278in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image81.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Vòng lặp while True: Vòng lặp vô hạn để liên tục lắng nghe và nhận dữ
+  liệu từ server.
+  \end{quote}
+\item
+  \begin{quote}
+  `self.dataReceive = self.conn.recv(1024).decode()':
+  \end{quote}
+\end{itemize}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  `self.conn.recv(1024)': Nhận tối đa 1024 byte dữ liệu từ server.
+  \end{quote}
+\item
+  \begin{quote}
+  `.decode()': Giải mã dữ liệu nhận được từ dạng byte sang dạng chuỗi.
+  \end{quote}
+\end{itemize}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  `if self.dataReceive != ""': Kiểm tra xem dữ liệu nhận được có rỗng
+  hay không.
+  \end{quote}
+\item
+  \begin{quote}
+  Phân tích dữ liệu nhận được:
+  \end{quote}
+\end{itemize}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  `friend = self.dataReceive.split("\textbar"){[}0{]}': Tách chuỗi dữ
+  liệu nhận được và lấy phần đầu tiên (người gửi).
+  \end{quote}
+\item
+  \begin{quote}
+  `action = self.dataReceive.split("\textbar"){[}1{]}': Lấy phần thứ hai
+  (hành động).
+  \end{quote}
+\end{itemize}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Xử lý các hành động khác nhau:
+  \end{quote}
+\end{itemize}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  `if action == "hit" and friend == "server"\textquotesingle:': Nếu hành
+  động là "hit" từ server, lấy tọa độ x và y và gọi phương thức
+  handleButton của GUI để cập nhật nước đi.
+  \end{quote}
+\item
+  \begin{quote}
+  `if action == "Undo" and friend == "server":': Nếu hành động là "Undo"
+  từ server, gọi phương thức Undo của GUI để hoàn tác nước đi mà không
+  đồng bộ hóa lại.
+  \end{quote}
+\item
+  \begin{quote}
+  `if action == "message" and friend == "server":': Nếu hành động là
+  "message" từ server, lấy tin nhắn và hiển thị nó trong giao diện GUI.
+  \end{quote}
+\end{itemize}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  `self.dataReceive = ""': Đặt lại biến nhận dữ liệu để sẵn sàng nhận dữ
+  liệu tiếp theo.
+  \end{quote}
+\item
+  \begin{quote}
+  `finally: s.close()': Đảm bảo socket được đóng lại khi kết thúc phương
+  thức, ngay cả khi có lỗi xảy ra.
+  \end{quote}
+\end{itemize}
+
+\hypertarget{phux1b0ux1a1ng-thux1ee9c-clientactionself-inputip}{%
+\paragraph{\texorpdfstring{\emph{Phương thức clientAction(self,
+inputIP)}}{Phương thức clientAction(self, inputIP)}}\label{phux1b0ux1a1ng-thux1ee9c-clientactionself-inputip}}
+
+Thiết lập máy khách, kết nối đến máy chủ và khởi động luồng để nhận dữ
+liệu.
+
+\includegraphics[width=6.29897in,height=2.09722in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image48.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  `inputIP': Địa chỉ IP của server mà client muốn kết nối tới.
+  \end{quote}
+\item
+  \begin{quote}
+  `self.name': Gán giá trị "client" cho biến này để xác định loại kết
+  nối.
+  \end{quote}
+\item
+  \begin{quote}
+  `HOST' và `PORT': Địa chỉ và cổng của server.
+  \end{quote}
+\item
+  \begin{quote}
+  `self.conn': Tạo một socket kết nối tới server.
+  \end{quote}
+\item
+  \begin{quote}
+  `self.gui.notification': Hiển thị thông báo về việc kết nối.
+  \end{quote}
+\item
+  \begin{quote}
+  `t1': Tạo một luồng để chạy phương thức client.
+  \end{quote}
+\end{itemize}
+
+\hypertarget{phux1b0ux1a1ng-thux1ee9c-clientself}{%
+\paragraph{\texorpdfstring{\emph{Phương thức
+client(self)}}{Phương thức client(self)}}\label{phux1b0ux1a1ng-thux1ee9c-clientself}}
+
+Phương thức này chịu trách nhiệm nhận dữ liệu từ server khi đối tượng
+đang hoạt động dưới dạng client.
+
+\includegraphics[width=6.29897in,height=3.77778in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image6.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Vòng lặp while True: Vòng lặp vô hạn để liên tục lắng nghe và nhận dữ
+  liệu từ server.
+  \end{quote}
+\item
+  \begin{quote}
+  `self.dataReceive = self.conn.recv(1024).decode()':
+  \end{quote}
+\end{itemize}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  `self.conn.recv(1024)': Nhận tối đa 1024 byte dữ liệu từ server.
+  \end{quote}
+\item
+  \begin{quote}
+  `.decode()': Giải mã dữ liệu nhận được từ dạng byte sang dạng chuỗi.
+  \end{quote}
+\end{itemize}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  `if self.dataReceive != ""': Kiểm tra xem dữ liệu nhận được có rỗng
+  hay không.
+  \end{quote}
+\item
+  \begin{quote}
+  Phân tích dữ liệu nhận được:
+  \end{quote}
+\end{itemize}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  `friend = self.dataReceive.split("\textbar"){[}0{]}': Tách chuỗi dữ
+  liệu nhận được và lấy phần đầu tiên (người gửi).
+  \end{quote}
+\item
+  \begin{quote}
+  `action = self.dataReceive.split("\textbar"){[}1{]}': Lấy phần thứ hai
+  (hành động).
+  \end{quote}
+\end{itemize}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Xử lý các hành động khác nhau:
+  \end{quote}
+\end{itemize}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  `if action == "hit" and friend == "server":': Nếu hành động là "hit"
+  từ server, lấy tọa độ x và y và gọi phương thức handleButton của GUI
+  để cập nhật nước đi.
+  \end{quote}
+\item
+  \begin{quote}
+  `if action == "Undo" and friend == "server":': Nếu hành động là "Undo"
+  từ server, gọi phương thức Undo của GUI để hoàn tác nước đi mà không
+  đồng bộ hóa lại.
+  \end{quote}
+\item
+  \begin{quote}
+  `if action == "message" and friend == "server":': Nếu hành động là
+  "message" từ server, lấy tin nhắn và hiển thị nó trong giao diện GUI.
+  \end{quote}
+\end{itemize}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  `self.dataReceive = ""': Đặt lại biến nhận dữ liệu để sẵn sàng nhận dữ
+  liệu tiếp theo.
+  \end{quote}
+\end{itemize}
+
+\hypertarget{phux1b0ux1a1ng-thux1ee9c-senddataself-data}{%
+\paragraph{\texorpdfstring{\emph{ Phương thức sendData(self,
+data)}}{Phương thức sendData(self, data)}}\label{phux1b0ux1a1ng-thux1ee9c-senddataself-data}}
+
+Được dùng để gửi dữ liệu qua mạng.
+
+\includegraphics[width=6.29897in,height=0.68056in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image24.png}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  `data': Dữ liệu cần gửi.
+  \end{quote}
+\item
+  \begin{quote}
+  `self.conn.sendall(...)': Gửi toàn bộ dữ liệu qua kết nối mạng.
+  \end{quote}
+\end{itemize}
+
+\hypertarget{demo-game}{%
+\subsubsection{Demo game}\label{demo-game}}
+
+\hypertarget{giao-diux1ec7n-game}{%
+\paragraph{\texorpdfstring{\emph{Giao diện
+game}}{Giao diện game}}\label{giao-diux1ec7n-game}}
+\begin{wrapfigure}{}{\textwidth}
+    \centering
+\includegraphics[width=6.29897in,height=5.01389in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image26.png}
+
+\end{wrapfigure}
+
+
+\hypertarget{tux1ea1o-server-host}{%
+\paragraph{\texorpdfstring{\emph{Tạo server
+host}}{Tạo server host}}\label{tux1ea1o-server-host}}
+
+\begin{wrapfigure}{}{\textwidth}
+    \centering
+
+\includegraphics[width=6.29897in,height=5.01389in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image58.png}
+
+\end{wrapfigure}
+
+
+
+\hypertarget{kux1ebft-nux1ed1i-tux1edbi-server-host}{%
+\paragraph{\texorpdfstring{\emph{Kết nối tới server
+host}}{Kết nối tới server host}}\label{kux1ebft-nux1ed1i-tux1edbi-server-host}}
+\begin{wrapfigure}{}{\textwidth}
+    \centering
+
+\includegraphics[width=6.29897in,height=5.01389in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image44.png}
+
+\end{wrapfigure}
+
+
+
+\hypertarget{kux1ebft-nux1ed1i-tux1edbi-server-host}{%
+\paragraph{\texorpdfstring{\emph{Thông báo kết quả thắng thua}}{Thông báo kết quả thắng thua}}\label{kux1ebft-nux1ed1i-tux1edbi-server-host}}
+
+\begin{wrapfigure}{}{\textwidth}
+    \centering
+
+\includegraphics[width=6.29897in,height=5.01389in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image69.png}
+
+\end{wrapfigure}
+
+
+
+\hypertarget{kux1ebft-nux1ed1i-tux1edbi-server-host}{%
+\paragraph{\texorpdfstring{\emph{Tính năng nhắn tin trong game}}{Tính năng nhắn tin trong game}}\label{kux1ebft-nux1ed1i-tux1edbi-server-host}}
+
+\begin{wrapfigure}{}{\textwidth}
+    \centering
+
+\includegraphics[width=6.29897in,height=5.02778in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image38.png}
+
+\end{wrapfigure}
+
+
+
+\hypertarget{kux1ebft-nux1ed1i-tux1edbi-server-host}{%
+\paragraph{\texorpdfstring{\emph{Tính năng điều chỉnh âm thanh nhạc, hiệu ứng trong game}}{Thông báo kết quả thắng thua}}\label{kux1ebft-nux1ed1i-tux1edbi-server-host}}
+ Tính năng điều chỉnh âm thanh nhạc, hiệu ứng trong game
+
+\begin{wrapfigure}{}{\textwidth}
+    \centering
+
+\includegraphics[width=6.29897in,height=5.01389in]{vertopal_6cbe81d90d224a7eb60cb3a05655835b/media/image25.png}
+
+\end{wrapfigure}
+
+
+\hypertarget{ux1b0u-ux111iux1ec3m}{%
+\subsection{Ưu điểm}\label{ux1b0u-ux111iux1ec3m}}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Tích hợp nhiều chức năng: Code cung cấp một loạt các chức năng như
+  chơi trò chơi Caro, gửi và nhận tin nhắn giữa client và server, cũng
+  như điều chỉnh âm lượng âm thanh và cài đặt khác.
+  \end{quote}
+\item
+  \begin{quote}
+  Sử dụng giao diện đồ họa (GUI): Sử dụng thư viện tkinter để tạo giao
+  diện người dùng dễ sử dụng và thân thiện.
+  \end{quote}
+\item
+  \begin{quote}
+  Sử dụng luồng (threading): Sử dụng luồng để xử lý các tác vụ mạng,
+  giúp tránh tình trạng chặn luồng chính.
+  \end{quote}
+\item
+  \begin{quote}
+  Tích hợp âm thanh: Code tích hợp âm thanh cho trò chơi, tăng trải
+  nghiệm người dùng.
+  \end{quote}
+\end{itemize}
+
+\hypertarget{nhux1b0ux1ee3c-ux111iux1ec3m}{%
+\subsection{Nhược điểm}\label{nhux1b0ux1ee3c-ux111iux1ec3m}}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Bảo mật: Code không có bất kỳ lớp bảo mật nào. Giao tiếp mạng không
+  được mã hóa hoặc bảo vệ, điều này có thể dẫn đến các lỗ hổng bảo mật.
+  \end{quote}
+\item
+  \begin{quote}
+  Phần mềm thô sơ: Code vẫn còn thiếu một số tính năng như tích hợp cơ
+  chế xác thực, quản lý người dùng và phân quyền.
+  \end{quote}
+\item
+  \begin{quote}
+  Giao diện người dùng đơn giản: Mặc dù có giao diện người dùng, nhưng
+  nó vẫn còn thiếu một số tính năng như thông báo lỗi chi tiết và trực
+  quan hóa tốt hơn.
+  \end{quote}
+\end{itemize}
+
+\hypertarget{hux1b0ux1edbng-phuxe1t-triux1ec3n-thuxeam}{%
+\subsection{Hướng phát triển
+thêm}\label{hux1b0ux1edbng-phuxe1t-triux1ec3n-thuxeam}}
+
+\begin{itemize}
+\item
+  \begin{quote}
+  Cải thiện bảo mật: Thêm mã hóa và cơ chế xác thực để bảo vệ dữ liệu
+  mạng.
+  \end{quote}
+\item
+  \begin{quote}
+  Tích hợp đa ngôn ngữ: Cho phép người dùng chọn ngôn ngữ giao diện phù
+  hợp với họ.
+  \end{quote}
+\item
+  \begin{quote}
+  Tối ưu hóa giao diện người dùng: Cải thiện giao diện người dùng với
+  hình ảnh đồ họa hấp dẫn hơn và thông báo lỗi chi tiết hơn.
+  \end{quote}
+\item
+  \begin{quote}
+  Thêm tính năng đa nền tảng: Phát triển ứng dụng để có thể chạy trên
+  nhiều nền tảng như Windows, macOS và Linux.
+  \end{quote}
+\item
+  \begin{quote}
+  Kiểm thử và sửa lỗi: Thực hiện kiểm thử chất lượng phần mềm (QA) để
+  tìm và sửa lỗi, cũng như cải thiện hiệu suất và ổn định của ứng dụng.
+  \end{quote}
+\end{itemize}
+
+\hypertarget{kux1ebft-luux1eadn}{%
+\subsection{Kết luận}\label{kux1ebft-luux1eadn}}
+
+Sau một thời gian tìm hiểu đồ án, thu thập các kiến thức liên quan và
+tham khảo cách làm một số nơi trên Internet, chúng em đã hoàn thành đồ
+án game ``Caro Online''. Mặc dù rất cố gắng, nhưng vẫn không tránh khỏi
+thiếu sót và hạn chế. Chúng em rất mong có được những ý kiến đánh giá,
+đóng góp của thầy cô để đồ án thêm hoàn thiện. Chúng em xin trân trọng
+cảm ơn thầy cô đã dành thời gian để đọc và xem qua đồ án của chúng em.
+
+
+\clearpage
+\hypertarget{phux1ea7n-ii.-nux1ed9i-dung}{%
+\section{Tài liệu tham khảo:}\label{phux1ea7n-ii.-nux1ed9i-dung}}
+\hypertarget{giux1edbi-thiux1ec7u-ux111ux1ec1-tuxe0i}{%
+\subsection{\texorpdfstring{Tài liệu trên mạng: 
+}{Tài liệu trên mạng: }}\label{giux1edbi-thiux1ec7u-ux111ux1ec1-tuxe0i}}
+\begin{flushleft}
+{[}1{]}
+\href{https://codelearn.io/sharing/lap-trinh-socket-voi-tcpip-trong-python}{\uline{https://codelearn.io/sharing/lap-trinh-socket-voi-tcpip-trong-python}}
+
+{[}2{]}
+\href{https://viblo.asia/p/lap-trinh-socket-bang-python-jvEla084Zkw}{\uline{https://viblo.asia/p/lap-trinh-socket-bang-python-jvEla084Zkw}}
+
+{[}3{]}
+\href{https://www.youtube.com/}{\uline{https://www.youtube.com/}}
+
+\end{flushleft}
+\hypertarget{giux1edbi-thiux1ec7u-ux111ux1ec1-tuxe0i}{%
+\subsection{\texorpdfstring{Tài liệu khác: 
+}{Tài liệu khác: }}\label{giux1edbi-thiux1ec7u-ux111ux1ec1-tuxe0i}}
+\begin{flushleft}
+{[}1{]} Slide bài giảng Ngôn ngữ lập trình Python của thầy Trịnh Tấn Đạt.
+
+{[}2{]} Slide bài giảng Ngôn ngữ lập trình Python của thầy Nguyễn Trung
+Tín.
+
+{[}3{]} Slide bài giảng Ngôn ngữ lập trình Python của thầy Từ Lãng Phiêu.
+\end{flushleft}
+\end{document}
