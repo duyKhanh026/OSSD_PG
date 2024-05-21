@@ -304,7 +304,6 @@ class Offline_2player:
                         if 150 <= mouse_y <= (150 + 40):
                             self.retrunMenu = 1
 
-
     def start(self):
         while True:
             self.run()
